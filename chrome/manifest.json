@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Cosmic New Tab",
+  "version": "2.4.0",
+  "description": "Космическая стартовая страница и новая вкладка: реалистичная 3D-Земля и Луна, Солнечная система, часы, быстрые ссылки и поиск.",
+  "chrome_url_overrides": {
+    "newtab": "index.html"
+  },
+  "permissions": [
+    "tabs",
+    "scripting"
+  ],
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ]
+}

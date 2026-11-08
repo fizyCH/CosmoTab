@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>New Tab</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Звёздное небо: звёзды создаются в script.js -->
+  <div class="stars" id="stars" aria-hidden="true"></div>
+
+  <!-- Шестерёнка настроек -->
+  <button class="settings-button" id="settings-button" type="button"
+          aria-label="Открыть настройки" title="Настройки" aria-haspopup="dialog"
+          data-i18n-aria="settings.open" data-i18n-title="settings.open">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+         stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="3.2" />
+      <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.87l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.7 1.7 0 0 0-1.87-.34 1.7 1.7 0 0 0-1 1.55V21a2 2 0 1 1-4 0v-.09a1.7 1.7 0 0 0-1.11-1.55 1.7 1.7 0 0 0-1.87.34l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.55-1H3a2 2 0 1 1 0-4h.09A1.7 1.7 0 0 0 4.64 8.9a1.7 1.7 0 0 0-.34-1.87l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.7 1.7 0 0 0 9 4.6a1.7 1.7 0 0 0 1-1.55V3a2 2 0 1 1 4 0v.09a1.7 1.7 0 0 0 1 1.55 1.7 1.7 0 0 0 1.87-.34l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.7 1.7 0 0 0-.34 1.87V9a1.7 1.7 0 0 0 1.55 1H21a2 2 0 1 1 0 4h-.09a1.7 1.7 0 0 0-1.51 1Z" />
+    </svg>
+  </button>
+
+  <!-- Верхние виджеты: плеер и погода справа от него -->
+  <div class="top-widgets" id="top-widgets">
+
+  <!-- Медиаплеер: появляется только когда в браузере играет звук -->
+  <section class="media-player" id="media-player" aria-label="Медиаплеер" aria-hidden="true" hidden
+           data-i18n-aria="player.label">
+    <div class="player-cover" id="player-cover">
+      <img class="player-art" id="player-art" alt="" />
+      <span class="player-cover-fallback" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 17.5V5.5l10-2V15" />
+          <circle cx="6.5" cy="17.5" r="2.5" />
+          <circle cx="16.5" cy="15" r="2.5" />
+        </svg>
+      </span>
+    </div>
+
+    <div class="player-body">
+      <div class="player-head">
+        <span class="player-title" id="player-title">Без названия</span>
+        <span class="player-dot" aria-hidden="true">•</span>
+        <span class="player-source" id="player-source">Браузер</span>
+      </div>
+
+      <div class="player-timeline">
+        <span class="player-time" id="player-current">00:00</span>
+
+        <div class="player-progress" id="player-progress" role="slider" tabindex="0"
+             aria-label="Позиция воспроизведения" aria-valuemin="0" aria-valuemax="100"
+             aria-valuenow="0" aria-valuetext="Перемотка недоступна" aria-disabled="true"
+             data-i18n-aria="player.progress">
+          <span class="player-progress-fill" id="player-progress-fill"></span>
+          <span class="player-progress-thumb" id="player-progress-thumb"></span>
+        </div>
+
+        <span class="player-time" id="player-duration">--:--</span>
+      </div>
+
+      <span class="player-artist" id="player-artist">Воспроизведение в браузере</span>
+    </div>
+  </section>
+
+  <!-- Погода справа от плеера -->
+  <aside class="weather-widget" id="weather-widget" hidden role="button" tabindex="0"
+         aria-label="Погода" data-i18n-aria="weather.label">
+    <div class="weather-icon" id="weather-icon" aria-hidden="true"></div>
+    <div class="weather-body">
+      <div class="weather-main">
+        <span class="weather-temp" id="weather-temp">—</span>
+        <span class="weather-range" id="weather-range"></span>
+      </div>
+      <span class="weather-city" id="weather-city">Москва</span>
+      <span class="weather-condition" id="weather-condition">Загрузка…</span>
+    </div>
+  </aside>
+  </div>
+
+  <main class="stage">
+    <!-- ================= Левая часть: 3D-космос ================= -->
+    <section class="planets" id="planet-panel" aria-label="Интерактивная 3D-сцена Солнечной системы">
+      <div class="scene" id="scene"></div>
+
+      <p class="scene-error" id="scene-error" hidden data-i18n="scene.error">
+        WebGL недоступен в этом браузере — 3D-сцена не может быть показана.
+      </p>
+    </section>
+
+    <!-- ================= Правая часть: часы и закладки ================= -->
+    <section class="content" aria-label="Часы и закладки">
+      <div class="clock" aria-label="Текущее время" data-i18n-aria="clock.label">
+        <span id="clock-hours">00</span><span class="clock-colon">:</span><span id="clock-minutes">00</span><span class="clock-seconds" id="clock-seconds">:00</span>
+      </div>
+
+      <div class="bookmarks-widget">
+        <nav class="tiles" id="tiles" aria-label="Закладки" data-i18n-aria="tiles.label"></nav>
+
+        <div class="tiles-nav" id="tiles-nav" hidden>
+          <button class="tiles-arrow" id="tiles-prev" type="button"
+                  aria-label="Предыдущая страница закладок" data-i18n-aria="tiles.prev">‹</button>
+          <div class="tiles-dots" id="tiles-dots" aria-label="Страницы закладок" data-i18n-aria="tiles.pages"></div>
+          <button class="tiles-arrow" id="tiles-next" type="button"
+                  aria-label="Следующая страница закладок" data-i18n-aria="tiles.next">›</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ================= Поиск Google + режим ИИ ================= -->
+  <footer class="search-bar">
+    <form class="search" id="search-form" action="https://www.google.com/search" method="get" role="search">
+      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+           stroke-linecap="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="6.5" />
+        <path d="M20.2 20.2 15.9 15.9" />
+      </svg>
+
+      <input id="search-input" name="q" type="text" placeholder="Search with Google"
+             autocomplete="off" spellcheck="false" autofocus />
+
+      <!-- Кнопка истории ИИ: открывает Google AI Mode, иконка из textures/history.png -->
+      <button class="ai-history" id="ai-history" type="button"
+              aria-label="Открыть историю ИИ-поиска Google" title="История ИИ-поиска Google"
+              data-i18n-aria="search.history" data-i18n-title="search.history">
+        <img src="textures/history.png" alt="" aria-hidden="true" />
+      </button>
+
+      <!-- Переключатель «Обычный поиск / ИИ-поиск Google» -->
+      <button class="ai-toggle" id="ai-toggle" type="button" aria-pressed="false"
+              aria-label="Переключить ИИ-поиск Google" title="ИИ-поиск Google">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 3.2 13.6 7.6 18 9.2 13.6 10.8 12 15.2 10.4 10.8 6 9.2 10.4 7.6 12 3.2Z" />
+          <path d="m18.4 14.6.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z" />
+        </svg>
+        <span class="ai-toggle-text" data-i18n="search.aiShort">AI</span>
+      </button>
+    </form>
+  </footer>
+
+  <!-- ================= Диалог добавления закладки ================= -->
+  <dialog class="bookmark-dialog" id="bookmark-dialog">
+    <form class="bookmark-form" id="bookmark-form" novalidate>
+      <h2 data-i18n="bookmarks.new">Новая закладка</h2>
+
+      <label class="field">
+        <span data-i18n="bookmarks.name">Название</span>
+        <input id="bm-name" type="text" maxlength="40" placeholder="Например, Хабр"
+               autocomplete="off" data-i18n-placeholder="bookmarks.namePlaceholder" />
+      </label>
+
+      <label class="field">
+        <span data-i18n="bookmarks.url">Адрес сайта</span>
+        <input id="bm-url" type="text" placeholder="example.com" autocomplete="off" spellcheck="false" />
+      </label>
+
+      <p class="dialog-error" id="bm-error" role="alert"></p>
+
+      <div class="dialog-actions">
+        <button class="btn btn--ghost" id="bm-cancel" type="button" data-i18n="common.cancel">Отмена</button>
+        <button class="btn" type="submit" data-i18n="common.add">Добавить</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ================= Настройки ================= -->
+  <dialog class="settings-dialog" id="settings-dialog">
+    <form class="settings-form" id="settings-form" novalidate>
+      <h2 data-i18n="settings.title">Настройки</h2>
+
+      <section class="settings-section">
+        <h3 data-i18n="settings.interfaceSection">Интерфейс</h3>
+        <label class="field">
+          <span data-i18n="settings.language">Язык интерфейса</span>
+          <select id="setting-language">
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
+          </select>
+        </label>
+        <label class="field">
+          <span data-i18n="settings.layout">Расположение</span>
+          <select id="setting-layout">
+            <option value="top" data-i18n="settings.layoutTop">Поиск внизу, плеер сверху</option>
+            <option value="bottom" data-i18n="settings.layoutBottom">Поиск вверху, плеер внизу</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="settings-section">
+        <h3 data-i18n="settings.planetSection">Планета</h3>
+        <label class="field">
+          <span data-i18n="settings.planetLighting">Освещение Земли</span>
+          <select id="setting-planet-lighting">
+            <option value="auto" data-i18n="lighting.auto">Авто (по времени)</option>
+            <option value="day" data-i18n="lighting.day">День</option>
+            <option value="dusk" data-i18n="lighting.dusk">50 / 50</option>
+            <option value="night" data-i18n="lighting.night">Ночь</option>
+          </select>
+        </label>
+        <p class="settings-note" data-i18n="settings.planetNote">Авто — по сезонному закату. Ручной режим не зависит от времени.</p>
+      </section>
+
+      <section class="settings-section">
+        <h3 data-i18n="settings.searchSection">Поисковик</h3>
+        <label class="field">
+          <span data-i18n="settings.searchEngine">Поисковая система</span>
+          <select id="setting-search-engine">
+            <option value="google">Google</option>
+            <option value="yandex" data-i18n="searchEngine.yandex">Яндекс</option>
+            <option value="bing">Bing</option>
+            <option value="duckduckgo">DuckDuckGo</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="settings-section">
+        <div class="settings-heading">
+          <h3 data-i18n="settings.weatherSection">Погода справа от плеера</h3>
+          <label class="switch" title="Показывать виджет погоды" data-i18n-title="settings.weatherToggle">
+            <input id="setting-weather-enabled" type="checkbox" />
+            <span class="switch-track"><span class="switch-thumb"></span></span>
+          </label>
+        </div>
+
+        <label class="field">
+          <span data-i18n="settings.city">Город</span>
+          <select id="setting-weather-city"></select>
+        </label>
+
+        <label class="field">
+          <span data-i18n="settings.units">Единицы температуры</span>
+          <select id="setting-weather-unit">
+            <option value="celsius" data-i18n="units.celsius">Цельсий (°C)</option>
+            <option value="fahrenheit" data-i18n="units.fahrenheit">Фаренгейт (°F)</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="settings-section">
+        <h3 data-i18n="settings.bookmarksSection">Закладки</h3>
+        <p class="settings-note" data-i18n="settings.bookmarksNote">По 9 закладок на странице. Точки под сеткой переключают страницы.</p>
+        <div class="settings-button-row">
+          <button class="btn btn--ghost" id="settings-export-bookmarks" type="button"
+                  data-i18n="settings.exportBookmarks">Экспорт закладок</button>
+          <button class="btn btn--ghost" id="settings-import-bookmarks" type="button"
+                  data-i18n="settings.importBookmarks">Импорт закладок</button>
+        </div>
+        <button class="btn btn--ghost" id="settings-restore-bookmarks" type="button"
+                data-i18n="settings.restore">Вернуть стандартные закладки</button>
+      </section>
+
+      <p class="dialog-status" id="settings-status" role="status"></p>
+      <p class="dialog-error" id="settings-error" role="alert"></p>
+
+      <div class="dialog-actions">
+        <button class="btn btn--ghost" id="settings-cancel" type="button" data-i18n="common.cancel">Отмена</button>
+        <button class="btn" type="submit" data-i18n="common.save">Сохранить</button>
+      </div>
+    </form>
+  </dialog>
+
+  <input type="file" id="bookmark-import" accept="application/json,.json" hidden />
+
+  <script src="lib/three.min.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
