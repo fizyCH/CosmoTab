@@ -2525,7 +2525,7 @@ const Settings = (() => {
     earthRadius: 1.55,
     earthPosition: new THREE.Vector3(-0.35, -0.22, 0),
     earthSpin: 0.05,
-    cloudSpin: 0.12,
+    cloudSpin: 0.09,
     moonRadius: 0.5,
     moonSpin: 0.045,
     moonOrbitSpeed: 0.045,
@@ -3201,8 +3201,19 @@ const Settings = (() => {
   const Y_AXIS = new THREE.Vector3(0, 1, 0);
   const canvas = renderer.domElement;
 
-  const earthTarget = { pivot: earthGroup, mesh: earthMesh };
-  const moonTarget = { pivot: moonPivot, mesh: moonMesh };
+  const earthTarget = {
+    pivot: earthGroup,
+    mesh: earthMesh,
+    base: earthGroup.quaternion.clone(),
+    lastTouched: 0
+  };
+  const moonTarget = {
+    pivot: moonPivot,
+    mesh: moonMesh,
+    base: moonPivot.quaternion.clone(),
+    lastTouched: 0
+  };
+  const draggableTargets = [earthTarget, moonTarget];
 
   let dragging = false;
   let activeTarget = null;
@@ -3248,6 +3259,7 @@ const Settings = (() => {
     lastY = event.clientY;
     lastMoveTime = performance.now();
     angularVelocity.set(0, 0, 0);
+    target.lastTouched = lastMoveTime;
 
     canvas.setPointerCapture(event.pointerId);
     canvas.classList.add('is-grabbing');
@@ -3289,6 +3301,7 @@ const Settings = (() => {
      
     const speed = Math.min(14, angle / elapsed);
     angularVelocity.copy(dragAxis).multiplyScalar(speed);
+    activeTarget.lastTouched = now;
   });
 
   function endDrag(event) {
@@ -3298,6 +3311,10 @@ const Settings = (() => {
      
     if (performance.now() - lastMoveTime > 120) {
       angularVelocity.set(0, 0, 0);
+    }
+
+    if (activeTarget) {
+      activeTarget.lastTouched = performance.now();
     }
 
     dragging = false;
@@ -3433,6 +3450,23 @@ const Settings = (() => {
 
       angularVelocity.multiplyScalar(Math.exp(-3.2 * dt));
       if (angularVelocity.length() < 0.015) angularVelocity.set(0, 0, 0);
+    }
+
+    const settleNow = performance.now();
+
+    for (const target of draggableTargets) {
+      if (dragging && activeTarget === target) continue;
+      if (!dragging && inertiaTarget === target && angularVelocity.lengthSq() > 1e-6) continue;
+
+      const offset = target.pivot.quaternion.angleTo(target.base);
+      if (offset < 1e-4) continue;
+      if (settleNow - target.lastTouched < 550) continue;
+
+      target.pivot.quaternion.slerp(target.base, 1 - Math.exp(-5.2 * dt));
+
+      if (target.pivot.quaternion.angleTo(target.base) < 0.002) {
+        target.pivot.quaternion.copy(target.base);
+      }
     }
 
      
