@@ -1,65 +1,123 @@
-# CosmoTab
+<h1 align="center">CosmoTab</h1>
 
 <p align="center">
-  <strong>Explore the Universe with every new tab.</strong>
-  <br>
-  Turn your browser into a window to the endless cosmos.
+  <strong>A window to the universe in every new tab.</strong><br>
+  A live 3D Earth, weather, now-playing controls, bookmarks and search — in one calm, glassy interface.
 </p>
 
 <p align="center">
-  <a href="README.md">
-    <img src="assets/English.png" height="46" alt="English">
-  </a>
-  &nbsp;&nbsp;
-  <a href="README_RU.md">
-    <img src="assets/Русский.png" height="46" alt="Русский">
-  </a>
+  <a href="README.md"><img src="assets/English.png" height="40" alt="English"></a>
+  &nbsp;
+  <a href="README_RU.md"><img src="assets/Русский.png" height="40" alt="Русский"></a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/Chrome-Supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/Firefox-Supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
+  <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
+  <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
+  <img src="https://img.shields.io/badge/version-2.4.0-8A7BFF?style=for-the-badge" alt="Version 2.4.0">
+  <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="MIT License">
 </p>
 
----
-
 <p align="center">
-  <img src="assets/cosmotab-preview.png" width="100%" alt="CosmoTab Preview">
+  <img src="assets/preview.png" width="100%" alt="CosmoTab — 3D Earth, clock, bookmarks, weather and search">
 </p>
 
 ---
 
 ## About
 
-**CosmoTab** transforms every new browser tab into a journey through space.
+**CosmoTab** turns every new tab into a quiet window to space.
 
-Enjoy breathtaking views of Earth, distant planets, and stars. Its minimalist interface combines a beautiful cosmic atmosphere with useful everyday tools.
+Instead of another blank page or a wall of widgets, it gives you a slowly turning Earth, a handful of useful tools, and nothing that gets in the way. Everything is local, fast, and designed to feel like a small piece of the cosmos.
 
 ## Features
 
-- **Earth from Space** — A stunning view of our planet surrounded by the endless universe.
-- **Cosmic Atmosphere** — Stars, planets, and the beauty of deep space.
-- **Clock** — Stylish digital clock displaying the current time.
-- **Quick Access** — Instantly open your favorite websites.
-- **Google Search** — Search the web directly from your new tab.
-- **Weather** — Convenient weather information widget.
-- **Media Widget** — A compact panel displaying media information.
-- **Customization** — Personalize the interface to your liking.
+- **A living 3D solar system.** Earth with an independent cloud layer, the Moon, a ringed planet and distant worlds. Drag to rotate with inertia; the scene keeps moving on its own.
+- **Seasonal lighting with manual control.** Auto day/night based on the season and local time, plus four modes: auto, day, 50/50 and night.
+- **Weather without the noise.** Current conditions and daily range for 30 cities, Celsius or Fahrenheit, powered by `wttr.in` with an Open-Meteo fallback and one-click retry.
+- **Now playing, everywhere.** CosmoTab picks up audio from other tabs and shows artwork, title, artist, source and a seekable timeline in a compact glass panel.
+- **Search the way you like.** Google, Yandex, Bing or DuckDuckGo, plus an optional Google AI Mode toggle.
+- **Bookmarks that stay out of the way.** Nine tiles per page, add and remove, restore defaults, and export or import your collection as JSON.
+- **Bilingual and configurable.** English and Russian, two layouts, weather on/off, city and temperature units.
+- **Private by design.** No accounts, no telemetry, no remote code. Your settings and bookmarks stay in local storage.
 
-## Design Philosophy
+## Layouts
 
-CosmoTab is designed for those who appreciate minimalism, aesthetics, and comfort.
+Prefer search at the bottom, or everything out of the way at the top? CosmoTab supports both — the choice is saved instantly.
 
-Every detail of the interface captures the feeling of observing Earth from outer space while keeping essential tools just one click away.
+<p align="center">
+  <img src="assets/layout-bottom.png" width="76%" alt="Search on top, player and weather at the bottom">
+  &nbsp;
+  <img src="assets/mobile.png" width="20%" alt="CosmoTab on mobile">
+</p>
 
-## Your Universe Starts Here
+On narrow screens the player and weather move below the bookmarks instead of covering them.
 
-Open a new tab. Leave the ordinary behind. Explore the cosmos.
+## Settings
+
+<p align="center">
+  <img src="assets/settings.png" width="72%" alt="CosmoTab settings">
+</p>
+
+- **Interface language** — English or Russian. English is used until you change it explicitly.
+- **Layout** — search at the bottom (classic) or search at the top with player and weather at the bottom.
+- **Earth lighting** — auto by season and time, day, 50/50 or night.
+- **Search provider** — Google, Yandex, Bing, DuckDuckGo, with a separate Google AI Mode switch.
+- **Weather** — enable or disable, choose a city, switch between °C and °F.
+- **Bookmarks** — export to JSON, import from JSON, restore the default set.
+
+## Install
+
+| Browser | Steps |
+| --- | --- |
+| **Firefox** | Open `about:debugging` → **This Firefox** → **Load Temporary Add-on** → select `manifest.json`. To use CosmoTab as your home page, set Firefox to open your home page on startup. |
+| **Chrome / Chromium** | Open `chrome://extensions` → enable **Developer mode** → **Load unpacked** → select the `chrome` folder. |
+
+The `chrome` folder is already generated in this repository. After changing the shared source files, rebuild it:
+
+```bash
+node build-chrome.js
+```
+
+More details and troubleshooting: [INSTALL.md](INSTALL.md).
+
+## Tech
+
+- Manifest V3, vanilla HTML, CSS and JavaScript — no framework, no build step for the main page.
+- Three.js bundled locally in `lib/three.min.js`; textures are shipped with the extension, so nothing is fetched from a CDN.
+- A small WebExtension adapter keeps `browser.*` (Firefox) and `chrome.*` (Chromium) working from the same code.
+- Weather comes from `wttr.in` first and Open-Meteo second.
+- The Chromium package is generated by `build-chrome.js`.
+
+## Project structure
+
+```text
+.
+├── index.html          # New-tab page
+├── style.css           # Layout, glass UI, responsive rules
+├── script.js           # Scene, weather, media, bookmarks, settings
+├── manifest.json       # Firefox / Manifest V3 entry point
+├── build-chrome.js     # Generates the Chromium build
+├── chrome/             # Ready-to-load Chromium extension
+├── icons/              # Bookmark icons
+├── textures/           # Earth, Moon and history textures
+├── lib/three.min.js    # Bundled Three.js
+├── README.md
+├── README_RU.md
+└── INSTALL.md
+```
+
+## Privacy
+
+CosmoTab does not collect analytics or personal data. Settings and bookmarks are stored locally in your browser. The only network requests are for weather data and the search page you choose to open.
+
+## License
+
+Released under the [MIT License](LICENSE).
 
 ---
 
 <p align="center">
-  <strong>CosmoTab — A piece of the Universe in every tab.</strong>
-  <br>
+  <strong>CosmoTab — a piece of the universe in every tab.</strong><br>
   Made with love.
 </p>
