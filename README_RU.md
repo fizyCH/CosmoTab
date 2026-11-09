@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox для Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.0-8A7BFF?style=for-the-badge" alt="Версия 2.6.0">
+  <img src="https://img.shields.io/badge/version-2.6.1-8A7BFF?style=for-the-badge" alt="Версия 2.6.1">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="Лицензия MIT">
 </p>
 
@@ -70,7 +70,7 @@
   <img src="assets/folders.png" width="76%" alt="Папка закладок CosmoTab">
 </p>
 
-Выберите **Папка** в окне добавления. Папка открывается сеткой 3×3 ровно на месте девяти вкладок и имеет внутри свою кнопку добавления. Название меняется карандашом, закладки можно перетаскивать внутрь, а на кнопку **Назад** — на уровень выше. Клик мимо вкладок, по фону или `Esc` закрывает папку.
+Выберите **Папка** в окне добавления. Папка открывается прозрачной сеткой 3×3 ровно на месте девяти вкладок, а название показывается по центру над папкой. Нажмите на название, чтобы переименовать. Внутри есть своя кнопка добавления; закладки можно перетаскивать внутрь, а чтобы вынести — перетащите за пределы панели. Если перетащить одну закладку на другую, сразу создастся новая папка с ними двумя. Клик мимо вкладок или `Esc` закрывает папку.
 
 ## Плеер
 

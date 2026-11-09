@@ -167,18 +167,18 @@ const I18N = {
     'bookmarks.bookmarkType': 'Закладка',
     'bookmarks.folderType': 'Папка',
     'folders.label': 'Папка',
-    'folders.back': 'Назад',
-    'folders.rename': 'Переименовать папку',
+    'folders.renameHint': 'Нажмите, чтобы переименовать',
     'folders.delete': 'Удалить папку',
     'folders.deleteConfirm': 'Удалить папку и всё её содержимое?',
-    'folders.close': 'Закрыть папку',
     'folders.defaultName': 'Папка',
     'folders.open': 'Открыть папку {title}',
+    'folders.dropHint': 'Перетащите сюда, чтобы вынести из папки',
     'bookmarks.name': 'Название',
     'bookmarks.namePlaceholder': 'Например, Хабр',
     'bookmarks.url': 'Адрес сайта',
     'bookmarks.add': 'Добавить',
     'bookmarks.remove': 'Удалить закладку {title}',
+    'bookmarks.removeConfirm': 'Удалить закладку «{title}»?',
     'bookmarks.limit': 'Достигнут лимит закладок.',
     'bookmarks.invalidUrl': 'Укажите корректный адрес, например example.com',
     'bookmarks.mail': 'Почта'
@@ -281,18 +281,18 @@ const I18N = {
     'bookmarks.bookmarkType': 'Bookmark',
     'bookmarks.folderType': 'Folder',
     'folders.label': 'Folder',
-    'folders.back': 'Back',
-    'folders.rename': 'Rename folder',
+    'folders.renameHint': 'Click to rename',
     'folders.delete': 'Delete folder',
     'folders.deleteConfirm': 'Delete the folder and everything inside it?',
-    'folders.close': 'Close folder',
     'folders.defaultName': 'Folder',
     'folders.open': 'Open folder {title}',
+    'folders.dropHint': 'Drop here to move out of the folder',
     'bookmarks.name': 'Name',
     'bookmarks.namePlaceholder': 'For example, GitHub',
     'bookmarks.url': 'Website address',
     'bookmarks.add': 'Add',
     'bookmarks.remove': 'Delete bookmark {title}',
+    'bookmarks.removeConfirm': 'Delete the bookmark “{title}”?',
     'bookmarks.limit': 'Bookmark limit reached.',
     'bookmarks.invalidUrl': 'Enter a valid address, for example example.com',
     'bookmarks.mail': 'Mail'
@@ -580,10 +580,6 @@ const Settings = (() => {
   const folderPanel = document.getElementById('folder-panel');
   const folderGrid = document.getElementById('folder-grid');
   const folderTitle = document.getElementById('folder-title');
-  const folderBack = document.getElementById('folder-back');
-  const folderRename = document.getElementById('folder-rename');
-  const folderDelete = document.getElementById('folder-delete');
-  const folderClose = document.getElementById('folder-close');
 
   if (!grid || !dialog || !form) return;
 
@@ -893,6 +889,36 @@ const Settings = (() => {
     if (folderStack.length) renderFolder();
   }
 
+  function createFolderFromDrop(targetBookmark, targetParentId, draggedId) {
+    const list = listFor(targetParentId);
+    const targetIndex = list.findIndex((item) => item.id === targetBookmark.id);
+    const sourceIndex = list.findIndex((item) => item.id === draggedId);
+
+    if (targetIndex === -1 || sourceIndex === -1 || targetIndex === sourceIndex) return;
+
+    const targetItem = list[targetIndex];
+    const sourceItem = list[sourceIndex];
+
+    if (targetItem.type !== 'bookmark' || sourceItem.type !== 'bookmark') return;
+
+    const insertAt = Math.min(targetIndex, sourceIndex);
+    list.splice(Math.max(targetIndex, sourceIndex), 1);
+    list.splice(Math.min(targetIndex, sourceIndex), 1);
+
+    const folder = {
+      id: newId('folder'),
+      type: 'folder',
+      title: t('folders.defaultName'),
+      children: [targetItem, sourceItem]
+    };
+
+    list.splice(insertAt, 0, folder);
+    saveBookmarks();
+    render();
+    if (folderStack.length) renderFolder();
+    openFolder(folder.id);
+  }
+
   function makeDropTarget(element, handler) {
     element.addEventListener('dragover', (event) => {
       if (!draggedItem) return;
@@ -945,6 +971,7 @@ const Settings = (() => {
     remove.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
+      if (!window.confirm(t('bookmarks.removeConfirm', { title: displayTitle }))) return;
       removeItemFrom(parentId, bookmark.id);
       saveBookmarks();
       if (!parentId) clampPage();
@@ -966,6 +993,38 @@ const Settings = (() => {
     wrap.addEventListener('dragend', () => {
       wrap.classList.remove('is-dragging');
       draggedItem = null;
+    });
+
+    wrap.addEventListener('dragover', (event) => {
+      if (!draggedItem ||
+          draggedItem.id === bookmark.id ||
+          draggedItem.parentId !== parentId) {
+        return;
+      }
+
+      event.preventDefault();
+      if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+      wrap.classList.add('is-folder-drop');
+    });
+
+    wrap.addEventListener('dragleave', () => {
+      wrap.classList.remove('is-folder-drop');
+    });
+
+    wrap.addEventListener('drop', (event) => {
+      if (!draggedItem ||
+          draggedItem.id === bookmark.id ||
+          draggedItem.parentId !== parentId) {
+        return;
+      }
+
+      event.preventDefault();
+      event.stopPropagation();
+      wrap.classList.remove('is-folder-drop');
+
+      const dragged = draggedItem;
+      draggedItem = null;
+      createFolderFromDrop(bookmark, parentId, dragged.id);
     });
 
     return wrap;
@@ -1140,6 +1199,8 @@ const Settings = (() => {
     updateNavigation();
   }
 
+  let folderCloseTimer = 0;
+
   function positionFolderPanel() {
     if (!folderPanel || folderPanel.hidden) return;
 
@@ -1167,7 +1228,7 @@ const Settings = (() => {
     folderPanel.style.top = `${top}px`;
     folderPanel.style.width = `${width}px`;
     folderPanel.style.height = `${height}px`;
-    folderPanel.classList.toggle('is-toolbar-below', top < 64);
+    folderPanel.classList.toggle('is-title-below', top < 54);
   }
 
   function syncFolderTitle() {
@@ -1205,34 +1266,49 @@ const Settings = (() => {
     if (!folderPanel || !folderBackdrop || !folderGrid) return;
     if (folderStack[folderStack.length - 1] !== folderId) folderStack.push(folderId);
 
+    if (folderCloseTimer) {
+      clearTimeout(folderCloseTimer);
+      folderCloseTimer = 0;
+    }
+
+    folderPanel.classList.remove('is-closing', 'is-open');
+    folderBackdrop.classList.remove('is-closing', 'is-open');
     folderPanel.hidden = false;
     folderBackdrop.hidden = false;
     document.body.classList.add('folder-open');
     renderFolder();
-    requestAnimationFrame(positionFolderPanel);
+
+    requestAnimationFrame(() => {
+      positionFolderPanel();
+      folderPanel.classList.add('is-open');
+      folderBackdrop.classList.add('is-open');
+    });
   }
 
   function closeFolder() {
-    if (!folderPanel || !folderBackdrop) return;
+    if (!folderPanel || !folderBackdrop || folderPanel.hidden) return;
 
     if (folderTitle) {
       folderTitle.contentEditable = 'false';
       folderTitle.classList.remove('is-editing');
     }
 
-    folderPanel.hidden = true;
-    folderBackdrop.hidden = true;
-    folderStack = [];
-    document.body.classList.remove('folder-open');
-  }
+    folderPanel.classList.remove('is-open');
+    folderBackdrop.classList.remove('is-open');
+    folderPanel.classList.add('is-closing');
+    folderBackdrop.classList.add('is-closing');
 
-  function goBackFolder() {
-    if (folderStack.length > 1) {
-      folderStack.pop();
-      renderFolder();
-    } else {
-      closeFolder();
-    }
+    clearTimeout(folderCloseTimer);
+    folderCloseTimer = window.setTimeout(() => {
+      folderPanel.hidden = true;
+      folderBackdrop.hidden = true;
+      folderPanel.classList.remove('is-closing');
+      folderBackdrop.classList.remove('is-closing');
+      folderStack = [];
+      draggedItem = null;
+      document.body.classList.remove('folder-open');
+      folderCloseTimer = 0;
+    }, 220);
   }
 
   function startRenameFolder() {
@@ -1272,64 +1348,40 @@ const Settings = (() => {
     render();
   }
 
-  function deleteCurrentFolder() {
-    const folder = currentFolder();
-    if (!folder) return;
-
-    if (!window.confirm(t('folders.deleteConfirm'))) return;
-
-    const parentId = folderStack.length > 1
-      ? folderStack[folderStack.length - 2]
-      : null;
-    const list = listFor(parentId);
-    const index = list.findIndex((item) => item.id === folder.id && item.type === 'folder');
-    if (index === -1) return;
-
-    list.splice(index, 1);
-    folderStack.pop();
-    saveBookmarks();
-    render();
-
-    if (folderStack.length) renderFolder();
-    else closeFolder();
+  if (folderBackdrop) {
+    folderBackdrop.addEventListener('click', closeFolder);
+    makeDropTarget(folderBackdrop, (dragged) => {
+      moveItemToRoot(dragged.id, dragged.parentId);
+    });
   }
 
-  if (folderBackdrop) folderBackdrop.addEventListener('click', closeFolder);
-  if (folderClose) folderClose.addEventListener('click', closeFolder);
-  if (folderBack) folderBack.addEventListener('click', goBackFolder);
   if (folderPanel && folderGrid) {
     folderPanel.tabIndex = -1;
     folderPanel.addEventListener('click', (event) => {
       if (event.target === folderPanel || event.target === folderGrid) closeFolder();
     });
   }
-  if (folderRename) {
-    folderRename.addEventListener('click', () => {
-      if (folderTitle && folderTitle.contentEditable === 'true') finishRenameFolder(true);
-      else startRenameFolder();
-    });
-  }
-  if (folderDelete) folderDelete.addEventListener('click', deleteCurrentFolder);
-
-  if (folderBack) {
-    makeDropTarget(folderBack, (dragged) => {
-      const targetParent = folderStack.length > 1
-        ? folderStack[folderStack.length - 2]
-        : null;
-      if (targetParent === dragged.parentId) return;
-      if (targetParent) moveItemToFolder(dragged.id, dragged.parentId, targetParent);
-      else moveItemToRoot(dragged.id, dragged.parentId);
-    });
-  }
 
   if (folderTitle) {
+    folderTitle.addEventListener('click', () => {
+      if (folderTitle.contentEditable !== 'true') startRenameFolder();
+    });
+
     folderTitle.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
+      if (folderTitle.contentEditable === 'true') {
+        if (event.key === 'Enter') {
+          event.preventDefault();
+          folderTitle.blur();
+        } else if (event.key === 'Escape') {
+          event.preventDefault();
+          finishRenameFolder(false);
+        }
+        return;
+      }
+
+      if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
-        folderTitle.blur();
-      } else if (event.key === 'Escape') {
-        event.preventDefault();
-        finishRenameFolder(false);
+        startRenameFolder();
       }
     });
 

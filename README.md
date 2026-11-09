@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox for Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.0-8A7BFF?style=for-the-badge" alt="Version 2.6.0">
+  <img src="https://img.shields.io/badge/version-2.6.1-8A7BFF?style=for-the-badge" alt="Version 2.6.1">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="MIT License">
 </p>
 
@@ -70,7 +70,7 @@ Add an image with the picture button, paste it with `Ctrl+V`, or drop it onto th
   <img src="assets/folders.png" width="76%" alt="CosmoTab bookmark folder">
 </p>
 
-Choose **Folder** in the add dialog to create a folder. It opens as a 3×3 panel exactly over the nine bookmark tiles, with its own add button inside. Rename it with the pencil, drag bookmarks into it, or drag a bookmark onto **Back** to move it one level up. Click outside the tiles, the backdrop, or press `Esc` to close the folder.
+Choose **Folder** in the add dialog to create a folder. It opens as a transparent 3×3 panel exactly over the nine bookmark tiles, with its name centered above the folder. Click the name to rename it. Add bookmarks inside, drag bookmarks into folders, or drag a bookmark outside the panel to move it back to the main grid. Dropping one bookmark onto another creates a new folder with both. Click outside the tiles or press `Esc` to close.
 
 ## Player
 
