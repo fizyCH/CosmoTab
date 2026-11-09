@@ -178,7 +178,6 @@ const I18N = {
     'bookmarks.url': 'Адрес сайта',
     'bookmarks.add': 'Добавить',
     'bookmarks.remove': 'Удалить закладку {title}',
-    'bookmarks.removeConfirm': 'Удалить закладку «{title}»?',
     'bookmarks.limit': 'Достигнут лимит закладок.',
     'bookmarks.invalidUrl': 'Укажите корректный адрес, например example.com',
     'bookmarks.mail': 'Почта'
@@ -292,7 +291,6 @@ const I18N = {
     'bookmarks.url': 'Website address',
     'bookmarks.add': 'Add',
     'bookmarks.remove': 'Delete bookmark {title}',
-    'bookmarks.removeConfirm': 'Delete the bookmark “{title}”?',
     'bookmarks.limit': 'Bookmark limit reached.',
     'bookmarks.invalidUrl': 'Enter a valid address, for example example.com',
     'bookmarks.mail': 'Mail'
@@ -964,14 +962,13 @@ const Settings = (() => {
     const remove = document.createElement('button');
     remove.className = 'tile-remove';
     remove.type = 'button';
-    remove.textContent = '?';
+    remove.textContent = '×';
     remove.title = t('bookmarks.remove', { title: displayTitle });
     remove.setAttribute('aria-label', t('bookmarks.remove', { title: displayTitle }));
 
     remove.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
-      if (!window.confirm(t('bookmarks.removeConfirm', { title: displayTitle }))) return;
       removeItemFrom(parentId, bookmark.id);
       saveBookmarks();
       if (!parentId) clampPage();
@@ -1077,7 +1074,7 @@ const Settings = (() => {
     const remove = document.createElement('button');
     remove.className = 'tile-remove';
     remove.type = 'button';
-    remove.textContent = '?';
+    remove.textContent = '×';
     remove.title = t('folders.delete');
     remove.setAttribute('aria-label', t('folders.delete'));
 
