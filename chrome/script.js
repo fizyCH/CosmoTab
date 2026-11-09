@@ -3163,6 +3163,7 @@ const Settings = (() => {
     if (attachmentImg) attachmentImg.src = pendingImageUrl;
     if (attachmentName) attachmentName.textContent = file.name || 'image';
     if (attachment) attachment.hidden = false;
+    form.classList.add('has-attachment');
 
     applyMode();
     input.focus();
@@ -3179,6 +3180,7 @@ const Settings = (() => {
     if (attachment) attachment.hidden = true;
     if (attachmentImg) attachmentImg.removeAttribute('src');
     if (attachmentName) attachmentName.textContent = '';
+    form.classList.remove('has-attachment');
 
     applyMode();
   }

@@ -155,65 +155,65 @@
   
   <footer class="search-bar">
     <form class="search" id="search-form" action="https://www.google.com/search" method="get" role="search">
-      <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-           stroke-linecap="round" aria-hidden="true">
-        <circle cx="11" cy="11" r="6.5" />
-        <path d="M20.2 20.2 15.9 15.9" />
-      </svg>
+      <div class="search-attachment" id="search-attachment" hidden>
+        <div class="search-attachment-thumb">
+          <img class="search-attachment-img" id="search-attachment-img" alt="" />
+          <button class="search-attachment-remove" id="search-attachment-remove" type="button"
+                  aria-label="Убрать изображение" title="Убрать изображение"
+                  data-i18n-aria="imageSearch.remove" data-i18n-title="imageSearch.remove">×</button>
+        </div>
+        <div class="search-attachment-info">
+          <span class="search-attachment-name" id="search-attachment-name"></span>
+          <span class="search-attachment-ready" id="search-attachment-ready">Готово к отправке</span>
+        </div>
+      </div>
 
-      <input id="search-input" name="q" type="text" placeholder="Search with Google"
-             autocomplete="off" spellcheck="false" autofocus />
-
-      
-      <button class="image-picker" id="image-picker" type="button"
-              aria-label="Поиск по картинке" title="Поиск по картинке">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <rect x="3" y="4.5" width="18" height="15" rx="3" />
-          <circle cx="8.6" cy="9.4" r="1.5" />
-          <path d="m5.5 17 5.1-5.1 3.8 3.8 2.1-2.1 2 2" />
+      <div class="search-row">
+        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+             stroke-linecap="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="6.5" />
+          <path d="M20.2 20.2 15.9 15.9" />
         </svg>
-      </button>
 
-      
-      <button class="ai-history" id="ai-history" type="button"
-              aria-label="Открыть историю ИИ-поиска Google" title="История ИИ-поиска Google"
-              data-i18n-aria="search.history" data-i18n-title="search.history">
-        <img src="textures/history.png" alt="" aria-hidden="true" />
-      </button>
+        <input id="search-input" name="q" type="text" placeholder="Search with Google"
+               autocomplete="off" spellcheck="false" autofocus />
 
-      
-      <button class="ai-toggle" id="ai-toggle" type="button" aria-pressed="false"
-              aria-label="Переключить ИИ-поиск Google" title="ИИ-поиск Google">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M12 3.2 13.6 7.6 18 9.2 13.6 10.8 12 15.2 10.4 10.8 6 9.2 10.4 7.6 12 3.2Z" />
-          <path d="m18.4 14.6.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z" />
-        </svg>
-        <span class="ai-toggle-text" data-i18n="search.aiShort">AI</span>
-      </button>
+        <button class="image-picker" id="image-picker" type="button"
+                aria-label="Поиск по картинке" title="Поиск по картинке">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="4.5" width="18" height="15" rx="3" />
+            <circle cx="8.6" cy="9.4" r="1.5" />
+            <path d="m5.5 17 5.1-5.1 3.8 3.8 2.1-2.1 2 2" />
+          </svg>
+        </button>
+
+        <button class="ai-history" id="ai-history" type="button"
+                aria-label="Открыть историю ИИ-поиска Google" title="История ИИ-поиска Google"
+                data-i18n-aria="search.history" data-i18n-title="search.history">
+          <img src="textures/history.png" alt="" aria-hidden="true" />
+        </button>
+
+        <button class="ai-toggle" id="ai-toggle" type="button" aria-pressed="false"
+                aria-label="Переключить ИИ-поиск Google" title="ИИ-поиск Google">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3.2 13.6 7.6 18 9.2 13.6 10.8 12 15.2 10.4 10.8 6 9.2 10.4 7.6 12 3.2Z" />
+            <path d="m18.4 14.6.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z" />
+          </svg>
+          <span class="ai-toggle-text" data-i18n="search.aiShort">AI</span>
+        </button>
+
+        <button class="search-attachment-send" id="search-attachment-send" type="button"
+                aria-label="Отправить изображение" title="Отправить изображение"
+                data-i18n-aria="imageSearch.send" data-i18n-title="imageSearch.send">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </button>
+      </div>
     </form>
-
-    <div class="search-attachment" id="search-attachment" hidden>
-      <div class="search-attachment-thumb">
-        <img class="search-attachment-img" id="search-attachment-img" alt="" />
-        <button class="search-attachment-remove" id="search-attachment-remove" type="button"
-                aria-label="Убрать изображение" title="Убрать изображение"
-                data-i18n-aria="imageSearch.remove" data-i18n-title="imageSearch.remove">×</button>
-      </div>
-      <div class="search-attachment-info">
-        <span class="search-attachment-name" id="search-attachment-name"></span>
-        <span class="search-attachment-ready" id="search-attachment-ready">Готово к отправке</span>
-      </div>
-      <button class="search-attachment-send" id="search-attachment-send" type="button"
-              aria-label="Отправить изображение" title="Отправить изображение"
-              data-i18n-aria="imageSearch.send" data-i18n-title="imageSearch.send">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
-             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M5 12h14M13 6l6 6-6 6" />
-        </svg>
-      </button>
-    </div>
   </footer>
 
   
