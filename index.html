@@ -8,10 +8,10 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- Звёздное небо: звёзды создаются в script.js -->
+  
   <div class="stars" id="stars" aria-hidden="true"></div>
 
-  <!-- Шестерёнка настроек -->
+  
   <button class="settings-button" id="settings-button" type="button"
           aria-label="Открыть настройки" title="Настройки" aria-haspopup="dialog"
           data-i18n-aria="settings.open" data-i18n-title="settings.open">
@@ -22,10 +22,10 @@
     </svg>
   </button>
 
-  <!-- Верхние виджеты: плеер и погода справа от него -->
+  
   <div class="top-widgets" id="top-widgets">
 
-  <!-- Медиаплеер: появляется только когда в браузере играет звук -->
+  
   <section class="media-player" id="media-player" aria-label="Медиаплеер" aria-hidden="true" hidden
            data-i18n-aria="player.label">
     <div class="player-cover" id="player-cover">
@@ -95,7 +95,7 @@
     </div>
   </section>
 
-  <!-- Погода справа от плеера -->
+  
   <aside class="weather-widget" id="weather-widget" hidden role="button" tabindex="0"
          aria-label="Погода" data-i18n-aria="weather.label">
     <div class="weather-icon" id="weather-icon" aria-hidden="true"></div>
@@ -111,7 +111,7 @@
   </div>
 
   <main class="stage">
-    <!-- ================= Левая часть: 3D-космос ================= -->
+    
     <section class="planets" id="planet-panel" aria-label="Интерактивная 3D-сцена Солнечной системы">
       <div class="scene" id="scene"></div>
 
@@ -120,7 +120,7 @@
       </p>
     </section>
 
-    <!-- ================= Правая часть: часы и закладки ================= -->
+    
     <section class="content" aria-label="Часы и закладки">
       <div class="clock" aria-label="Текущее время" data-i18n-aria="clock.label">
         <span id="clock-hours">00</span><span class="clock-colon">:</span><span id="clock-minutes">00</span><span class="clock-seconds" id="clock-seconds">:00</span>
@@ -152,7 +152,7 @@
     <div class="folder-grid" id="folder-grid"></div>
   </section>
 
-  <!-- ================= Поиск Google + режим ИИ ================= -->
+  
   <footer class="search-bar">
     <form class="search" id="search-form" action="https://www.google.com/search" method="get" role="search">
       <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -164,7 +164,7 @@
       <input id="search-input" name="q" type="text" placeholder="Search with Google"
              autocomplete="off" spellcheck="false" autofocus />
 
-      <!-- Кнопка добавления картинки для ИИ или Объектива -->
+      
       <button class="image-picker" id="image-picker" type="button"
               aria-label="Поиск по картинке" title="Поиск по картинке">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
@@ -175,14 +175,14 @@
         </svg>
       </button>
 
-      <!-- Кнопка истории ИИ: открывает Google AI Mode, иконка из textures/history.png -->
+      
       <button class="ai-history" id="ai-history" type="button"
               aria-label="Открыть историю ИИ-поиска Google" title="История ИИ-поиска Google"
               data-i18n-aria="search.history" data-i18n-title="search.history">
         <img src="textures/history.png" alt="" aria-hidden="true" />
       </button>
 
-      <!-- Переключатель «Обычный поиск / ИИ-поиск Google» -->
+      
       <button class="ai-toggle" id="ai-toggle" type="button" aria-pressed="false"
               aria-label="Переключить ИИ-поиск Google" title="ИИ-поиск Google">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
@@ -195,7 +195,12 @@
     </form>
 
     <div class="search-attachment" id="search-attachment" hidden>
-      <img class="search-attachment-img" id="search-attachment-img" alt="" />
+      <div class="search-attachment-thumb">
+        <img class="search-attachment-img" id="search-attachment-img" alt="" />
+        <button class="search-attachment-remove" id="search-attachment-remove" type="button"
+                aria-label="Убрать изображение" title="Убрать изображение"
+                data-i18n-aria="imageSearch.remove" data-i18n-title="imageSearch.remove">×</button>
+      </div>
       <div class="search-attachment-info">
         <span class="search-attachment-name" id="search-attachment-name"></span>
         <span class="search-attachment-ready" id="search-attachment-ready">Готово к отправке</span>
@@ -208,13 +213,10 @@
           <path d="M5 12h14M13 6l6 6-6 6" />
         </svg>
       </button>
-      <button class="search-attachment-remove" id="search-attachment-remove" type="button"
-              aria-label="Убрать изображение" title="Убрать изображение"
-              data-i18n-aria="imageSearch.remove" data-i18n-title="imageSearch.remove">×</button>
     </div>
   </footer>
 
-  <!-- ================= Диалог добавления закладки ================= -->
+  
   <dialog class="bookmark-dialog" id="bookmark-dialog">
     <form class="bookmark-form" id="bookmark-form" novalidate>
       <h2 id="bm-dialog-title">Новая закладка</h2>
@@ -246,7 +248,7 @@
     </form>
   </dialog>
 
-  <!-- ================= Настройки ================= -->
+  
   <dialog class="settings-dialog" id="settings-dialog">
     <form class="settings-form" id="settings-form" novalidate>
       <h2 data-i18n="settings.title">Настройки</h2>

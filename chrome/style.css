@@ -1,16 +1,4 @@
-/* ==========================================================================
-   COSMIC NEW TAB — style.css
-   Порядок:
-     1. База и космический фон
-     2. Звёздное небо
-     3. Сетка страницы и 3D-сцена
-     4. Часы и закладки
-     5. Поиск Google + режим ИИ
-     6. Диалог новой закладки
-     7. Адаптивность и доступность
-   ========================================================================== */
 
-/* ------------------------------ 1. База ---------------------------------- */
 
 *,
 *::before,
@@ -42,7 +30,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  /* Чёрный космос с едва заметными синими/фиолетовыми туманностями */
+  
   background-color: #000000;
   background-image:
     radial-gradient(1200px 800px at 12% 18%, rgba(48, 96, 190, 0.14), transparent 62%),
@@ -54,8 +42,6 @@ body {
   color: #ffffff;
   background: rgba(120, 170, 255, 0.35);
 }
-
-/* --------------------------- 2. Звёздное небо ---------------------------- */
 
 .stars {
   position: fixed;
@@ -93,8 +79,6 @@ body {
   }
 }
 
-/* ---------------------- 3. Сетка страницы и 3D-сцена --------------------- */
-
 .stage {
   position: relative;
   z-index: 1;
@@ -107,7 +91,6 @@ body {
   justify-items: stretch;
 }
 
-/* Левая половина целиком отдана WebGL-сцене */
 .planets {
   position: relative;
   min-width: 0;
@@ -149,12 +132,9 @@ body {
   color: rgba(255, 255, 255, 0.55);
 }
 
-/* Атрибут hidden должен побеждать display: grid выше */
 .scene-error[hidden] {
   display: none;
 }
-
-/* --------------------------- 4. Часы и закладки -------------------------- */
 
 .content {
   display: flex;
@@ -192,7 +172,6 @@ body {
   color: rgba(255, 255, 255, 0.72);
 }
 
-/* Сетка закладок: 3 колонки, количество строк растёт по мере добавления */
 .tiles {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -209,7 +188,6 @@ body {
   width: 100%;
 }
 
-/* Пагинация закладок: стрелки + точки, как на iPhone */
 .tiles-nav {
   display: flex;
   align-items: center;
@@ -281,7 +259,6 @@ body {
   min-width: 0;
 }
 
-/* Карточка-стекло */
 .tile {
   position: relative;
   display: flex;
@@ -332,7 +309,6 @@ body {
   opacity: 1;
 }
 
-/* Иконка сайта: светлая «плашка», чтобы настоящие favicon читались на тёмном */
 .tile-icon {
   position: relative;
   display: grid;
@@ -366,7 +342,6 @@ body {
   filter: brightness(0) invert(1) drop-shadow(0 3px 8px rgba(0, 0, 0, 0.35));
 }
 
-/* Резервный вариант: цветная плашка с первой буквой */
 .tile-icon--letter {
   background: linear-gradient(145deg, var(--c1, #5b8cff), var(--c2, #3a5bd9));
   font-size: 16px;
@@ -394,7 +369,6 @@ body {
   color: #ffffff;
 }
 
-/* Кнопка удаления собственной закладки */
 .tile-remove {
   position: absolute;
   top: 6px;
@@ -430,7 +404,6 @@ body {
   color: #ffffff;
 }
 
-/* Плитка «Добавить» */
 .tile--add {
   border-style: dashed;
   border-color: rgba(255, 255, 255, 0.16);
@@ -704,16 +677,6 @@ body.folder-open .bookmarks-widget > .tiles-nav {
     inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 
-/* ----------------------------- 4a. Медиаплеер --------------------------- */
-
-/*
-   Плеер живёт вверху по центру. По умолчанию он скрыт атрибутом hidden;
-   при появлении звука в браузере снимаем hidden и плавно проявляем.
-*/
-/*
-   Верхние виджеты: плеер и погода справа от него.
-   Обёртка центрирует всю группу; если плеер скрыт, погода остаётся по центру.
-*/
 .top-widgets {
   position: fixed;
   top: clamp(12px, 2.2vh, 22px);
@@ -752,8 +715,6 @@ body.layout-bottom .search {
     transform: translateY(calc(-1 * var(--stage-shift, 0px)));
   }
 }
-
-/* --------------------------- Погодный виджет ---------------------------- */
 
 .weather-widget {
   position: relative;
@@ -872,8 +833,6 @@ body.layout-bottom .search {
   color: rgba(255, 255, 255, 0.45);
 }
 
-/* --------------------------- Шестерёнка -------------------------------- */
-
 .settings-button {
   position: fixed;
   top: clamp(12px, 2.2vh, 22px);
@@ -953,7 +912,6 @@ body.layout-bottom .search {
   transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.16, 0.84, 0.44, 1);
 }
 
-/* Глянцевый блик «жидкого стекла» слева и внутренний градиент */
 .media-player::before {
   content: "";
   position: absolute;
@@ -1079,7 +1037,6 @@ body.layout-bottom .search {
   display: block;
 }
 
-/* Обложка / иконка сайта / нота */
 .player-cover {
   position: relative;
   z-index: 1;
@@ -1123,7 +1080,6 @@ body.layout-bottom .search {
   display: block;
 }
 
-/* favicon сайта не растягиваем, а аккуратно вписываем */
 .player-cover.is-favicon .player-art {
   padding: 13px;
   object-fit: contain;
@@ -1221,7 +1177,6 @@ body.layout-bottom .search {
   outline: none;
 }
 
-/* Сама линия прогресса */
 .player-progress::before {
   content: "";
   position: absolute;
@@ -1266,7 +1221,6 @@ body.layout-bottom .search {
   pointer-events: none;
 }
 
-/* Ползунок активен, когда известна длительность и доступна перемотка */
 .player-progress.is-seekable {
   cursor: pointer;
 }
@@ -1289,7 +1243,6 @@ body.layout-bottom .search {
   cursor: default;
 }
 
-/* Если точная длительность/позиция недоступны — бегущий индикатор */
 .player-progress.is-indeterminate .player-progress-fill {
   left: -34%;
   width: 34%;
@@ -1319,8 +1272,6 @@ body.layout-bottom .search {
   color: rgba(255, 255, 255, 0.45);
 }
 
-/* ---------------------- 5. Поиск Google + режим ИИ ---------------------- */
-
 .search-bar {
   position: relative;
   z-index: 2;
@@ -1335,14 +1286,14 @@ body.layout-bottom .search {
   bottom: calc(100% + 10px);
   z-index: 4;
   display: flex;
-  align-items: center;
-  gap: 10px;
+  align-items: stretch;
+  gap: 14px;
   width: min(560px, calc(100vw - 32px));
-  padding: 8px 10px;
+  padding: 10px 12px;
   border: 1px solid rgba(255, 255, 255, 0.16);
-  border-radius: 18px;
+  border-radius: 22px;
   background:
-    linear-gradient(145deg, rgba(22, 29, 50, 0.9), rgba(10, 14, 26, 0.88));
+    linear-gradient(145deg, rgba(22, 29, 50, 0.92), rgba(10, 14, 26, 0.9));
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   backdrop-filter: blur(24px) saturate(180%);
   box-shadow:
@@ -1369,13 +1320,24 @@ body.layout-bottom .search-attachment {
   bottom: auto;
 }
 
-.search-attachment-img {
+.search-attachment-thumb {
+  position: relative;
   flex: 0 0 auto;
-  width: 46px;
-  height: 46px;
+  width: 108px;
+  height: 108px;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 12px;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.06);
+  box-shadow:
+    0 12px 26px -16px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14);
+}
+
+.search-attachment-img {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
 }
 
@@ -1383,14 +1345,15 @@ body.layout-bottom .search-attachment {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 2px;
+  justify-content: center;
+  gap: 4px;
   min-width: 0;
 }
 
 .search-attachment-name {
   overflow: hidden;
   color: #ffffff;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 600;
   letter-spacing: -0.01em;
   text-overflow: ellipsis;
@@ -1399,7 +1362,7 @@ body.layout-bottom .search-attachment {
 
 .search-attachment-ready {
   overflow: hidden;
-  font-size: 11px;
+  font-size: 12px;
   color: rgba(205, 220, 255, 0.55);
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1408,9 +1371,11 @@ body.layout-bottom .search-attachment {
 .search-attachment-send {
   display: grid;
   place-items: center;
+  align-self: flex-end;
   flex: 0 0 auto;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 4px;
   padding: 0;
   border: 1px solid transparent;
   border-radius: 50%;
@@ -1439,27 +1404,72 @@ body.layout-bottom .search-attachment {
 }
 
 .search-attachment-remove {
+  position: absolute;
+  top: 6px;
+  right: 6px;
   display: grid;
   place-items: center;
-  flex: 0 0 auto;
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   padding: 0 0 1px;
-  border: 1px solid rgba(255, 255, 255, 0.13);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.06);
-  color: rgba(255, 255, 255, 0.62);
+  background: rgba(8, 12, 22, 0.68);
+  -webkit-backdrop-filter: blur(14px) saturate(160%);
+  backdrop-filter: blur(14px) saturate(160%);
+  color: #ffffff;
   font-family: inherit;
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1;
   cursor: pointer;
-  transition: color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+  opacity: 0;
+  transform: scale(0.82);
+  transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+}
+
+.search-attachment:hover .search-attachment-remove,
+.search-attachment-remove:focus-visible {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .search-attachment-remove:hover {
-  border-color: rgba(255, 140, 140, 0.45);
-  background: rgba(255, 100, 100, 0.18);
-  color: #ffffff;
+  border-color: rgba(255, 140, 140, 0.55);
+  background: rgba(220, 60, 80, 0.92);
+}
+
+@media (hover: none) {
+  .search-attachment-remove {
+    opacity: 0.92;
+    transform: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-attachment {
+    gap: 10px;
+    padding: 8px;
+    border-radius: 18px;
+  }
+
+  .search-attachment-thumb {
+    width: 84px;
+    height: 84px;
+    border-radius: 14px;
+  }
+
+  .search-attachment-name {
+    font-size: 13px;
+  }
+
+  .search-attachment-ready {
+    font-size: 11px;
+  }
+
+  .search-attachment-send {
+    width: 34px;
+    height: 34px;
+  }
 }
 
 .search {
@@ -1489,7 +1499,6 @@ body.layout-bottom .search-attachment {
     0 18px 44px -20px rgba(0, 0, 0, 0.95);
 }
 
-/* Режим ИИ: переливающаяся рамка + мягкое пульсирующее свечение */
 .search.is-ai {
   border-color: transparent;
   background:
@@ -1565,7 +1574,6 @@ body.layout-bottom .search-attachment {
   color: rgba(190, 205, 255, 0.55);
 }
 
-/* Кнопка истории ИИ — ведёт на веб-версию Google Gemini */
 .ai-history {
   display: grid;
   place-items: center;
@@ -1586,7 +1594,7 @@ body.layout-bottom .search-attachment {
   width: 18px;
   height: 18px;
   object-fit: contain;
-  /* Картинка history.png делается белой, сохраняя прозрачность */
+  
   filter: brightness(0) invert(1);
   opacity: 0.72;
   transition: opacity 0.3s ease;
@@ -1615,7 +1623,6 @@ body.layout-bottom .search-attachment {
   box-shadow: 0 0 18px rgba(140, 110, 255, 0.22);
 }
 
-/* Кнопка добавления картинки */
 .image-picker {
   display: grid;
   place-items: center;
@@ -1662,7 +1669,6 @@ body.layout-bottom .search-attachment {
     0 18px 44px -20px rgba(0, 0, 0, 0.95);
 }
 
-/* Кнопка-переключатель «ИИ» */
 .ai-toggle {
   display: flex;
   align-items: center;
@@ -1720,8 +1726,6 @@ body.layout-bottom .search-attachment {
     transform: scale(1.18) rotate(9deg);
   }
 }
-
-/* ----------------------- 6. Диалог новой закладки ------------------------ */
 
 .bookmark-dialog {
   width: min(420px, calc(100vw - 32px));
@@ -1888,8 +1892,6 @@ body.layout-bottom .search-attachment {
   color: #ffffff;
 }
 
-/* ----------------------------- Настройки -------------------------------- */
-
 .settings-dialog {
   width: min(470px, calc(100vw - 32px));
   max-height: calc(100vh - 40px);
@@ -1992,7 +1994,6 @@ body.layout-bottom .search-attachment {
   color: #ffffff;
 }
 
-/* Переключатель */
 .switch {
   position: relative;
   display: inline-flex;
@@ -2043,8 +2044,6 @@ body.layout-bottom .search-attachment {
 .switch input:focus-visible + .switch-track {
   box-shadow: 0 0 0 3px rgba(120, 160, 255, 0.25);
 }
-
-/* --------------------- 7. Адаптивность и доступность --------------------- */
 
 @media (max-width: 900px) {
   body {
@@ -2151,7 +2150,7 @@ body.layout-bottom .search-attachment {
     width: min(100%, 430px);
   }
 
-  /* На телефоне карточки компактнее — все 6 плиток помещаются в 2 ряда */
+  
   .tile {
     padding: 13px 8px 11px;
     gap: 8px;
@@ -2217,14 +2216,13 @@ body.layout-bottom .search-attachment {
 }
 
 @media (hover: none) {
-  /* На сенсорных экранах кнопка удаления всегда видна */
+  
   .tile-remove {
     opacity: 0.85;
     transform: none;
   }
 }
 
-/* Компактный режим для невысоких экранов — чтобы 3–4 ряда закладок помещались */
 @media (min-width: 901px) and (max-height: 820px) {
   .content {
     gap: 28px;
