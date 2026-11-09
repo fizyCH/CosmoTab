@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox для Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.6-8A7BFF?style=for-the-badge" alt="Версия 2.6.6">
+  <img src="https://img.shields.io/badge/version-2.6.7-8A7BFF?style=for-the-badge" alt="Версия 2.6.7">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="Лицензия MIT">
 </p>
 
@@ -66,7 +66,7 @@
   <img src="assets/attachment.png" width="76%" alt="Превью картинки в CosmoTab">
 </p>
 
-Добавьте картинку кнопкой с изображением, вставьте через `Ctrl+V` или перетащите на строку поиска. Картинка не отправляется сразу: строка поиска раскрывается, и превью появляется прямо внутри неё — с пометкой «Готово», кнопкой отправки и удаления. В строке поиска можно написать вопрос к изображению, затем нажать `Enter` или кнопку со стрелкой.
+Добавьте картинку кнопкой с изображением, вставьте через `Ctrl+V` или перетащите на строку поиска. Картинка не отправляется сразу: строка поиска раскрывается, и превью появляется прямо внутри неё — с кнопкой отправки и удаления. В строке поиска можно написать вопрос к изображению, затем нажать `Enter` или кнопку со стрелкой.
 
 Переключатель ИИ решает, куда отправить картинку: при включённом ИИ открывается Google AI Mode вместе с текстом, при выключенном — Google Lens. Если вопрос не написан, изображение отправляется без дополнительного текста.
 

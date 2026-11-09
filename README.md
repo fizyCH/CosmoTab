@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox for Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.6-8A7BFF?style=for-the-badge" alt="Version 2.6.6">
+  <img src="https://img.shields.io/badge/version-2.6.7-8A7BFF?style=for-the-badge" alt="Version 2.6.7">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="MIT License">
 </p>
 
@@ -66,7 +66,7 @@ On narrow screens the player and weather move below the bookmarks instead of cov
   <img src="assets/attachment.png" width="76%" alt="CosmoTab image attachment preview">
 </p>
 
-Add an image with the picture button, paste it with `Ctrl+V`, or drop it onto the search bar. The image is not sent immediately: the search field expands and shows a preview inside it, with a ready indicator, a send button and a remove button. You can type a question about the image in the search bar, then press `Enter` or the arrow button.
+Add an image with the picture button, paste it with `Ctrl+V`, or drop it onto the search bar. The image is not sent immediately: the search field expands and shows a preview inside it, with a send button and a remove button. You can type a question about the image in the search bar, then press `Enter` or the arrow button.
 
 The AI toggle decides the destination: with AI Mode on, the image and your text open in Google AI Mode; with AI Mode off, the image opens in Google Lens. If no question is typed, the image is sent without extra text.
 

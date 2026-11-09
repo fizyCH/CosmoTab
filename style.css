@@ -594,29 +594,38 @@ body {
 .folder-title {
   display: inline-block;
   max-width: min(70vw, 420px);
-  padding: 4px 10px;
+  padding: 7px 14px;
   overflow: hidden;
-  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  background: rgba(8, 12, 22, 0.82);
+  -webkit-backdrop-filter: blur(20px) saturate(170%);
+  backdrop-filter: blur(20px) saturate(170%);
+  box-shadow:
+    0 14px 34px -20px rgba(0, 0, 0, 0.95),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
   color: #ffffff;
   font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.25;
   text-overflow: ellipsis;
-  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.85);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.55);
   white-space: nowrap;
   outline: none;
   cursor: text;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  transition: background 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .folder-title:hover {
-  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(160, 185, 255, 0.35);
+  background: rgba(16, 22, 40, 0.92);
 }
 
 .folder-title.is-editing {
   overflow: visible;
-  background: rgba(10, 14, 26, 0.9);
+  border-color: rgba(120, 160, 255, 0.45);
+  background: rgba(10, 14, 26, 0.96);
   box-shadow: 0 0 0 2px rgba(120, 160, 255, 0.32);
   text-overflow: clip;
 }
@@ -1300,14 +1309,14 @@ body.layout-bottom .search {
 .search-attachment-thumb {
   position: relative;
   flex: 0 0 auto;
-  width: 108px;
-  height: 108px;
+  width: 72px;
+  height: 72px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 16px;
+  border-radius: 14px;
   background: rgba(255, 255, 255, 0.06);
   box-shadow:
-    0 12px 26px -16px rgba(0, 0, 0, 0.9),
+    0 10px 22px -16px rgba(0, 0, 0, 0.9),
     inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
@@ -1316,33 +1325,6 @@ body.layout-bottom .search {
   width: 100%;
   height: 100%;
   object-fit: cover;
-}
-
-.search-attachment-info {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  justify-content: center;
-  gap: 4px;
-  min-width: 0;
-}
-
-.search-attachment-name {
-  overflow: hidden;
-  color: #ffffff;
-  font-size: 15px;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.search-attachment-ready {
-  overflow: hidden;
-  font-size: 12px;
-  color: rgba(205, 220, 255, 0.55);
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .search-attachment-send {
@@ -1434,17 +1416,9 @@ body.layout-bottom .search {
   }
 
   .search-attachment-thumb {
-    width: 84px;
-    height: 84px;
-    border-radius: 14px;
-  }
-
-  .search-attachment-name {
-    font-size: 13px;
-  }
-
-  .search-attachment-ready {
-    font-size: 11px;
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
   }
 
   .search-attachment-send {

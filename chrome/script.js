@@ -159,8 +159,6 @@ const I18N = {
     'imageSearch.error': 'Не удалось подготовить картинку',
     'imageSearch.promptPlaceholder': 'Спросите об изображении…',
     'imageSearch.lensReady': 'Enter — поиск в Объективе',
-    'imageSearch.readyAi': 'Google ИИ',
-    'imageSearch.readyLens': 'Объектив',
     'imageSearch.send': 'Отправить изображение',
     'imageSearch.remove': 'Убрать изображение',
     'searchEngine.google': 'Google',
@@ -277,8 +275,6 @@ const I18N = {
     'imageSearch.error': 'Could not prepare the image',
     'imageSearch.promptPlaceholder': 'Ask about this image…',
     'imageSearch.lensReady': 'Enter — search with Lens',
-    'imageSearch.readyAi': 'Google AI',
-    'imageSearch.readyLens': 'Lens',
     'imageSearch.send': 'Send image',
     'imageSearch.remove': 'Remove image',
     'searchEngine.google': 'Google',
@@ -3043,8 +3039,6 @@ const Settings = (() => {
   const imageInput = document.getElementById('search-image-input');
   const attachment = document.getElementById('search-attachment');
   const attachmentImg = document.getElementById('search-attachment-img');
-  const attachmentName = document.getElementById('search-attachment-name');
-  const attachmentReady = document.getElementById('search-attachment-ready');
   const attachmentSend = document.getElementById('search-attachment-send');
   const attachmentRemove = document.getElementById('search-attachment-remove');
   if (!form || !input || !toggle) return;
@@ -3079,12 +3073,6 @@ const Settings = (() => {
       : (aiMode
         ? t('search.aiPlaceholder')
         : t('search.placeholder', { engine: t(`searchEngine.${Settings.data.searchEngine}`) }));
-
-    if (attachmentReady) {
-      attachmentReady.textContent = aiMode
-        ? t('imageSearch.readyAi')
-        : t('imageSearch.readyLens');
-    }
 
     if (imagePicker) {
       const imageTitle = aiMode ? t('imageSearch.ai') : t('imageSearch.lens');
@@ -3161,7 +3149,6 @@ const Settings = (() => {
     pendingImageUrl = URL.createObjectURL(file);
 
     if (attachmentImg) attachmentImg.src = pendingImageUrl;
-    if (attachmentName) attachmentName.textContent = file.name || 'image';
     if (attachment) attachment.hidden = false;
     form.classList.add('has-attachment');
 
@@ -3179,7 +3166,6 @@ const Settings = (() => {
 
     if (attachment) attachment.hidden = true;
     if (attachmentImg) attachmentImg.removeAttribute('src');
-    if (attachmentName) attachmentName.textContent = '';
     form.classList.remove('has-attachment');
 
     applyMode();
