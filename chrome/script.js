@@ -149,6 +149,15 @@ const I18N = {
     'search.aiPlaceholder': 'Спросить Google ИИ…',
     'search.aiOffTitle': 'ИИ-поиск Google',
     'search.aiOnTitle': 'Обычный поиск',
+    'imageSearch.open': 'Добавить картинку',
+    'imageSearch.title': 'Поиск по картинке',
+    'imageSearch.hint': 'Выберите, куда отправить картинку.',
+    'imageSearch.prompt': 'Вопрос для ИИ',
+    'imageSearch.promptPlaceholder': 'Например: что изображено?',
+    'imageSearch.lens': 'Искать в Объективе',
+    'imageSearch.ai': 'Спросить Google ИИ',
+    'imageSearch.error': 'Не удалось подготовить картинку',
+    'imageSearch.defaultQuery': 'Что изображено на картинке?',
     'searchEngine.google': 'Google',
     'searchEngine.yandex': 'Яндекс',
     'searchEngine.bing': 'Bing',
@@ -243,6 +252,15 @@ const I18N = {
     'search.aiPlaceholder': 'Ask Google AI…',
     'search.aiOffTitle': 'Google AI search',
     'search.aiOnTitle': 'Regular search',
+    'imageSearch.open': 'Add an image',
+    'imageSearch.title': 'Search by image',
+    'imageSearch.hint': 'Choose where to send the image.',
+    'imageSearch.prompt': 'Question for AI',
+    'imageSearch.promptPlaceholder': 'For example: what is in this image?',
+    'imageSearch.lens': 'Search with Lens',
+    'imageSearch.ai': 'Ask Google AI',
+    'imageSearch.error': 'Could not prepare the image',
+    'imageSearch.defaultQuery': 'What is in this image?',
     'searchEngine.google': 'Google',
     'searchEngine.yandex': 'Yandex',
     'searchEngine.bing': 'Bing',
@@ -410,9 +428,33 @@ const Settings = (() => {
 })();
 
 (function initLayout() {
+  const searchBar = document.querySelector('.search-bar');
+  let shiftFrame = 0;
+
+  function updateStageShift() {
+    if (!searchBar) return;
+    if (!document.body.classList.contains('layout-bottom')) return;
+
+    document.body.classList.remove('layout-bottom');
+    const bottomHeight = searchBar.offsetHeight;
+    document.body.classList.add('layout-bottom');
+    const topHeight = searchBar.offsetHeight;
+    const shift = (bottomHeight + topHeight) / 2;
+
+    document.body.style.setProperty('--stage-shift', `${shift}px`);
+  }
+
   function applyLayout(settings) {
     document.body.classList.toggle('layout-bottom', settings.layout === 'bottom');
+    updateStageShift();
   }
+
+  window.addEventListener('resize', () => {
+    cancelAnimationFrame(shiftFrame);
+    shiftFrame = requestAnimationFrame(updateStageShift);
+  });
+
+  window.addEventListener('load', updateStageShift);
 
   Settings.subscribe(applyLayout);
 })();
@@ -2280,6 +2322,236 @@ const Settings = (() => {
   if (historyButton) {
     historyButton.addEventListener('click', () => {
       window.location.href = 'https://www.google.com/ai';
+    });
+  }
+
+  const imagePicker = document.getElementById('image-picker');
+  const imageInput = document.getElementById('search-image-input');
+  const imageDialog = document.getElementById('image-dialog');
+  const imageForm = document.getElementById('image-form');
+  const imagePreviewImg = document.getElementById('image-preview-img');
+  const imageMetaEl = document.getElementById('image-meta');
+  const imagePrompt = document.getElementById('image-prompt');
+  const imageErrorEl = document.getElementById('image-error');
+  const imageCancel = document.getElementById('image-cancel');
+  const imageLens = document.getElementById('image-lens');
+  const imageAi = document.getElementById('image-ai');
+
+  let imageFile = null;
+  let imageObjectUrl = '';
+
+  function formatFileSize(bytes) {
+    if (bytes < 1024) return `${bytes} B`;
+    if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
+    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  }
+
+  function clearImageError() {
+    if (!imageErrorEl) return;
+    imageErrorEl.textContent = '';
+    imageErrorEl.classList.remove('is-visible');
+  }
+
+  function showImageError(message) {
+    if (!imageErrorEl) return;
+    imageErrorEl.textContent = message;
+    imageErrorEl.classList.add('is-visible');
+  }
+
+  function releaseImage() {
+    if (imageObjectUrl) {
+      URL.revokeObjectURL(imageObjectUrl);
+      imageObjectUrl = '';
+    }
+
+    imageFile = null;
+
+    if (imagePreviewImg) imagePreviewImg.removeAttribute('src');
+    if (imageMetaEl) imageMetaEl.textContent = '';
+    if (imageInput) imageInput.value = '';
+  }
+
+  function closeImageDialog() {
+    if (!imageDialog) return;
+
+    if (typeof imageDialog.close === 'function') imageDialog.close();
+    else imageDialog.removeAttribute('open');
+  }
+
+  function openImageDialog(file) {
+    if (!file || !imageDialog) return;
+    if (file.type && !file.type.startsWith('image/')) return;
+
+    if (imageObjectUrl) URL.revokeObjectURL(imageObjectUrl);
+
+    imageFile = file;
+    imageObjectUrl = URL.createObjectURL(file);
+
+    if (imagePreviewImg) imagePreviewImg.src = imageObjectUrl;
+    if (imageMetaEl) {
+      imageMetaEl.textContent = `${file.name || 'image'} · ${formatFileSize(file.size)}`;
+    }
+    if (imagePrompt) imagePrompt.value = input.value.trim();
+    clearImageError();
+
+    if (typeof imageDialog.showModal === 'function') {
+      if (!imageDialog.open) imageDialog.showModal();
+    } else {
+      imageDialog.setAttribute('open', '');
+    }
+
+    window.setTimeout(() => {
+      if (imagePrompt) imagePrompt.focus();
+    }, 60);
+  }
+
+  function sendImageRequest(mode, query) {
+    return new Promise((resolve) => {
+      const api = typeof browser !== 'undefined'
+        ? browser
+        : (typeof chrome !== 'undefined' ? chrome : null);
+      if (!api || !api.runtime || typeof api.runtime.sendMessage !== 'function') {
+        resolve();
+        return;
+      }
+
+      const payload = { type: 'cosmotab:image-search', mode, query };
+
+      try {
+        if (typeof browser !== 'undefined') {
+          const result = api.runtime.sendMessage(payload);
+          if (result && typeof result.then === 'function') {
+            result.then(resolve).catch(resolve);
+          } else {
+            resolve();
+          }
+        } else {
+          api.runtime.sendMessage(payload, () => {
+            void api.runtime.lastError;
+            resolve();
+          });
+        }
+      } catch {
+        resolve();
+      }
+    });
+  }
+
+  async function submitImage(mode) {
+    const file = imageFile;
+    if (!file) return;
+
+    const query = imagePrompt ? imagePrompt.value.trim() : '';
+    const aiQuery = mode === 'ai'
+      ? (query || t('imageSearch.defaultQuery'))
+      : query;
+    await sendImageRequest(mode, aiQuery);
+
+    const uploadAction = new URL('https://www.google.com/searchbyimage/upload');
+    if (mode === 'ai') uploadAction.searchParams.set('q', aiQuery);
+
+    const uploadForm = document.createElement('form');
+    uploadForm.method = 'post';
+    uploadForm.action = uploadAction.toString();
+    uploadForm.enctype = 'multipart/form-data';
+    uploadForm.target = '_blank';
+    uploadForm.style.display = 'none';
+
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.name = 'encoded_image';
+
+    const uploadFile = file.name
+      ? file
+      : new File([file], 'image.png', { type: file.type || 'image/png' });
+
+    try {
+      const transfer = new DataTransfer();
+      transfer.items.add(uploadFile);
+      fileInput.files = transfer.files;
+    } catch {
+      showImageError(t('imageSearch.error'));
+      return;
+    }
+
+    const imageContent = document.createElement('input');
+    imageContent.type = 'hidden';
+    imageContent.name = 'image_content';
+    imageContent.value = '';
+
+    uploadForm.append(fileInput, imageContent);
+    document.body.appendChild(uploadForm);
+    uploadForm.submit();
+    window.setTimeout(() => uploadForm.remove(), 1000);
+
+    closeImageDialog();
+  }
+
+  if (imagePicker && imageInput && imageDialog && imageForm) {
+    imagePicker.addEventListener('click', () => imageInput.click());
+
+    imageInput.addEventListener('change', () => {
+      const file = imageInput.files && imageInput.files[0];
+      if (file) openImageDialog(file);
+      imageInput.value = '';
+    });
+
+    form.addEventListener('paste', (event) => {
+      if (imageDialog.open) return;
+
+      const items = event.clipboardData ? event.clipboardData.items : null;
+      if (!items) return;
+
+      for (const item of items) {
+        if (item.kind === 'file' && item.type.startsWith('image/')) {
+          const file = item.getAsFile();
+          if (file) {
+            event.preventDefault();
+            openImageDialog(file);
+          }
+          return;
+        }
+      }
+    });
+
+    form.addEventListener('dragover', (event) => {
+      if (!event.dataTransfer ||
+          !Array.from(event.dataTransfer.types).includes('Files')) {
+        return;
+      }
+
+      event.preventDefault();
+      form.classList.add('is-dragover');
+    });
+
+    form.addEventListener('dragleave', () => {
+      form.classList.remove('is-dragover');
+    });
+
+    form.addEventListener('drop', (event) => {
+      if (!event.dataTransfer) return;
+
+      const file = event.dataTransfer.files && event.dataTransfer.files[0];
+      if (!file) return;
+
+      event.preventDefault();
+      form.classList.remove('is-dragover');
+      if (file.type.startsWith('image/')) openImageDialog(file);
+    });
+
+    imageDialog.addEventListener('click', (event) => {
+      if (event.target === imageDialog) closeImageDialog();
+    });
+
+    imageDialog.addEventListener('close', releaseImage);
+
+    if (imageCancel) imageCancel.addEventListener('click', closeImageDialog);
+    if (imageLens) imageLens.addEventListener('click', () => submitImage('lens'));
+    if (imageAi) imageAi.addEventListener('click', () => submitImage('ai'));
+
+    imageForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (imageAi) submitImage('ai');
     });
   }
 

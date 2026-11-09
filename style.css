@@ -499,6 +499,12 @@ body.layout-bottom .search {
   width: min(660px, calc(100vw - 160px));
 }
 
+@media (min-width: 901px) {
+  body.layout-bottom .stage {
+    transform: translateY(calc(-1 * var(--stage-shift, 0px)));
+  }
+}
+
 /* --------------------------- Погодный виджет ---------------------------- */
 
 .weather-widget {
@@ -1155,6 +1161,53 @@ body.layout-bottom .search {
   box-shadow: 0 0 18px rgba(140, 110, 255, 0.22);
 }
 
+/* Кнопка добавления картинки */
+.image-picker {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease,
+    box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.image-picker svg {
+  width: 18px;
+  height: 18px;
+}
+
+.image-picker:hover {
+  color: #ffffff;
+  border-color: rgba(150, 170, 255, 0.45);
+  background: rgba(120, 140, 255, 0.14);
+  box-shadow: 0 0 20px rgba(120, 140, 255, 0.24);
+}
+
+.image-picker:active {
+  transform: scale(0.95);
+}
+
+.search.is-ai .image-picker {
+  border-color: rgba(170, 150, 255, 0.35);
+  color: rgba(215, 205, 255, 0.9);
+  background: rgba(120, 100, 255, 0.14);
+}
+
+.search.is-dragover {
+  border-color: rgba(150, 180, 255, 0.8);
+  background: rgba(120, 150, 255, 0.16);
+  box-shadow:
+    0 0 0 4px rgba(120, 170, 255, 0.16),
+    0 18px 44px -20px rgba(0, 0, 0, 0.95);
+}
+
 /* Кнопка-переключатель «ИИ» */
 .ai-toggle {
   display: flex;
@@ -1261,6 +1314,63 @@ body.layout-bottom .search {
   font-size: 18px;
   font-weight: 600;
   letter-spacing: -0.01em;
+}
+
+/* Диалог поиска по картинке */
+.image-dialog {
+  width: min(440px, calc(100vw - 32px));
+  max-height: calc(100vh - 24px);
+}
+
+.image-form {
+  max-height: calc(100vh - 24px);
+  overflow-y: auto;
+}
+
+.image-hint {
+  margin: -8px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.48);
+}
+
+.image-preview {
+  display: grid;
+  place-items: center;
+  min-height: 120px;
+  max-height: 240px;
+  padding: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.32);
+}
+
+.image-preview img {
+  display: block;
+  max-width: 100%;
+  max-height: 220px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.image-meta {
+  margin: -8px 0 0;
+  overflow: hidden;
+  font-size: 12px;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.45);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.image-actions {
+  flex-wrap: wrap;
+}
+
+.image-actions .btn {
+  flex: 0 1 auto;
+  white-space: nowrap;
 }
 
 .field {
@@ -1688,6 +1798,14 @@ body.layout-bottom .search {
   .settings-dialog {
     width: calc(100vw - 24px);
     max-height: calc(100vh - 24px);
+  }
+
+  .image-dialog {
+    width: calc(100vw - 24px);
+  }
+
+  .image-actions .btn {
+    flex: 1 1 100%;
   }
 
   .settings-form {

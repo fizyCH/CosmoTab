@@ -1,8 +1,25 @@
 {
   "manifest_version": 3,
   "name": "Cosmic New Tab",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "description": "Космическая стартовая страница и новая вкладка: реалистичная 3D-Земля и Луна, Солнечная система, часы, быстрые ссылки и поиск.",
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png",
+    "128": "icons/icon-128.png"
+  },
+  "action": {
+    "default_title": "CosmoTab",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "32": "icons/icon-32.png",
+      "48": "icons/icon-48.png",
+      "96": "icons/icon-96.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
   "chrome_url_overrides": {
     "newtab": "index.html"
   },

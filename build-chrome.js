@@ -32,6 +32,12 @@ const manifest = JSON.parse(fs.readFileSync(manifestPath, 'utf8'));
 delete manifest.chrome_settings_overrides;
 delete manifest.browser_specific_settings;
 
+if (manifest.background && Array.isArray(manifest.background.scripts)) {
+  manifest.background = {
+    service_worker: manifest.background.scripts[0]
+  };
+}
+
 fs.writeFileSync(
   path.join(out, 'manifest.json'),
   `${JSON.stringify(manifest, null, 2)}\n`,

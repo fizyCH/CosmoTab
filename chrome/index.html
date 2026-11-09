@@ -122,6 +122,18 @@
       <input id="search-input" name="q" type="text" placeholder="Search with Google"
              autocomplete="off" spellcheck="false" autofocus />
 
+      <!-- Кнопка добавления картинки для ИИ или Объектива -->
+      <button class="image-picker" id="image-picker" type="button"
+              aria-label="Добавить картинку" title="Добавить картинку"
+              data-i18n-aria="imageSearch.open" data-i18n-title="imageSearch.open">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <rect x="3" y="4.5" width="18" height="15" rx="3" />
+          <circle cx="8.6" cy="9.4" r="1.5" />
+          <path d="m5.5 17 5.1-5.1 3.8 3.8 2.1-2.1 2 2" />
+        </svg>
+      </button>
+
       <!-- Кнопка истории ИИ: открывает Google AI Mode, иконка из textures/history.png -->
       <button class="ai-history" id="ai-history" type="button"
               aria-label="Открыть историю ИИ-поиска Google" title="История ИИ-поиска Google"
@@ -163,6 +175,37 @@
       <div class="dialog-actions">
         <button class="btn btn--ghost" id="bm-cancel" type="button" data-i18n="common.cancel">Отмена</button>
         <button class="btn" type="submit" data-i18n="common.add">Добавить</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- ================= Поиск по картинке ================= -->
+  <dialog class="bookmark-dialog image-dialog" id="image-dialog">
+    <form class="bookmark-form image-form" id="image-form" novalidate>
+      <h2 data-i18n="imageSearch.title">Поиск по картинке</h2>
+      <p class="image-hint" data-i18n="imageSearch.hint">Выберите, куда отправить картинку.</p>
+
+      <div class="image-preview">
+        <img id="image-preview-img" alt="" />
+      </div>
+      <p class="image-meta" id="image-meta"></p>
+
+      <label class="field">
+        <span data-i18n="imageSearch.prompt">Вопрос для ИИ</span>
+        <input id="image-prompt" type="text" maxlength="300" autocomplete="off"
+               placeholder="Например: что изображено?"
+               data-i18n-placeholder="imageSearch.promptPlaceholder" />
+      </label>
+
+      <p class="dialog-error" id="image-error" role="alert"></p>
+
+      <div class="dialog-actions image-actions">
+        <button class="btn btn--ghost" id="image-cancel" type="button"
+                data-i18n="common.cancel">Отмена</button>
+        <button class="btn btn--ghost" id="image-lens" type="button"
+                data-i18n="imageSearch.lens">Искать в Объективе</button>
+        <button class="btn" id="image-ai" type="button"
+                data-i18n="imageSearch.ai">Спросить Google ИИ</button>
       </div>
     </form>
   </dialog>
@@ -264,6 +307,7 @@
   </dialog>
 
   <input type="file" id="bookmark-import" accept="application/json,.json" hidden />
+  <input type="file" id="search-image-input" accept="image/*" hidden />
 
   <script src="lib/three.min.js"></script>
   <script src="script.js"></script>
