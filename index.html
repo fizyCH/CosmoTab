@@ -193,6 +193,25 @@
         <span class="ai-toggle-text" data-i18n="search.aiShort">AI</span>
       </button>
     </form>
+
+    <div class="search-attachment" id="search-attachment" hidden>
+      <img class="search-attachment-img" id="search-attachment-img" alt="" />
+      <div class="search-attachment-info">
+        <span class="search-attachment-name" id="search-attachment-name"></span>
+        <span class="search-attachment-ready" id="search-attachment-ready">Готово к отправке</span>
+      </div>
+      <button class="search-attachment-send" id="search-attachment-send" type="button"
+              aria-label="Отправить изображение" title="Отправить изображение"
+              data-i18n-aria="imageSearch.send" data-i18n-title="imageSearch.send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9"
+             stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14M13 6l6 6-6 6" />
+        </svg>
+      </button>
+      <button class="search-attachment-remove" id="search-attachment-remove" type="button"
+              aria-label="Убрать изображение" title="Убрать изображение"
+              data-i18n-aria="imageSearch.remove" data-i18n-title="imageSearch.remove">×</button>
+    </div>
   </footer>
 
   <!-- ================= Диалог добавления закладки ================= -->

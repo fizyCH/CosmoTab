@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox for Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.2-8A7BFF?style=for-the-badge" alt="Version 2.6.2">
+  <img src="https://img.shields.io/badge/version-2.6.3-8A7BFF?style=for-the-badge" alt="Version 2.6.3">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="MIT License">
 </p>
 
@@ -62,7 +62,13 @@ On narrow screens the player and weather move below the bookmarks instead of cov
 
 ## Image search
 
-Add an image with the picture button, paste it with `Ctrl+V`, or drop it onto the search bar. The AI toggle decides where it goes: with AI Mode on, the image opens in Google AI Mode together with your question; with AI Mode off, it opens in Google Lens. Leave the search field empty to use “What is in this image?”.
+<p align="center">
+  <img src="assets/attachment.png" width="76%" alt="CosmoTab image attachment preview">
+</p>
+
+Add an image with the picture button, paste it with `Ctrl+V`, or drop it onto the search bar. The image is not sent immediately: a preview appears with a ready indicator, a send button and a remove button. You can type a question about the image in the search bar, then press `Enter` or the arrow button.
+
+The AI toggle decides the destination: with AI Mode on, the image and your text open in Google AI Mode; with AI Mode off, the image opens in Google Lens. If no question is typed, the image is sent without extra text.
 
 ## Bookmark folders
 
@@ -146,7 +152,7 @@ Minimum versions: Firefox 140 and Firefox for Android 142 — the Android requir
 
 ## Privacy
 
-CosmoTab does not collect analytics or personal data. Settings and bookmarks are stored locally in your browser. The only network requests are for weather data and the search page you choose to open. Images added for AI or Lens search are sent to Google only when you attach or drop an image.
+CosmoTab does not collect analytics or personal data. Settings and bookmarks are stored locally in your browser. The only network requests are for weather data and the search page you choose to open. Images added for AI or Lens search are sent to Google only when you confirm the attachment.
 
 ## License
 

@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox для Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.2-8A7BFF?style=for-the-badge" alt="Версия 2.6.2">
+  <img src="https://img.shields.io/badge/version-2.6.3-8A7BFF?style=for-the-badge" alt="Версия 2.6.3">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="Лицензия MIT">
 </p>
 
@@ -62,7 +62,13 @@
 
 ## Картинки для ИИ и Объектива
 
-Добавьте картинку кнопкой с изображением, вставьте через `Ctrl+V` или перетащите на строку поиска. Переключатель ИИ решает, куда она попадёт: при включённом ИИ открывается Google AI Mode вместе с вопросом из строки поиска, при выключенном — Google Lens. Если строка пустая, подставляется «Что изображено на картинке?».
+<p align="center">
+  <img src="assets/attachment.png" width="76%" alt="Превью картинки в CosmoTab">
+</p>
+
+Добавьте картинку кнопкой с изображением, вставьте через `Ctrl+V` или перетащите на строку поиска. Картинка не отправляется сразу: появляется превью с пометкой «Готово», кнопкой отправки и удаления. В строке поиска можно написать вопрос к изображению, затем нажать `Enter` или кнопку со стрелкой.
+
+Переключатель ИИ решает, куда отправить картинку: при включённом ИИ открывается Google AI Mode вместе с текстом, при выключенном — Google Lens. Если вопрос не написан, изображение отправляется без дополнительного текста.
 
 ## Папки закладок
 
@@ -146,7 +152,7 @@ Firefox Android не позволяет расширениям заменять 
 
 ## Приватность
 
-CosmoTab не собирает аналитику и персональные данные. Настройки и закладки хранятся локально в браузере. Единственные сетевые запросы — за погодой и на выбранную вами поисковую страницу. Картинки для ИИ или Объектива отправляются в Google только после выбора или перетаскивания.
+CosmoTab не собирает аналитику и персональные данные. Настройки и закладки хранятся локально в браузере. Единственные сетевые запросы — за погодой и на выбранную вами поисковую страницу. Картинки для ИИ или Объектива отправляются в Google только после подтверждения.
 
 ## Лицензия
 

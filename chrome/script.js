@@ -157,7 +157,12 @@ const I18N = {
     'imageSearch.lens': 'Искать в Объективе',
     'imageSearch.ai': 'Спросить Google ИИ',
     'imageSearch.error': 'Не удалось подготовить картинку',
-    'imageSearch.defaultQuery': 'Что изображено на картинке?',
+    'imageSearch.promptPlaceholder': 'Спросите об изображении…',
+    'imageSearch.lensReady': 'Enter — поиск в Объективе',
+    'imageSearch.readyAi': 'Готово · Google ИИ',
+    'imageSearch.readyLens': 'Готово · Объектив',
+    'imageSearch.send': 'Отправить изображение',
+    'imageSearch.remove': 'Убрать изображение',
     'searchEngine.google': 'Google',
     'searchEngine.yandex': 'Яндекс',
     'searchEngine.bing': 'Bing',
@@ -270,7 +275,12 @@ const I18N = {
     'imageSearch.lens': 'Search with Lens',
     'imageSearch.ai': 'Ask Google AI',
     'imageSearch.error': 'Could not prepare the image',
-    'imageSearch.defaultQuery': 'What is in this image?',
+    'imageSearch.promptPlaceholder': 'Ask about this image…',
+    'imageSearch.lensReady': 'Enter — search with Lens',
+    'imageSearch.readyAi': 'Ready · Google AI',
+    'imageSearch.readyLens': 'Ready · Lens',
+    'imageSearch.send': 'Send image',
+    'imageSearch.remove': 'Remove image',
     'searchEngine.google': 'Google',
     'searchEngine.yandex': 'Yandex',
     'searchEngine.bing': 'Bing',
@@ -3031,7 +3041,16 @@ const Settings = (() => {
   const historyButton = document.getElementById('ai-history');
   const imagePicker = document.getElementById('image-picker');
   const imageInput = document.getElementById('search-image-input');
+  const attachment = document.getElementById('search-attachment');
+  const attachmentImg = document.getElementById('search-attachment-img');
+  const attachmentName = document.getElementById('search-attachment-name');
+  const attachmentReady = document.getElementById('search-attachment-ready');
+  const attachmentSend = document.getElementById('search-attachment-send');
+  const attachmentRemove = document.getElementById('search-attachment-remove');
   if (!form || !input || !toggle) return;
+
+  let pendingImage = null;
+  let pendingImageUrl = '';
 
   const MODE_KEY = 'cosmic.search.mode.v3';
 
@@ -3055,9 +3074,17 @@ const Settings = (() => {
     toggle.setAttribute('aria-pressed', String(aiMode));
     toggle.title = aiMode ? t('search.aiOnTitle') : t('search.aiOffTitle');
     toggle.setAttribute('aria-label', toggle.title);
-    input.placeholder = aiMode
-      ? t('search.aiPlaceholder')
-      : t('search.placeholder', { engine: t(`searchEngine.${Settings.data.searchEngine}`) });
+    input.placeholder = pendingImage
+      ? (aiMode ? t('imageSearch.promptPlaceholder') : t('imageSearch.lensReady'))
+      : (aiMode
+        ? t('search.aiPlaceholder')
+        : t('search.placeholder', { engine: t(`searchEngine.${Settings.data.searchEngine}`) }));
+
+    if (attachmentReady) {
+      attachmentReady.textContent = aiMode
+        ? t('imageSearch.readyAi')
+        : t('imageSearch.readyLens');
+    }
 
     if (imagePicker) {
       const imageTitle = aiMode ? t('imageSearch.ai') : t('imageSearch.lens');
@@ -3125,18 +3152,47 @@ const Settings = (() => {
     window.setTimeout(applyMode, 2500);
   }
 
-  async function submitImage(file) {
+  function setPendingImage(file) {
     if (!file || (file.type && !file.type.startsWith('image/'))) return;
 
+    if (pendingImageUrl) URL.revokeObjectURL(pendingImageUrl);
+
+    pendingImage = file;
+    pendingImageUrl = URL.createObjectURL(file);
+
+    if (attachmentImg) attachmentImg.src = pendingImageUrl;
+    if (attachmentName) attachmentName.textContent = file.name || 'image';
+    if (attachment) attachment.hidden = false;
+
+    applyMode();
+    input.focus();
+  }
+
+  function clearPendingImage() {
+    if (pendingImageUrl) {
+      URL.revokeObjectURL(pendingImageUrl);
+      pendingImageUrl = '';
+    }
+
+    pendingImage = null;
+
+    if (attachment) attachment.hidden = true;
+    if (attachmentImg) attachmentImg.removeAttribute('src');
+    if (attachmentName) attachmentName.textContent = '';
+
+    applyMode();
+  }
+
+  async function submitImage() {
+    const file = pendingImage;
+    if (!file) return;
+
     const mode = aiMode ? 'ai' : 'lens';
-    const typed = input.value.trim();
-    const query = mode === 'ai'
-      ? (typed || t('imageSearch.defaultQuery'))
-      : '';
+    const query = mode === 'ai' ? input.value.trim() : '';
     await sendImageRequest(mode, query);
 
     const uploadAction = new URL('https://www.google.com/searchbyimage/upload');
-    if (mode === 'ai') uploadAction.searchParams.set('q', query);
+    if (mode === 'ai' && query) uploadAction.searchParams.set('q', query);
 
     const uploadForm = document.createElement('form');
     uploadForm.method = 'post';
@@ -3171,6 +3227,9 @@ const Settings = (() => {
     document.body.appendChild(uploadForm);
     uploadForm.submit();
     window.setTimeout(() => uploadForm.remove(), 1000);
+
+    clearPendingImage();
+    input.value = '';
   }
 
   if (imagePicker && imageInput) {
@@ -3178,7 +3237,7 @@ const Settings = (() => {
 
     imageInput.addEventListener('change', () => {
       const file = imageInput.files && imageInput.files[0];
-      if (file) void submitImage(file);
+      if (file) setPendingImage(file);
       imageInput.value = '';
     });
 
@@ -3191,7 +3250,7 @@ const Settings = (() => {
           const file = item.getAsFile();
           if (file) {
             event.preventDefault();
-            void submitImage(file);
+            setPendingImage(file);
           }
           return;
         }
@@ -3220,12 +3279,30 @@ const Settings = (() => {
 
       event.preventDefault();
       form.classList.remove('is-dragover');
-      if (file.type.startsWith('image/')) void submitImage(file);
+      if (file.type.startsWith('image/')) setPendingImage(file);
     });
+
+    if (attachmentSend) {
+      attachmentSend.addEventListener('click', () => {
+        void submitImage();
+      });
+    }
+
+    if (attachmentRemove) {
+      attachmentRemove.addEventListener('click', () => {
+        clearPendingImage();
+        input.focus();
+      });
+    }
   }
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
+
+    if (pendingImage) {
+      void submitImage();
+      return;
+    }
 
     const query = input.value.trim();
     if (!query) {
