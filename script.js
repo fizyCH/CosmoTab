@@ -84,6 +84,11 @@ const I18N = {
     'player.thisBrowser': 'Этот браузер',
     'player.playing': 'Воспроизведение в браузере',
     'player.of': 'из',
+    'player.controls': 'Управление плеером',
+    'player.prev': 'Предыдущий трек',
+    'player.next': 'Следующий трек',
+    'player.pauseAction': 'Пауза',
+    'player.playAction': 'Играть',
     'weather.label': 'Погода',
     'weather.loading': 'Загрузка…',
     'weather.unavailable': 'Погода недоступна',
@@ -132,7 +137,7 @@ const I18N = {
     'settings.importNone': 'Новых закладок нет',
     'settings.importError': 'Не удалось прочитать файл закладок',
     'settings.bookmarksSection': 'Закладки',
-    'settings.bookmarksNote': 'По 9 закладок на странице. Точки под сеткой переключают страницы.',
+    'settings.bookmarksNote': 'По 9 закладок на странице. Папки открываются сеткой 3×3. Точки под сеткой переключают страницы.',
     'settings.restore': 'Вернуть стандартные закладки',
     'settings.restoreDone': 'Стандартные закладки возвращены',
     'settings.invalidCity': 'Выберите город из списка.',
@@ -149,11 +154,6 @@ const I18N = {
     'search.aiPlaceholder': 'Спросить Google ИИ…',
     'search.aiOffTitle': 'ИИ-поиск Google',
     'search.aiOnTitle': 'Обычный поиск',
-    'imageSearch.open': 'Добавить картинку',
-    'imageSearch.title': 'Поиск по картинке',
-    'imageSearch.hint': 'Выберите, куда отправить картинку.',
-    'imageSearch.prompt': 'Вопрос для ИИ',
-    'imageSearch.promptPlaceholder': 'Например: что изображено?',
     'imageSearch.lens': 'Искать в Объективе',
     'imageSearch.ai': 'Спросить Google ИИ',
     'imageSearch.error': 'Не удалось подготовить картинку',
@@ -163,6 +163,17 @@ const I18N = {
     'searchEngine.bing': 'Bing',
     'searchEngine.duckduckgo': 'DuckDuckGo',
     'bookmarks.new': 'Новая закладка',
+    'bookmarks.newFolder': 'Новая папка',
+    'bookmarks.bookmarkType': 'Закладка',
+    'bookmarks.folderType': 'Папка',
+    'folders.label': 'Папка',
+    'folders.back': 'Назад',
+    'folders.rename': 'Переименовать папку',
+    'folders.delete': 'Удалить папку',
+    'folders.deleteConfirm': 'Удалить папку и всё её содержимое?',
+    'folders.close': 'Закрыть папку',
+    'folders.defaultName': 'Папка',
+    'folders.open': 'Открыть папку {title}',
     'bookmarks.name': 'Название',
     'bookmarks.namePlaceholder': 'Например, Хабр',
     'bookmarks.url': 'Адрес сайта',
@@ -187,6 +198,11 @@ const I18N = {
     'player.thisBrowser': 'This browser',
     'player.playing': 'Playing in browser',
     'player.of': 'of',
+    'player.controls': 'Player controls',
+    'player.prev': 'Previous track',
+    'player.next': 'Next track',
+    'player.pauseAction': 'Pause',
+    'player.playAction': 'Play',
     'weather.label': 'Weather',
     'weather.loading': 'Loading…',
     'weather.unavailable': 'Weather unavailable',
@@ -235,7 +251,7 @@ const I18N = {
     'settings.importNone': 'No new bookmarks',
     'settings.importError': 'Could not read the bookmarks file',
     'settings.bookmarksSection': 'Bookmarks',
-    'settings.bookmarksNote': '9 bookmarks per page. Use the dots below the grid to switch pages.',
+    'settings.bookmarksNote': '9 bookmarks per page. Folders open as a 3×3 panel. Use the dots below the grid to switch pages.',
     'settings.restore': 'Restore default bookmarks',
     'settings.restoreDone': 'Default bookmarks restored',
     'settings.invalidCity': 'Choose a city from the list.',
@@ -252,11 +268,6 @@ const I18N = {
     'search.aiPlaceholder': 'Ask Google AI…',
     'search.aiOffTitle': 'Google AI search',
     'search.aiOnTitle': 'Regular search',
-    'imageSearch.open': 'Add an image',
-    'imageSearch.title': 'Search by image',
-    'imageSearch.hint': 'Choose where to send the image.',
-    'imageSearch.prompt': 'Question for AI',
-    'imageSearch.promptPlaceholder': 'For example: what is in this image?',
     'imageSearch.lens': 'Search with Lens',
     'imageSearch.ai': 'Ask Google AI',
     'imageSearch.error': 'Could not prepare the image',
@@ -266,6 +277,17 @@ const I18N = {
     'searchEngine.bing': 'Bing',
     'searchEngine.duckduckgo': 'DuckDuckGo',
     'bookmarks.new': 'New bookmark',
+    'bookmarks.newFolder': 'New folder',
+    'bookmarks.bookmarkType': 'Bookmark',
+    'bookmarks.folderType': 'Folder',
+    'folders.label': 'Folder',
+    'folders.back': 'Back',
+    'folders.rename': 'Rename folder',
+    'folders.delete': 'Delete folder',
+    'folders.deleteConfirm': 'Delete the folder and everything inside it?',
+    'folders.close': 'Close folder',
+    'folders.defaultName': 'Folder',
+    'folders.open': 'Open folder {title}',
     'bookmarks.name': 'Name',
     'bookmarks.namePlaceholder': 'For example, GitHub',
     'bookmarks.url': 'Website address',
@@ -549,8 +571,19 @@ const Settings = (() => {
   const form = document.getElementById('bookmark-form');
   const nameInput = document.getElementById('bm-name');
   const urlInput = document.getElementById('bm-url');
+  const urlField = document.getElementById('bm-url-field');
+  const dialogTitle = document.getElementById('bm-dialog-title');
+  const typeGroup = document.getElementById('bm-type');
   const errorEl = document.getElementById('bm-error');
   const cancelButton = document.getElementById('bm-cancel');
+  const folderBackdrop = document.getElementById('folder-backdrop');
+  const folderPanel = document.getElementById('folder-panel');
+  const folderGrid = document.getElementById('folder-grid');
+  const folderTitle = document.getElementById('folder-title');
+  const folderBack = document.getElementById('folder-back');
+  const folderRename = document.getElementById('folder-rename');
+  const folderDelete = document.getElementById('folder-delete');
+  const folderClose = document.getElementById('folder-close');
 
   if (!grid || !dialog || !form) return;
 
@@ -558,13 +591,14 @@ const Settings = (() => {
   const LEGACY_KEY = 'cosmic.bookmarks.v1';
   const PER_PAGE = 9;
   const MAX_BOOKMARKS = 36;
+  const MAX_FOLDER_ITEMS = 9;
 
   const DEFAULT_BOOKMARKS = [
-    { id: 'default-google', title: 'Google', url: 'https://www.google.com/', icon: 'icons/google.png' },
-    { id: 'default-youtube', title: 'YouTube', url: 'https://www.youtube.com/', icon: 'icons/youtube.png' },
-    { id: 'default-github', title: 'GitHub', url: 'https://github.com/', icon: 'icons/github.svg' },
-    { id: 'default-gmail', title: 'Почта', url: 'https://mail.google.com/', icon: 'icons/gmail.svg' },
-    { id: 'default-telegram', title: 'Telegram', url: 'https://web.telegram.org/', icon: 'icons/telegram.svg' }
+    { id: 'default-google', type: 'bookmark', title: 'Google', url: 'https://www.google.com/', icon: 'icons/google.png' },
+    { id: 'default-youtube', type: 'bookmark', title: 'YouTube', url: 'https://www.youtube.com/', icon: 'icons/youtube.png' },
+    { id: 'default-github', type: 'bookmark', title: 'GitHub', url: 'https://github.com/', icon: 'icons/github.svg' },
+    { id: 'default-gmail', type: 'bookmark', title: '?????', url: 'https://mail.google.com/', icon: 'icons/gmail.svg' },
+    { id: 'default-telegram', type: 'bookmark', title: 'Telegram', url: 'https://web.telegram.org/', icon: 'icons/telegram.svg' }
   ];
 
   const ICON_PALETTES = [
@@ -577,8 +611,14 @@ const Settings = (() => {
   ];
 
   let currentPage = 0;
+  let dialogParentId = null;
+  let dialogType = 'bookmark';
+  let draggedItem = null;
+  let folderStack = [];
 
-   
+  function newId(prefix) {
+    return `${prefix}-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
+  }
 
   function normalizeUrl(value) {
     const raw = String(value || '').trim();
@@ -610,7 +650,7 @@ const Settings = (() => {
 
   function initialOf(title) {
     const chars = Array.from(String(title || '').trim());
-    return chars.length ? chars[0].toUpperCase() : '•';
+    return chars.length ? chars[0].toUpperCase() : '?';
   }
 
   function paletteFor(title) {
@@ -622,8 +662,23 @@ const Settings = (() => {
     return ICON_PALETTES[Math.abs(hash) % ICON_PALETTES.length];
   }
 
-  function sanitizeBookmark(item) {
-    if (!item || typeof item.title !== 'string' || typeof item.url !== 'string') return null;
+  function sanitizeItem(item) {
+    if (!item || typeof item.title !== 'string') return null;
+
+    const rawTitle = item.title.trim().slice(0, 40);
+
+    if (item.type === 'folder' || Array.isArray(item.children)) {
+      const children = Array.isArray(item.children)
+        ? item.children.map(sanitizeItem).filter(Boolean).slice(0, MAX_FOLDER_ITEMS)
+        : [];
+
+      return {
+        id: String(item.id || newId('folder')),
+        type: 'folder',
+        title: rawTitle || t('folders.defaultName'),
+        children
+      };
+    }
 
     const url = normalizeUrl(item.url);
     if (!url) return null;
@@ -631,13 +686,20 @@ const Settings = (() => {
     const defaultBookmark = DEFAULT_BOOKMARKS.find((bookmark) => bookmark.id === item.id);
 
     return {
-      id: String(item.id || `bm-${Math.random().toString(36).slice(2, 9)}`),
-      title: item.title.trim().slice(0, 40) || url.hostname.replace(/^www\./, ''),
+      id: String(item.id || newId('bm')),
+      type: 'bookmark',
+      title: rawTitle || url.hostname.replace(/^www\./, ''),
       url: url.href,
       icon: defaultBookmark
         ? defaultBookmark.icon
         : (typeof item.icon === 'string' ? item.icon : '')
     };
+  }
+
+  function sanitizeList(list) {
+    return (Array.isArray(list) ? list : [])
+      .map(sanitizeItem)
+      .filter(Boolean);
   }
 
   function loadBookmarks() {
@@ -647,17 +709,14 @@ const Settings = (() => {
       if (raw) {
         const parsed = JSON.parse(raw);
         if (Array.isArray(parsed)) {
-          return parsed.map(sanitizeBookmark).filter(Boolean).slice(0, MAX_BOOKMARKS);
+          return sanitizeList(parsed).slice(0, MAX_BOOKMARKS);
         }
       }
 
-       
       let legacy = [];
       try {
         const oldRaw = JSON.parse(localStorage.getItem(LEGACY_KEY) || '[]');
-        if (Array.isArray(oldRaw)) {
-          legacy = oldRaw.map(sanitizeBookmark).filter(Boolean);
-        }
+        if (Array.isArray(oldRaw)) legacy = sanitizeList(oldRaw);
       } catch {
         legacy = [];
       }
@@ -688,12 +747,41 @@ const Settings = (() => {
     }
   }
 
-  function canAddBookmark() {
-    return bookmarks.length < MAX_BOOKMARKS;
+  function listFor(parentId) {
+    if (!parentId) return bookmarks;
+    const folder = findFolder(parentId);
+    return folder ? folder.children : bookmarks;
+  }
+
+  function findFolder(id) {
+    if (!id) return null;
+
+    function walk(list) {
+      for (const item of list) {
+        if (item.type !== 'folder') continue;
+        if (item.id === id) return item;
+        const nested = walk(item.children);
+        if (nested) return nested;
+      }
+      return null;
+    }
+
+    return walk(bookmarks);
+  }
+
+  function currentFolder() {
+    if (!folderStack.length) return null;
+    return findFolder(folderStack[folderStack.length - 1]);
+  }
+
+  function canAddTo(parentId) {
+    if (!parentId) return bookmarks.length < MAX_BOOKMARKS;
+    const folder = findFolder(parentId);
+    return Boolean(folder && folder.children.length < MAX_FOLDER_ITEMS);
   }
 
   function totalItems() {
-    return bookmarks.length + (canAddBookmark() ? 1 : 0);
+    return bookmarks.length + (canAddTo(null) ? 1 : 0);
   }
 
   function pageCount() {
@@ -703,8 +791,6 @@ const Settings = (() => {
   function clampPage() {
     currentPage = Math.max(0, Math.min(currentPage, pageCount() - 1));
   }
-
-   
 
   function applyLetterIcon(icon, title) {
     const [c1, c2] = paletteFor(title);
@@ -756,21 +842,89 @@ const Settings = (() => {
     return icon;
   }
 
-   
+  function createFolderIcon() {
+    const icon = document.createElement('span');
+    icon.className = 'tile-icon tile-icon--folder';
+    icon.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 7.5a2 2 0 0 1 2-2h4l2 2h7a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2v-9Z"/></svg>';
+    return icon;
+  }
 
   function bookmarkDisplayTitle(bookmark) {
     if (bookmark.id === 'default-gmail') return t('bookmarks.mail');
     return bookmark.title;
   }
 
-  function createBookmarkTile(bookmark) {
+  function removeItemFrom(parentId, itemId) {
+    const list = listFor(parentId);
+    const index = list.findIndex((item) => item.id === itemId);
+    if (index === -1) return false;
+    list.splice(index, 1);
+    return true;
+  }
+
+  function moveItemToFolder(itemId, sourceParentId, folderId) {
+    if (sourceParentId === folderId) return;
+
+    const target = findFolder(folderId);
+    const source = listFor(sourceParentId);
+    if (!target || source === target.children) return;
+
+    const index = source.findIndex((item) => item.id === itemId && item.type === 'bookmark');
+    if (index === -1) return;
+
+    const [item] = source.splice(index, 1);
+    target.children.push(item);
+    saveBookmarks();
+    render();
+    if (folderStack.length) renderFolder();
+  }
+
+  function moveItemToRoot(itemId, sourceParentId) {
+    if (!sourceParentId) return;
+
+    const source = listFor(sourceParentId);
+    const index = source.findIndex((item) => item.id === itemId && item.type === 'bookmark');
+    if (index === -1) return;
+
+    const [item] = source.splice(index, 1);
+    bookmarks.push(item);
+    saveBookmarks();
+    render();
+    if (folderStack.length) renderFolder();
+  }
+
+  function makeDropTarget(element, handler) {
+    element.addEventListener('dragover', (event) => {
+      if (!draggedItem) return;
+      event.preventDefault();
+      if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+      element.classList.add('is-drop-target');
+    });
+
+    element.addEventListener('dragleave', () => {
+      element.classList.remove('is-drop-target');
+    });
+
+    element.addEventListener('drop', (event) => {
+      if (!draggedItem) return;
+      event.preventDefault();
+      event.stopPropagation();
+      element.classList.remove('is-drop-target');
+      handler(draggedItem);
+      draggedItem = null;
+    });
+  }
+
+  function createBookmarkTile(bookmark, parentId) {
     const wrap = document.createElement('div');
     wrap.className = 'tile-wrap';
+    wrap.draggable = true;
 
     const link = document.createElement('a');
     link.className = 'tile';
     link.href = bookmark.url;
     link.title = bookmark.url;
+    link.draggable = false;
 
     const displayTitle = bookmarkDisplayTitle(bookmark);
 
@@ -784,22 +938,108 @@ const Settings = (() => {
     const remove = document.createElement('button');
     remove.className = 'tile-remove';
     remove.type = 'button';
-    remove.textContent = '×';
+    remove.textContent = '?';
     remove.title = t('bookmarks.remove', { title: displayTitle });
     remove.setAttribute('aria-label', t('bookmarks.remove', { title: displayTitle }));
 
-    remove.addEventListener('click', () => {
-      bookmarks = bookmarks.filter((item) => item.id !== bookmark.id);
+    remove.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      removeItemFrom(parentId, bookmark.id);
       saveBookmarks();
-      clampPage();
+      if (!parentId) clampPage();
       render();
+      if (folderStack.length) renderFolder();
     });
 
     wrap.appendChild(remove);
+
+    wrap.addEventListener('dragstart', (event) => {
+      draggedItem = { id: bookmark.id, parentId };
+      wrap.classList.add('is-dragging');
+      if (event.dataTransfer) {
+        event.dataTransfer.effectAllowed = 'move';
+        event.dataTransfer.setData('text/plain', bookmark.id);
+      }
+    });
+
+    wrap.addEventListener('dragend', () => {
+      wrap.classList.remove('is-dragging');
+      draggedItem = null;
+    });
+
     return wrap;
   }
 
-  function createAddTile() {
+  function deleteFolderById(folderId, parentId) {
+    if (!window.confirm(t('folders.deleteConfirm'))) return;
+
+    const list = listFor(parentId);
+    const index = list.findIndex((item) => item.id === folderId && item.type === 'folder');
+    if (index === -1) return;
+
+    list.splice(index, 1);
+
+    const openIndex = folderStack.indexOf(folderId);
+    if (openIndex !== -1) folderStack = folderStack.slice(0, openIndex);
+
+    saveBookmarks();
+    render();
+
+    if (folderStack.length) {
+      renderFolder();
+    } else {
+      closeFolder();
+    }
+  }
+
+  function createFolderTile(folder, parentId) {
+    const wrap = document.createElement('div');
+    wrap.className = 'tile-wrap tile-wrap--folder';
+
+    const button = document.createElement('button');
+    button.className = 'tile tile--folder';
+    button.type = 'button';
+    button.title = t('folders.open', { title: folder.title });
+    button.setAttribute('aria-label', button.title);
+
+    const name = document.createElement('span');
+    name.className = 'tile-name';
+    name.textContent = folder.title;
+
+    button.append(createFolderIcon(), name);
+    wrap.appendChild(button);
+
+    const count = document.createElement('span');
+    count.className = 'tile-folder-count';
+    count.textContent = String(folder.children.length);
+    wrap.appendChild(count);
+
+    const remove = document.createElement('button');
+    remove.className = 'tile-remove';
+    remove.type = 'button';
+    remove.textContent = '?';
+    remove.title = t('folders.delete');
+    remove.setAttribute('aria-label', t('folders.delete'));
+
+    remove.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      deleteFolderById(folder.id, parentId);
+    });
+
+    wrap.appendChild(remove);
+
+    button.addEventListener('click', () => openFolder(folder.id));
+
+    makeDropTarget(wrap, (dragged) => {
+      moveItemToFolder(dragged.id, dragged.parentId, folder.id);
+    });
+
+    return wrap;
+  }
+
+  function createAddTile(parentId) {
     const button = document.createElement('button');
     button.className = 'tile tile--add';
     button.type = 'button';
@@ -814,11 +1054,9 @@ const Settings = (() => {
     label.textContent = t('bookmarks.add');
 
     button.append(icon, label);
-    button.addEventListener('click', openDialog);
+    button.addEventListener('click', () => openDialog(parentId));
     return button;
   }
-
-   
 
   function goToPage(page) {
     const target = Math.max(0, Math.min(page, pageCount() - 1));
@@ -839,9 +1077,6 @@ const Settings = (() => {
         return;
       }
 
-       
-       
-       
       grid.style.minHeight = '';
       if (bookmarksWidget) bookmarksWidget.style.minHeight = '';
 
@@ -853,8 +1088,6 @@ const Settings = (() => {
         : 0;
 
       if (tileHeight > 0 && bookmarksWidget) {
-         
-         
         bookmarksWidget.style.minHeight = `${Math.round(
           tileHeight * 3 + rowGap * 2 + (navHeight ? widgetGap + navHeight : 0)
         )}px`;
@@ -888,8 +1121,8 @@ const Settings = (() => {
   function render() {
     clampPage();
 
-    const items = bookmarks.map((bookmark) => ({ kind: 'bookmark', bookmark }));
-    if (canAddBookmark()) items.push({ kind: 'add' });
+    const items = bookmarks.map((item) => ({ kind: item.type === 'folder' ? 'folder' : 'bookmark', item }));
+    if (canAddTo(null)) items.push({ kind: 'add' });
 
     const start = currentPage * PER_PAGE;
     const pageItems = items.slice(start, start + PER_PAGE);
@@ -897,14 +1130,223 @@ const Settings = (() => {
     grid.textContent = '';
     const fragment = document.createDocumentFragment();
 
-    for (const item of pageItems) {
-      if (item.kind === 'bookmark') fragment.appendChild(createBookmarkTile(item.bookmark));
-      else fragment.appendChild(createAddTile());
+    for (const entry of pageItems) {
+      if (entry.kind === 'bookmark') fragment.appendChild(createBookmarkTile(entry.item, null));
+      else if (entry.kind === 'folder') fragment.appendChild(createFolderTile(entry.item, null));
+      else fragment.appendChild(createAddTile(null));
     }
 
     grid.appendChild(fragment);
     updateNavigation();
   }
+
+  function positionFolderPanel() {
+    if (!folderPanel || folderPanel.hidden) return;
+
+    const rect = grid.getBoundingClientRect();
+    const rowGap = parseFloat(getComputedStyle(grid).rowGap) || 0;
+    const firstTile = grid.firstElementChild;
+    const tileHeight = firstTile ? firstTile.getBoundingClientRect().height : 0;
+    const availableHeight = Math.max(120, window.innerHeight - 24);
+
+    let height = tileHeight > 0
+      ? Math.round(tileHeight * 3 + rowGap * 2)
+      : Math.round(rect.height);
+
+    height = Math.min(height, Math.round(availableHeight));
+
+    const width = Math.round(rect.width);
+    const left = Math.round(rect.left);
+    let top = Math.round(rect.top);
+
+    if (top + height > window.innerHeight - 12 || top < 12) {
+      top = Math.max(12, Math.round((window.innerHeight - height) / 2));
+    }
+
+    folderPanel.style.left = `${left}px`;
+    folderPanel.style.top = `${top}px`;
+    folderPanel.style.width = `${width}px`;
+    folderPanel.style.height = `${height}px`;
+    folderPanel.classList.toggle('is-toolbar-below', top < 64);
+  }
+
+  function syncFolderTitle() {
+    const folder = currentFolder();
+    if (folderTitle) folderTitle.textContent = folder ? folder.title : '';
+  }
+
+  function renderFolder() {
+    if (!folderPanel || !folderGrid) return;
+
+    const folder = currentFolder();
+    if (!folder) {
+      closeFolder();
+      return;
+    }
+
+    syncFolderTitle();
+    folderGrid.textContent = '';
+    const fragment = document.createDocumentFragment();
+
+    for (const item of folder.children) {
+      if (item.type === 'folder') fragment.appendChild(createFolderTile(item, folder.id));
+      else fragment.appendChild(createBookmarkTile(item, folder.id));
+    }
+
+    if (folder.children.length < MAX_FOLDER_ITEMS) {
+      fragment.appendChild(createAddTile(folder.id));
+    }
+
+    folderGrid.appendChild(fragment);
+    positionFolderPanel();
+  }
+
+  function openFolder(folderId) {
+    if (!folderPanel || !folderBackdrop || !folderGrid) return;
+    if (folderStack[folderStack.length - 1] !== folderId) folderStack.push(folderId);
+
+    folderPanel.hidden = false;
+    folderBackdrop.hidden = false;
+    document.body.classList.add('folder-open');
+    renderFolder();
+    requestAnimationFrame(positionFolderPanel);
+  }
+
+  function closeFolder() {
+    if (!folderPanel || !folderBackdrop) return;
+
+    if (folderTitle) {
+      folderTitle.contentEditable = 'false';
+      folderTitle.classList.remove('is-editing');
+    }
+
+    folderPanel.hidden = true;
+    folderBackdrop.hidden = true;
+    folderStack = [];
+    document.body.classList.remove('folder-open');
+  }
+
+  function goBackFolder() {
+    if (folderStack.length > 1) {
+      folderStack.pop();
+      renderFolder();
+    } else {
+      closeFolder();
+    }
+  }
+
+  function startRenameFolder() {
+    const folder = currentFolder();
+    if (!folder || !folderTitle) return;
+
+    folderTitle.dataset.original = folder.title;
+    folderTitle.contentEditable = 'true';
+    folderTitle.classList.add('is-editing');
+    folderTitle.focus();
+
+    const range = document.createRange();
+    range.selectNodeContents(folderTitle);
+    const selection = window.getSelection();
+    if (selection) {
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
+  }
+
+  function finishRenameFolder(save) {
+    if (!folderTitle || folderTitle.contentEditable !== 'true') return;
+
+    const folder = currentFolder();
+    const nextTitle = folderTitle.textContent.trim().slice(0, 40);
+    folderTitle.contentEditable = 'false';
+    folderTitle.classList.remove('is-editing');
+
+    if (!save || !folder) {
+      syncFolderTitle();
+      return;
+    }
+
+    folder.title = nextTitle || t('folders.defaultName');
+    saveBookmarks();
+    syncFolderTitle();
+    render();
+  }
+
+  function deleteCurrentFolder() {
+    const folder = currentFolder();
+    if (!folder) return;
+
+    if (!window.confirm(t('folders.deleteConfirm'))) return;
+
+    const parentId = folderStack.length > 1
+      ? folderStack[folderStack.length - 2]
+      : null;
+    const list = listFor(parentId);
+    const index = list.findIndex((item) => item.id === folder.id && item.type === 'folder');
+    if (index === -1) return;
+
+    list.splice(index, 1);
+    folderStack.pop();
+    saveBookmarks();
+    render();
+
+    if (folderStack.length) renderFolder();
+    else closeFolder();
+  }
+
+  if (folderBackdrop) folderBackdrop.addEventListener('click', closeFolder);
+  if (folderClose) folderClose.addEventListener('click', closeFolder);
+  if (folderBack) folderBack.addEventListener('click', goBackFolder);
+  if (folderPanel && folderGrid) {
+    folderPanel.tabIndex = -1;
+    folderPanel.addEventListener('click', (event) => {
+      if (event.target === folderPanel || event.target === folderGrid) closeFolder();
+    });
+  }
+  if (folderRename) {
+    folderRename.addEventListener('click', () => {
+      if (folderTitle && folderTitle.contentEditable === 'true') finishRenameFolder(true);
+      else startRenameFolder();
+    });
+  }
+  if (folderDelete) folderDelete.addEventListener('click', deleteCurrentFolder);
+
+  if (folderBack) {
+    makeDropTarget(folderBack, (dragged) => {
+      const targetParent = folderStack.length > 1
+        ? folderStack[folderStack.length - 2]
+        : null;
+      if (targetParent === dragged.parentId) return;
+      if (targetParent) moveItemToFolder(dragged.id, dragged.parentId, targetParent);
+      else moveItemToRoot(dragged.id, dragged.parentId);
+    });
+  }
+
+  if (folderTitle) {
+    folderTitle.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        folderTitle.blur();
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        finishRenameFolder(false);
+      }
+    });
+
+    folderTitle.addEventListener('blur', () => finishRenameFolder(true));
+  }
+
+  window.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (folderTitle && folderTitle.contentEditable === 'true') {
+      finishRenameFolder(false);
+      return;
+    }
+    if (folderPanel && !folderPanel.hidden) closeFolder();
+  });
+
+  window.addEventListener('resize', positionFolderPanel);
+  window.addEventListener('scroll', positionFolderPanel, { passive: true });
 
   if (prevButton) {
     prevButton.addEventListener('click', () => goToPage(currentPage - 1));
@@ -914,8 +1356,6 @@ const Settings = (() => {
   }
 
   window.addEventListener('resize', () => syncGridHeight(pageCount()));
-
-   
 
   function clearError() {
     if (!errorEl) return;
@@ -929,10 +1369,31 @@ const Settings = (() => {
     errorEl.classList.add('is-visible');
   }
 
-  function openDialog() {
-    if (!canAddBookmark()) return;
+  function setDialogType(type) {
+    dialogType = type === 'folder' ? 'folder' : 'bookmark';
+
+    if (typeGroup) {
+      for (const button of typeGroup.querySelectorAll('[data-type]')) {
+        button.classList.toggle('is-active', button.dataset.type === dialogType);
+      }
+    }
+
+    if (urlField) urlField.hidden = dialogType === 'folder';
+    if (dialogTitle) {
+      dialogTitle.textContent = dialogType === 'folder'
+        ? t('bookmarks.newFolder')
+        : t('bookmarks.new');
+    }
 
     clearError();
+  }
+
+  function openDialog(parentId = null) {
+    if (!canAddTo(parentId)) return;
+
+    dialogParentId = parentId;
+    setDialogType('bookmark');
+
     if (nameInput) nameInput.value = '';
     if (urlInput) urlInput.value = '';
 
@@ -950,9 +1411,13 @@ const Settings = (() => {
     else dialog.removeAttribute('open');
   }
 
-  if (cancelButton) {
-    cancelButton.addEventListener('click', closeDialog);
+  if (typeGroup) {
+    for (const button of typeGroup.querySelectorAll('[data-type]')) {
+      button.addEventListener('click', () => setDialogType(button.dataset.type));
+    }
   }
+
+  if (cancelButton) cancelButton.addEventListener('click', closeDialog);
 
   dialog.addEventListener('click', (event) => {
     if (event.target === dialog) closeDialog();
@@ -962,8 +1427,27 @@ const Settings = (() => {
     event.preventDefault();
     clearError();
 
-    if (!canAddBookmark()) {
+    if (!canAddTo(dialogParentId)) {
       showError(t('bookmarks.limit'));
+      return;
+    }
+
+    const titleFromInput = nameInput ? nameInput.value.trim() : '';
+    const targetList = listFor(dialogParentId);
+
+    if (dialogType === 'folder') {
+      const folder = {
+        id: newId('folder'),
+        type: 'folder',
+        title: (titleFromInput || t('folders.defaultName')).slice(0, 40),
+        children: []
+      };
+
+      targetList.push(folder);
+      saveBookmarks();
+      render();
+      if (folderStack.length) renderFolder();
+      closeDialog();
       return;
     }
 
@@ -974,26 +1458,39 @@ const Settings = (() => {
       return;
     }
 
-    const titleFromInput = nameInput ? nameInput.value.trim() : '';
     const title = (titleFromInput || parsedUrl.hostname.replace(/^www\./, '')).slice(0, 40);
 
-    bookmarks.push({
-      id: `bm-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`,
+    targetList.push({
+      id: newId('bm'),
+      type: 'bookmark',
       title,
       url: parsedUrl.href,
       icon: ''
     });
 
     saveBookmarks();
-    currentPage = Math.floor((bookmarks.length - 1) / PER_PAGE);
-    render();
+
+    if (!dialogParentId) {
+      currentPage = Math.floor((bookmarks.length - 1) / PER_PAGE);
+      render();
+    } else {
+      render();
+      if (folderStack.length) renderFolder();
+    }
+
     closeDialog();
   });
 
-   
+  function collectIds(list, ids) {
+    for (const item of list) {
+      ids.add(item.id);
+      if (item.type === 'folder') collectIds(item.children, ids);
+    }
+  }
 
   window.addEventListener('cosmic:restore-bookmarks', () => {
-    const existingIds = new Set(bookmarks.map((bookmark) => bookmark.id));
+    const existingIds = new Set();
+    collectIds(bookmarks, existingIds);
 
     for (const bookmark of DEFAULT_BOOKMARKS) {
       if (bookmarks.length >= MAX_BOOKMARKS) break;
@@ -1008,16 +1505,29 @@ const Settings = (() => {
     render();
   });
 
+  function serializeItem(item) {
+    if (item.type === 'folder') {
+      return {
+        type: 'folder',
+        title: item.title,
+        children: item.children.map(serializeItem)
+      };
+    }
+
+    return {
+      type: 'bookmark',
+      title: item.title,
+      url: item.url,
+      icon: item.icon || ''
+    };
+  }
+
   function exportBookmarks() {
     const payload = {
       app: 'cosmic-new-tab',
-      version: 1,
+      version: 2,
       exportedAt: new Date().toISOString(),
-      bookmarks: bookmarks.map((bookmark) => ({
-        title: bookmark.title,
-        url: bookmark.url,
-        icon: bookmark.icon || ''
-      }))
+      bookmarks: bookmarks.map(serializeItem)
     };
 
     const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -1036,6 +1546,20 @@ const Settings = (() => {
     }));
   }
 
+  function collectUrls(list, urls) {
+    for (const item of list) {
+      if (item.type === 'folder') collectUrls(item.children, urls);
+      else urls.add(item.url);
+    }
+  }
+
+  function regenerateIds(list) {
+    for (const item of list) {
+      item.id = newId(item.type === 'folder' ? 'folder' : 'bm');
+      if (item.type === 'folder') regenerateIds(item.children);
+    }
+  }
+
   async function importBookmarks(file) {
     const text = await file.text();
     const parsed = JSON.parse(text);
@@ -1045,23 +1569,18 @@ const Settings = (() => {
 
     if (!list) throw new Error('invalid-import');
 
-    const existingUrls = new Set(bookmarks.map((bookmark) => bookmark.url));
-    const existingIds = new Set(bookmarks.map((bookmark) => bookmark.id));
+    const existingUrls = new Set();
+    collectUrls(bookmarks, existingUrls);
     let added = 0;
 
-    for (const raw of list) {
+    for (const raw of sanitizeList(list)) {
       if (bookmarks.length >= MAX_BOOKMARKS) break;
 
-      const bookmark = sanitizeBookmark(raw);
-      if (!bookmark || existingUrls.has(bookmark.url)) continue;
+      if (raw.type === 'bookmark' && existingUrls.has(raw.url)) continue;
 
-      if (existingIds.has(bookmark.id)) {
-        bookmark.id = `bm-import-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 7)}`;
-      }
-
-      bookmarks.push(bookmark);
-      existingUrls.add(bookmark.url);
-      existingIds.add(bookmark.id);
+      regenerateIds([raw]);
+      bookmarks.push(raw);
+      collectUrls([raw], existingUrls);
       added += 1;
     }
 
@@ -1094,12 +1613,14 @@ const Settings = (() => {
     });
   }
 
-  window.addEventListener('cosmic:locale', render);
+  window.addEventListener('cosmic:locale', () => {
+    render();
+    if (folderStack.length) renderFolder();
+  });
 
   render();
 })();
 
- 
 (function initWeather() {
   const widget = document.getElementById('weather-widget');
   const iconEl = document.getElementById('weather-icon');
@@ -1489,6 +2010,9 @@ const Settings = (() => {
   const currentEl = document.getElementById('player-current');
   const durationEl = document.getElementById('player-duration');
   const progressEl = document.getElementById('player-progress');
+  const prevButton = document.getElementById('player-prev');
+  const playButton = document.getElementById('player-play');
+  const nextButton = document.getElementById('player-next');
 
   if (!player || !cover || !art || !titleEl || !sourceEl || !artistEl ||
       !currentEl || !durationEl || !progressEl) {
@@ -1556,7 +2080,8 @@ const Settings = (() => {
     mode: '',         
     tabId: null,
     position: null,
-    duration: null
+    duration: null,
+    playing: true
   };
 
   let visible = false;
@@ -1647,8 +2172,12 @@ const Settings = (() => {
     }
 
     try {
-      media = Array.from(document.querySelectorAll('video, audio'))
-        .find((element) => !element.paused && !element.ended) || null;
+      const mediaList = Array.from(document.querySelectorAll('video, audio'));
+      media = mediaList.find((element) => !element.paused && !element.ended) ||
+        mediaList.find((element) =>
+          element.readyState >= 2 && Number.isFinite(element.duration) && element.duration > 0) ||
+        mediaList[0] ||
+        null;
     } catch {
       media = null;
     }
@@ -1693,8 +2222,7 @@ const Settings = (() => {
       artwork,
       position,
       duration,
-       
-      playing: Boolean(media) || playbackState === 'playing'
+      playing: media ? (!media.paused && !media.ended) : playbackState === 'playing'
     };
   }
 
@@ -1765,8 +2293,6 @@ const Settings = (() => {
 
      
      
-    if (media && media.playing === false) return null;
-
     if (media) {
        
       const rawArtwork = typeof media.artwork === 'string' ? media.artwork : '';
@@ -1782,7 +2308,8 @@ const Settings = (() => {
         mode: 'tab',
         tabId: tab.id,
         position: Number.isFinite(media.position) ? media.position : null,
-        duration: Number.isFinite(media.duration) ? media.duration : null
+        duration: Number.isFinite(media.duration) ? media.duration : null,
+        playing: media.playing !== false
       };
     }
 
@@ -1795,7 +2322,8 @@ const Settings = (() => {
       mode: 'tab',
       tabId: tab.id,
       position: null,
-      duration: null
+      duration: null,
+      playing: true
     };
   }
 
@@ -1811,10 +2339,13 @@ const Settings = (() => {
 
     const session = navigator.mediaSession;
     const metadata = session.metadata || null;
-    const mediaElement = getPageMediaElement();
+    const mediaElement = getPageMediaElement() ||
+      document.querySelector('audio, video') ||
+      null;
 
-    const isPlaying = Boolean(mediaElement) || session.playbackState === 'playing';
-    if (!isPlaying) return null;
+    if (!mediaElement && !metadata) return null;
+
+    const isPlaying = Boolean(mediaElement) && !mediaElement.paused && !mediaElement.ended;
 
     const artworkEntry = metadata && Array.isArray(metadata.artwork) && metadata.artwork.length
       ? metadata.artwork[metadata.artwork.length - 1]
@@ -1833,7 +2364,8 @@ const Settings = (() => {
         : null,
       duration: mediaElement && Number.isFinite(mediaElement.duration)
         ? mediaElement.duration
-        : null
+        : null,
+      playing: isPlaying
     };
   }
 
@@ -1902,6 +2434,20 @@ const Settings = (() => {
     progressEl.setAttribute('aria-valuetext', t('player.noSeek'));
   }
 
+  function updatePlayLabel() {
+    if (!playButton) return;
+
+    const label = state.playing ? t('player.pauseAction') : t('player.playAction');
+    playButton.title = label;
+    playButton.setAttribute('aria-label', label);
+  }
+
+  function setPlaying(playing) {
+    state.playing = playing !== false;
+    player.classList.toggle('is-paused', !state.playing);
+    updatePlayLabel();
+  }
+
   function apply(data) {
     if (!data) return;
 
@@ -1923,6 +2469,7 @@ const Settings = (() => {
     }
 
     renderTimeline(data.position, data.duration, canSeek);
+    setPlaying(data.playing !== false);
 
     state.title = title;
     state.source = source;
@@ -1933,6 +2480,159 @@ const Settings = (() => {
     state.tabId = data.tabId === undefined ? null : data.tabId;
     state.position = Number.isFinite(data.position) ? data.position : null;
     state.duration = Number.isFinite(data.duration) ? data.duration : null;
+  }
+
+  function controlMediaInTab(action) {
+    const mediaList = Array.from(document.querySelectorAll('video, audio'));
+    const media = mediaList.find((element) => !element.paused && !element.ended) ||
+      mediaList.find((element) => element.readyState >= 2) ||
+      mediaList[0] ||
+      null;
+
+    if (action === 'play' || action === 'pause') {
+      if (!media) return false;
+
+      if (action === 'pause') {
+        if (!media.paused) media.pause();
+        return true;
+      }
+
+      if (media.paused) {
+        const result = media.play();
+        if (result && typeof result.catch === 'function') result.catch(() => {});
+      }
+
+      return true;
+    }
+
+    const key = action === 'next' ? 'MediaTrackNext' : 'MediaTrackPrevious';
+
+    try {
+      document.dispatchEvent(new KeyboardEvent('keydown', {
+        key,
+        code: key,
+        bubbles: true,
+        cancelable: true
+      }));
+      document.dispatchEvent(new KeyboardEvent('keyup', {
+        key,
+        code: key,
+        bubbles: true,
+        cancelable: true
+      }));
+    } catch {
+       
+    }
+
+    const selectors = action === 'next'
+      ? [
+        '.ytp-next-button',
+        '#next-button',
+        '[data-testid="control-button-skip-forward"]',
+        '.playControls__next',
+        'button[aria-label*="next" i]',
+        '[role="button"][aria-label*="next" i]',
+        'button[title*="next" i]',
+        '[data-testid*="next" i]',
+        'button[aria-label*="след" i]',
+        'button[title*="след" i]'
+      ]
+      : [
+        '.ytp-prev-button',
+        '#previous-button',
+        '[data-testid="control-button-skip-back"]',
+        '.playControls__prev',
+        'button[aria-label*="previous" i]',
+        '[role="button"][aria-label*="previous" i]',
+        'button[title*="previous" i]',
+        'button[aria-label*="prev" i]',
+        '[data-testid*="previous" i]',
+        'button[aria-label*="пред" i]',
+        'button[title*="пред" i]'
+      ];
+
+    for (const selector of selectors) {
+      const element = document.querySelector(selector);
+      if (element && typeof element.click === 'function') {
+        element.click();
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function controlPageMedia(action) {
+    const media = getPageMediaElement() || document.querySelector('audio, video');
+    if (!media) return false;
+
+    if (action === 'pause') {
+      if (!media.paused) media.pause();
+      return true;
+    }
+
+    if (action === 'play') {
+      if (media.paused) {
+        const result = media.play();
+        if (result && typeof result.catch === 'function') result.catch(() => {});
+      }
+      return true;
+    }
+
+    return false;
+  }
+
+  async function sendControl(action) {
+    let handled = false;
+
+    if (state.mode === 'tab' && state.tabId !== null && scriptingApi) {
+      try {
+        const results = await callExtensionApi(scriptingApi, 'executeScript', {
+          target: { tabId: state.tabId },
+          func: controlMediaInTab,
+          args: [action]
+        });
+
+        handled = Array.isArray(results) &&
+          results.some((result) => result && result.result === true);
+      } catch {
+         
+      }
+    } else if (state.mode === 'page') {
+      handled = controlPageMedia(action);
+    }
+
+    if (action === 'pause' || action === 'play') {
+      if (handled || state.mode === 'tab') setPlaying(action === 'play');
+      window.setTimeout(() => {
+        if (!document.hidden) refresh();
+      }, 350);
+    } else {
+      window.setTimeout(() => {
+        if (!document.hidden) refresh();
+      }, 450);
+    }
+  }
+
+  if (prevButton) {
+    prevButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      void sendControl('prev');
+    });
+  }
+
+  if (playButton) {
+    playButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      void sendControl(state.playing ? 'pause' : 'play');
+    });
+  }
+
+  if (nextButton) {
+    nextButton.addEventListener('click', (event) => {
+      event.stopPropagation();
+      void sendControl('next');
+    });
   }
 
    
@@ -1962,13 +2662,6 @@ const Settings = (() => {
       try {
         const media = await readTabMedia(state.tabId);
         if (!media || !visible || seeking) return;
-
-         
-         
-        if (media.playing === false) {
-          hide();
-          return;
-        }
 
         apply(tabProgressData(media));
       } finally {
@@ -2002,7 +2695,8 @@ const Settings = (() => {
       mode: 'tab',
       tabId: state.tabId,
       position: Number.isFinite(media.position) ? media.position : state.position,
-      duration: Number.isFinite(media.duration) ? media.duration : state.duration
+      duration: Number.isFinite(media.duration) ? media.duration : state.duration,
+      playing: media.playing !== false
     };
   }
 
@@ -2202,6 +2896,16 @@ const Settings = (() => {
 
     if (token !== requestToken) return;
 
+    if (!data && state.mode === 'tab' && state.tabId !== null && !state.playing) {
+      try {
+        const media = await readTabMedia(state.tabId);
+        if (token !== requestToken) return;
+        if (media) data = tabProgressData(media);
+      } catch {
+         
+      }
+    }
+
     if (!data) {
       hide();
       return;
@@ -2236,6 +2940,7 @@ const Settings = (() => {
   }, 1500);
 
   window.addEventListener('cosmic:locale', () => {
+    updatePlayLabel();
     if (!visible) return;
 
     const oldTitles = [I18N.ru['player.untitled'], I18N.en['player.untitled']];
@@ -2265,6 +2970,7 @@ const Settings = (() => {
     }
   });
 
+  updatePlayLabel();
   refresh();
 })();
 
@@ -2274,6 +2980,8 @@ const Settings = (() => {
   const input = document.getElementById('search-input');
   const toggle = document.getElementById('ai-toggle');
   const historyButton = document.getElementById('ai-history');
+  const imagePicker = document.getElementById('image-picker');
+  const imageInput = document.getElementById('search-image-input');
   if (!form || !input || !toggle) return;
 
   const MODE_KEY = 'cosmic.search.mode.v3';
@@ -2301,6 +3009,12 @@ const Settings = (() => {
     input.placeholder = aiMode
       ? t('search.aiPlaceholder')
       : t('search.placeholder', { engine: t(`searchEngine.${Settings.data.searchEngine}`) });
+
+    if (imagePicker) {
+      const imageTitle = aiMode ? t('imageSearch.ai') : t('imageSearch.lens');
+      imagePicker.title = imageTitle;
+      imagePicker.setAttribute('aria-label', imageTitle);
+    }
   }
 
   function saveMode() {
@@ -2323,86 +3037,6 @@ const Settings = (() => {
     historyButton.addEventListener('click', () => {
       window.location.href = 'https://www.google.com/ai';
     });
-  }
-
-  const imagePicker = document.getElementById('image-picker');
-  const imageInput = document.getElementById('search-image-input');
-  const imageDialog = document.getElementById('image-dialog');
-  const imageForm = document.getElementById('image-form');
-  const imagePreviewImg = document.getElementById('image-preview-img');
-  const imageMetaEl = document.getElementById('image-meta');
-  const imagePrompt = document.getElementById('image-prompt');
-  const imageErrorEl = document.getElementById('image-error');
-  const imageCancel = document.getElementById('image-cancel');
-  const imageLens = document.getElementById('image-lens');
-  const imageAi = document.getElementById('image-ai');
-
-  let imageFile = null;
-  let imageObjectUrl = '';
-
-  function formatFileSize(bytes) {
-    if (bytes < 1024) return `${bytes} B`;
-    if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)} KB`;
-    return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  }
-
-  function clearImageError() {
-    if (!imageErrorEl) return;
-    imageErrorEl.textContent = '';
-    imageErrorEl.classList.remove('is-visible');
-  }
-
-  function showImageError(message) {
-    if (!imageErrorEl) return;
-    imageErrorEl.textContent = message;
-    imageErrorEl.classList.add('is-visible');
-  }
-
-  function releaseImage() {
-    if (imageObjectUrl) {
-      URL.revokeObjectURL(imageObjectUrl);
-      imageObjectUrl = '';
-    }
-
-    imageFile = null;
-
-    if (imagePreviewImg) imagePreviewImg.removeAttribute('src');
-    if (imageMetaEl) imageMetaEl.textContent = '';
-    if (imageInput) imageInput.value = '';
-  }
-
-  function closeImageDialog() {
-    if (!imageDialog) return;
-
-    if (typeof imageDialog.close === 'function') imageDialog.close();
-    else imageDialog.removeAttribute('open');
-  }
-
-  function openImageDialog(file) {
-    if (!file || !imageDialog) return;
-    if (file.type && !file.type.startsWith('image/')) return;
-
-    if (imageObjectUrl) URL.revokeObjectURL(imageObjectUrl);
-
-    imageFile = file;
-    imageObjectUrl = URL.createObjectURL(file);
-
-    if (imagePreviewImg) imagePreviewImg.src = imageObjectUrl;
-    if (imageMetaEl) {
-      imageMetaEl.textContent = `${file.name || 'image'} · ${formatFileSize(file.size)}`;
-    }
-    if (imagePrompt) imagePrompt.value = input.value.trim();
-    clearImageError();
-
-    if (typeof imageDialog.showModal === 'function') {
-      if (!imageDialog.open) imageDialog.showModal();
-    } else {
-      imageDialog.setAttribute('open', '');
-    }
-
-    window.setTimeout(() => {
-      if (imagePrompt) imagePrompt.focus();
-    }, 60);
   }
 
   function sendImageRequest(mode, query) {
@@ -2437,18 +3071,23 @@ const Settings = (() => {
     });
   }
 
-  async function submitImage(mode) {
-    const file = imageFile;
-    if (!file) return;
+  function imageError() {
+    input.placeholder = t('imageSearch.error');
+    window.setTimeout(applyMode, 2500);
+  }
 
-    const query = imagePrompt ? imagePrompt.value.trim() : '';
-    const aiQuery = mode === 'ai'
-      ? (query || t('imageSearch.defaultQuery'))
-      : query;
-    await sendImageRequest(mode, aiQuery);
+  async function submitImage(file) {
+    if (!file || (file.type && !file.type.startsWith('image/'))) return;
+
+    const mode = aiMode ? 'ai' : 'lens';
+    const typed = input.value.trim();
+    const query = mode === 'ai'
+      ? (typed || t('imageSearch.defaultQuery'))
+      : '';
+    await sendImageRequest(mode, query);
 
     const uploadAction = new URL('https://www.google.com/searchbyimage/upload');
-    if (mode === 'ai') uploadAction.searchParams.set('q', aiQuery);
+    if (mode === 'ai') uploadAction.searchParams.set('q', query);
 
     const uploadForm = document.createElement('form');
     uploadForm.method = 'post';
@@ -2470,7 +3109,7 @@ const Settings = (() => {
       transfer.items.add(uploadFile);
       fileInput.files = transfer.files;
     } catch {
-      showImageError(t('imageSearch.error'));
+      imageError();
       return;
     }
 
@@ -2483,22 +3122,18 @@ const Settings = (() => {
     document.body.appendChild(uploadForm);
     uploadForm.submit();
     window.setTimeout(() => uploadForm.remove(), 1000);
-
-    closeImageDialog();
   }
 
-  if (imagePicker && imageInput && imageDialog && imageForm) {
+  if (imagePicker && imageInput) {
     imagePicker.addEventListener('click', () => imageInput.click());
 
     imageInput.addEventListener('change', () => {
       const file = imageInput.files && imageInput.files[0];
-      if (file) openImageDialog(file);
+      if (file) void submitImage(file);
       imageInput.value = '';
     });
 
     form.addEventListener('paste', (event) => {
-      if (imageDialog.open) return;
-
       const items = event.clipboardData ? event.clipboardData.items : null;
       if (!items) return;
 
@@ -2507,7 +3142,7 @@ const Settings = (() => {
           const file = item.getAsFile();
           if (file) {
             event.preventDefault();
-            openImageDialog(file);
+            void submitImage(file);
           }
           return;
         }
@@ -2536,22 +3171,7 @@ const Settings = (() => {
 
       event.preventDefault();
       form.classList.remove('is-dragover');
-      if (file.type.startsWith('image/')) openImageDialog(file);
-    });
-
-    imageDialog.addEventListener('click', (event) => {
-      if (event.target === imageDialog) closeImageDialog();
-    });
-
-    imageDialog.addEventListener('close', releaseImage);
-
-    if (imageCancel) imageCancel.addEventListener('click', closeImageDialog);
-    if (imageLens) imageLens.addEventListener('click', () => submitImage('lens'));
-    if (imageAi) imageAi.addEventListener('click', () => submitImage('ai'));
-
-    imageForm.addEventListener('submit', (event) => {
-      event.preventDefault();
-      if (imageAi) submitImage('ai');
+      if (file.type.startsWith('image/')) void submitImage(file);
     });
   }
 
@@ -3494,7 +4114,36 @@ const Settings = (() => {
   let lastX = 0;
   let lastY = 0;
   let lastMoveTime = 0;
+  let lastDragFrame = 0;
   let lastHoverCheck = 0;
+  let dragDx = 0;
+  let dragDy = 0;
+  const dragVelocity = new THREE.Vector3();
+
+  function applyDragStep(nowMs) {
+    if (!dragging || !activeTarget) return false;
+    if (dragDx === 0 && dragDy === 0) return false;
+
+    const angle = Math.hypot(dragDx, dragDy) * 0.0065;
+
+    if (angle > 1e-6) {
+      dragAxis.set(dragDy, dragDx, 0).normalize();
+      tempQuaternion.setFromAxisAngle(dragAxis, angle);
+      activeTarget.pivot.quaternion.premultiply(tempQuaternion);
+
+      const elapsed = Math.max(8, nowMs - lastDragFrame) / 1000;
+      lastDragFrame = nowMs;
+
+      const speed = Math.min(14, angle / elapsed);
+      dragVelocity.copy(dragAxis).multiplyScalar(speed);
+      angularVelocity.lerp(dragVelocity, 0.42);
+      activeTarget.lastTouched = nowMs;
+    }
+
+    dragDx = 0;
+    dragDy = 0;
+    return true;
+  }
 
   function updatePointer(event) {
     const rect = canvas.getBoundingClientRect();
@@ -3530,6 +4179,9 @@ const Settings = (() => {
     lastX = event.clientX;
     lastY = event.clientY;
     lastMoveTime = performance.now();
+    lastDragFrame = lastMoveTime;
+    dragDx = 0;
+    dragDy = 0;
     angularVelocity.set(0, 0, 0);
     target.lastTouched = lastMoveTime;
 
@@ -3555,24 +4207,13 @@ const Settings = (() => {
     const now = performance.now();
     const dx = event.clientX - lastX;
     const dy = event.clientY - lastY;
-    const elapsed = Math.max(8, now - lastMoveTime) / 1000;
 
     lastX = event.clientX;
     lastY = event.clientY;
     lastMoveTime = now;
 
-    const angle = Math.hypot(dx, dy) * 0.0065;
-    if (angle < 1e-6) return;
-
-     
-     
-    dragAxis.set(dy, dx, 0).normalize();
-    tempQuaternion.setFromAxisAngle(dragAxis, angle);
-    activeTarget.pivot.quaternion.premultiply(tempQuaternion);
-
-     
-    const speed = Math.min(14, angle / elapsed);
-    angularVelocity.copy(dragAxis).multiplyScalar(speed);
+    dragDx += dx;
+    dragDy += dy;
     activeTarget.lastTouched = now;
   });
 
@@ -3580,7 +4221,15 @@ const Settings = (() => {
     if (!dragging) return;
     if (event && event.pointerId !== pointerId) return;
 
-     
+    if (event && Number.isFinite(event.clientX) && Number.isFinite(event.clientY)) {
+      dragDx += event.clientX - lastX;
+      dragDy += event.clientY - lastY;
+      lastX = event.clientX;
+      lastY = event.clientY;
+    }
+
+    applyDragStep(performance.now());
+
     if (performance.now() - lastMoveTime > 120) {
       angularVelocity.set(0, 0, 0);
     }
@@ -3711,6 +4360,15 @@ const Settings = (() => {
     );
 
      
+    if (dragging && activeTarget) {
+      const didDrag = applyDragStep(performance.now());
+
+      if (!didDrag) {
+        angularVelocity.multiplyScalar(0.82);
+        if (angularVelocity.length() < 0.02) angularVelocity.set(0, 0, 0);
+      }
+    }
+
     if (!dragging && angularVelocity.lengthSq() > 1e-6) {
       const speed = angularVelocity.length();
       inertiaAxis.copy(angularVelocity).normalize();

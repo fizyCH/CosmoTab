@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox for Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.5.0-8A7BFF?style=for-the-badge" alt="Version 2.5.0">
+  <img src="https://img.shields.io/badge/version-2.6.0-8A7BFF?style=for-the-badge" alt="Version 2.6.0">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="MIT License">
 </p>
 
@@ -43,7 +43,8 @@ Instead of another blank page or a wall of widgets, it gives you a slowly turnin
 - **Now playing, everywhere.** CosmoTab picks up audio from other tabs and shows artwork, title, artist, source and a seekable timeline in a compact glass panel.
 - **Search the way you like.** Google, Yandex, Bing or DuckDuckGo, plus an optional Google AI Mode toggle.
 - **Image search, two ways.** Attach, paste, or drop an image, then ask Google AI about it or run a visual search in Google Lens.
-- **Bookmarks that stay out of the way.** Nine tiles per page, add and remove, restore defaults, and export or import your collection as JSON.
+- **Bookmarks that stay out of the way.** Nine tiles per page, folders that open as a 3×3 panel, rename support, drag and drop, restore defaults, and JSON export or import.
+- **A player with real controls.** Previous, play/pause and next buttons in a liquid-glass panel. Pause keeps the panel visible so you can resume from the new tab.
 - **Bilingual and configurable.** English and Russian, two layouts, weather on/off, city and temperature units.
 - **Private by design.** No accounts, no telemetry, no remote code. Your settings and bookmarks stay in local storage.
 
@@ -61,11 +62,23 @@ On narrow screens the player and weather move below the bookmarks instead of cov
 
 ## Image search
 
+Add an image with the picture button, paste it with `Ctrl+V`, or drop it onto the search bar. The AI toggle decides where it goes: with AI Mode on, the image opens in Google AI Mode together with your question; with AI Mode off, it opens in Google Lens. Leave the search field empty to use “What is in this image?”.
+
+## Bookmark folders
+
 <p align="center">
-  <img src="assets/image-search.png" width="76%" alt="CosmoTab image search dialog">
+  <img src="assets/folders.png" width="76%" alt="CosmoTab bookmark folder">
 </p>
 
-Add an image with the picture button, paste it with `Ctrl+V`, or drop it onto the search bar. Choose **Ask Google AI** to open AI Mode with the image and your question, or **Search with Lens** for a classic visual search. Leave the question empty to use “What is in this image?”.
+Choose **Folder** in the add dialog to create a folder. It opens as a 3×3 panel exactly over the nine bookmark tiles, with its own add button inside. Rename it with the pencil, drag bookmarks into it, or drag a bookmark onto **Back** to move it one level up. Click outside the tiles, the backdrop, or press `Esc` to close the folder.
+
+## Player
+
+<p align="center">
+  <img src="assets/player-controls.png" width="76%" alt="CosmoTab media player controls">
+</p>
+
+The liquid-glass player has previous, play/pause and next controls. Pausing no longer hides it: the panel stays on the new tab and the same button resumes playback. Track switching works on sites that support media keys or expose next/previous buttons.
 
 ## Settings
 
@@ -78,7 +91,7 @@ Add an image with the picture button, paste it with `Ctrl+V`, or drop it onto th
 - **Earth lighting** — auto by season and time, day, 50/50 or night.
 - **Search provider** — Google, Yandex, Bing, DuckDuckGo, with a separate Google AI Mode switch.
 - **Weather** — enable or disable, choose a city, switch between °C and °F.
-- **Bookmarks** — export to JSON, import from JSON, restore the default set.
+- **Bookmarks** — folders, export to JSON, import from JSON, restore the default set.
 
 ## Install
 
@@ -133,7 +146,7 @@ Minimum versions: Firefox 140 and Firefox for Android 142 — the Android requir
 
 ## Privacy
 
-CosmoTab does not collect analytics or personal data. Settings and bookmarks are stored locally in your browser. The only network requests are for weather data and the search page you choose to open. Images added for AI or Lens search are sent to Google only when you press one of the image-search buttons.
+CosmoTab does not collect analytics or personal data. Settings and bookmarks are stored locally in your browser. The only network requests are for weather data and the search page you choose to open. Images added for AI or Lens search are sent to Google only when you attach or drop an image.
 
 ## License
 
