@@ -18,6 +18,7 @@
 html,
 body {
   height: 100%;
+  touch-action: pan-x pan-y;
 }
 
 body {
@@ -1292,31 +1293,50 @@ body.layout-bottom .search {
 .search-attachment {
   display: flex;
   align-items: center;
-  gap: 14px;
   width: 100%;
-  min-height: 0;
+  max-height: 0;
   padding: 0;
+  overflow: hidden;
   border: 0;
   background: none;
   box-shadow: none;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: max-height 0.28s ease, opacity 0.22s ease, transform 0.22s ease;
+  pointer-events: none;
+}
+
+.search.has-attachment .search-attachment {
+  max-height: 60px;
+  opacity: 1;
+  transform: translateY(0);
   pointer-events: auto;
 }
 
-.search-attachment[hidden] {
+.search-attachment-list {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.search-attachment-list::-webkit-scrollbar {
   display: none;
 }
 
 .search-attachment-thumb {
   position: relative;
   flex: 0 0 auto;
-  width: 72px;
-  height: 72px;
+  width: 56px;
+  height: 56px;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 14px;
+  border-radius: 12px;
   background: rgba(255, 255, 255, 0.06);
   box-shadow:
-    0 10px 22px -16px rgba(0, 0, 0, 0.9),
+    0 8px 18px -14px rgba(0, 0, 0, 0.9),
     inset 0 1px 0 rgba(255, 255, 255, 0.14);
 }
 
@@ -1342,15 +1362,21 @@ body.layout-bottom .search {
   box-shadow:
     0 8px 20px -10px rgba(90, 110, 255, 0.9),
     inset 0 1px 0 rgba(255, 255, 255, 0.28);
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  opacity: 1;
+  transform: scale(1);
+  margin-left: 0;
+  transition: width 0.24s ease, height 0.24s ease, opacity 0.2s ease,
+    transform 0.24s ease, margin 0.24s ease, box-shadow 0.2s ease;
 }
 
 .search:not(.has-attachment) .search-attachment-send {
-  display: none;
-}
-
-.search.has-attachment .ai-history {
-  display: none;
+  width: 0;
+  height: 0;
+  border: 0;
+  opacity: 0;
+  transform: scale(0.6);
+  margin-left: -12px;
+  pointer-events: none;
 }
 
 .search-attachment-send svg {
@@ -1370,12 +1396,12 @@ body.layout-bottom .search {
 
 .search-attachment-remove {
   position: absolute;
-  top: 6px;
-  right: 6px;
+  top: 3px;
+  right: 3px;
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
+  width: 20px;
+  height: 20px;
   padding: 0 0 1px;
   border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 50%;
@@ -1384,7 +1410,7 @@ body.layout-bottom .search {
   backdrop-filter: blur(14px) saturate(160%);
   color: #ffffff;
   font-family: inherit;
-  font-size: 16px;
+  font-size: 13px;
   line-height: 1;
   cursor: pointer;
   opacity: 0;
@@ -1392,7 +1418,7 @@ body.layout-bottom .search {
   transition: opacity 0.2s ease, transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 }
 
-.search-attachment:hover .search-attachment-remove,
+.search-attachment-thumb:hover .search-attachment-remove,
 .search-attachment-remove:focus-visible {
   opacity: 1;
   transform: scale(1);
@@ -1412,13 +1438,17 @@ body.layout-bottom .search {
 
 @media (max-width: 480px) {
   .search-attachment {
-    gap: 10px;
+    max-height: 56px;
+  }
+
+  .search.has-attachment .search-attachment {
+    max-height: 52px;
   }
 
   .search-attachment-thumb {
-    width: 64px;
-    height: 64px;
-    border-radius: 12px;
+    width: 52px;
+    height: 52px;
+    border-radius: 11px;
   }
 
   .search-attachment-send {
@@ -1431,10 +1461,11 @@ body.layout-bottom .search {
   position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
   width: min(660px, 100%);
   height: 56px;
-  padding: 0 10px 0 20px;
+  padding: 9px 10px 9px 20px;
+  overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.06);
@@ -1444,11 +1475,11 @@ body.layout-bottom .search {
     0 14px 40px -20px rgba(0, 0, 0, 0.95),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease,
-    border-radius 0.25s ease, padding 0.25s ease;
+    border-radius 0.28s ease, padding 0.28s ease, height 0.28s ease;
 }
 
 .search.has-attachment {
-  height: auto;
+  height: 126px;
   padding: 10px;
   border-radius: 24px;
   gap: 10px;
@@ -1460,6 +1491,17 @@ body.layout-bottom .search {
   gap: 12px;
   width: 100%;
   min-height: 38px;
+}
+
+.search.has-attachment .ai-history {
+  width: 0;
+  padding: 0;
+  border-width: 0;
+  opacity: 0;
+  transform: scale(0.6);
+  margin-right: -12px;
+  overflow: hidden;
+  pointer-events: none;
 }
 
 .search:focus-within {
@@ -1557,8 +1599,10 @@ body.layout-bottom .search {
   background: rgba(255, 255, 255, 0.06);
   color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
+  overflow: hidden;
   transition: color 0.3s ease, background 0.3s ease, border-color 0.3s ease,
-    box-shadow 0.3s ease, transform 0.2s ease;
+    box-shadow 0.3s ease, transform 0.24s ease, width 0.24s ease,
+    padding 0.24s ease, margin 0.24s ease, opacity 0.2s ease;
 }
 
 .ai-history img {
@@ -2158,7 +2202,12 @@ body.layout-bottom .search {
 @media (max-width: 480px) {
   .search {
     height: 52px;
-    padding-left: 16px;
+    padding: 7px 10px 7px 16px;
+  }
+
+  .search.has-attachment {
+    height: 120px;
+    padding: 8px;
   }
 
   .ai-toggle {

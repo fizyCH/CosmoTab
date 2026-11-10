@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox for Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.8-8A7BFF?style=for-the-badge" alt="Version 2.6.8">
+  <img src="https://img.shields.io/badge/version-2.6.9-8A7BFF?style=for-the-badge" alt="Version 2.6.9">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="MIT License">
 </p>
 
@@ -38,7 +38,7 @@ Instead of another blank page or a wall of widgets, it gives you a slowly turnin
 ## Features
 
 - **A living 3D solar system.** Earth with an independent cloud layer, the Moon, a ringed planet and distant worlds. Drag to rotate with inertia, then let go — Earth and the Moon glide back to their orbit.
-- **Seasonal lighting with manual control.** Auto day/night based on the season and local time, plus four modes: auto, day, 50/50 and night.
+- **Seasonal lighting with manual control.** Auto day/night based on the season and local time, with smooth hour-by-hour shadow movement, plus four modes: auto, day, 50/50 and night.
 - **Weather without the noise.** Current conditions and daily range for 30 cities, Celsius or Fahrenheit, powered by `wttr.in` with an Open-Meteo fallback and one-click retry.
 - **Now playing, everywhere.** CosmoTab picks up audio from other tabs and shows artwork, title, artist, source and a seekable timeline in a compact glass panel.
 - **Search the way you like.** Google, Yandex, Bing or DuckDuckGo, plus an optional Google AI Mode toggle.
@@ -47,6 +47,7 @@ Instead of another blank page or a wall of widgets, it gives you a slowly turnin
 - **A player with real controls.** Previous, play/pause and next buttons in a liquid-glass panel. Pause keeps the panel visible so you can resume from the new tab.
 - **Bilingual and configurable.** English and Russian, two layouts, weather on/off, city and temperature units.
 - **Private by design.** No accounts, no telemetry, no remote code. Your settings and bookmarks stay in local storage.
+- **Fixed composition.** Page zoom shortcuts and pinch zoom are disabled so the layout stays exactly as designed.
 
 ## Layouts
 
@@ -66,7 +67,7 @@ On narrow screens the player and weather move below the bookmarks instead of cov
   <img src="assets/attachment.png" width="76%" alt="CosmoTab image attachment preview">
 </p>
 
-Add an image with the picture button, paste it with `Ctrl+V`, or drop it onto the search bar. The image is not sent immediately: the search field expands and shows a preview inside it, with a send button and a remove button. You can type a question about the image in the search bar. Send it with the paper-plane button on the right; pressing Enter does not send an image.
+Add an image with the picture button, paste it with `Ctrl+V`, or drop it onto the search bar. The image is not sent immediately: the search field expands and shows previews inside it, with a send button and a remove cross. You can type a question about the image in the search bar. Send it with the paper-plane button on the right; pressing Enter does not send an image. Up to 10 images can be added; several images are combined into one collage before upload.
 
 The AI toggle decides the destination: with AI Mode on, the image and your text open in Google AI Mode; with AI Mode off, the image opens in Google Lens. If no question is typed, the image is sent without extra text.
 
@@ -84,7 +85,7 @@ Choose **Folder** in the add dialog to create a folder. It opens as a transparen
   <img src="assets/player-controls.png" width="76%" alt="CosmoTab media player controls">
 </p>
 
-The liquid-glass player has previous, play/pause and next controls. Pausing no longer hides it: the panel stays on the new tab and the same button resumes playback. Track switching works on sites that support media keys or expose next/previous buttons.
+The liquid-glass player has previous, play/pause and next controls. Pausing no longer hides it: the panel stays on the new tab and the same button resumes playback. Previous and next use the site's own controls when available and fall back to media keys.
 
 ## Settings
 

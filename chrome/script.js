@@ -161,6 +161,7 @@ const I18N = {
     'imageSearch.lensReady': 'Поиск в Объективе',
     'imageSearch.send': 'Отправить изображение',
     'imageSearch.remove': 'Убрать изображение',
+    'imageSearch.limit': 'Можно добавить до 10 изображений',
     'searchEngine.google': 'Google',
     'searchEngine.yandex': 'Яндекс',
     'searchEngine.bing': 'Bing',
@@ -277,6 +278,7 @@ const I18N = {
     'imageSearch.lensReady': 'Search with Lens',
     'imageSearch.send': 'Send image',
     'imageSearch.remove': 'Remove image',
+    'imageSearch.limit': 'You can add up to 10 images',
     'searchEngine.google': 'Google',
     'searchEngine.yandex': 'Yandex',
     'searchEngine.bing': 'Bing',
@@ -451,6 +453,25 @@ const Settings = (() => {
       }
     }
   };
+})();
+
+(function preventZoom() {
+  window.addEventListener('wheel', (event) => {
+    if (event.ctrlKey || event.metaKey) event.preventDefault();
+  }, { passive: false });
+
+  window.addEventListener('keydown', (event) => {
+    if (!(event.ctrlKey || event.metaKey)) return;
+
+    const key = event.key;
+    if (key === '+' || key === '-' || key === '=' || key === '_' || key === '0') {
+      event.preventDefault();
+    }
+  }, { capture: true });
+
+  document.addEventListener('gesturestart', (event) => {
+    event.preventDefault();
+  });
 })();
 
 (function initLayout() {
@@ -2544,20 +2565,118 @@ const Settings = (() => {
       mediaList[0] ||
       null;
 
-    if (action === 'play' || action === 'pause') {
-      if (!media) return false;
+    function isVisible(element) {
+      if (!element) return false;
+      const rect = element.getBoundingClientRect();
+      const style = window.getComputedStyle(element);
+      return rect.width > 0 && rect.height > 0 &&
+        style.display !== 'none' && style.visibility !== 'hidden';
+    }
 
-      if (action === 'pause') {
-        if (!media.paused) media.pause();
+    function clickFirst(selectors) {
+      for (const selector of selectors) {
+        const nodes = Array.from(document.querySelectorAll(selector));
+        const element = nodes.find(isVisible);
+        if (element && typeof element.click === 'function') {
+          element.click();
+          return true;
+        }
+      }
+      return false;
+    }
+
+    const toggleSelectors = [
+      '.ytp-play-button',
+      '#play-pause-button',
+      '[data-testid="control-button-playpause"]',
+      '[data-testid="playback-control-play"]',
+      '[data-testid="playback-control-pause"]',
+      '.playControl',
+      '.web-chrome-playback-controls__play'
+    ];
+
+    if (action === 'pause') {
+      if (media && !media.paused) {
+        media.pause();
         return true;
       }
 
-      if (media.paused) {
+      if (clickFirst(toggleSelectors)) return true;
+      return Boolean(media);
+    }
+
+    if (action === 'play') {
+      if (clickFirst(toggleSelectors)) return true;
+
+      if (media && media.paused) {
         const result = media.play();
         if (result && typeof result.catch === 'function') result.catch(() => {});
+        return true;
       }
 
-      return true;
+      return Boolean(media);
+    }
+
+    const selectors = action === 'next'
+      ? [
+        '#next-button',
+        '.ytp-next-button',
+        '[data-testid="control-button-skip-forward"]',
+        '[data-testid="next-track"]',
+        '[data-testid="playback-control-next"]',
+        '.playControls__next',
+        '.web-chrome-playback-controls__next',
+        '.audio_player__next',
+        'button[aria-label*="next track" i]',
+        'button[aria-label*="next song" i]',
+        'button[aria-label*="skip forward" i]',
+        'button[aria-label*="next" i]',
+        'button[title*="next" i]',
+        '[role="button"][aria-label*="next" i]',
+        '[data-testid*="next" i]',
+        'button[aria-label*="????" i]',
+        'button[title*="????" i]'
+      ]
+      : [
+        '#previous-button',
+        '.ytp-prev-button',
+        '[data-testid="control-button-skip-back"]',
+        '[data-testid="previous-track"]',
+        '[data-testid="playback-control-previous"]',
+        '.playControls__prev',
+        '.web-chrome-playback-controls__prev',
+        '.audio_player__prev',
+        'button[aria-label*="previous track" i]',
+        'button[aria-label*="previous song" i]',
+        'button[aria-label*="skip back" i]',
+        'button[aria-label*="previous" i]',
+        'button[title*="previous" i]',
+        'button[aria-label*="prev" i]',
+        '[role="button"][aria-label*="prev" i]',
+        '[data-testid*="previous" i]',
+        'button[aria-label*="????" i]',
+        'button[title*="????" i]'
+      ];
+
+    if (clickFirst(selectors)) return true;
+
+    const words = action === 'next'
+      ? ['next track', 'next song', 'skip forward', 'next video', '????????? ????', '????????? ?????', '?????']
+      : ['previous track', 'previous song', 'skip back', 'previous video', '?????????? ????', '?????????? ?????', '?????'];
+
+    const candidates = Array.from(document.querySelectorAll('button, [role="button"], [data-testid]'));
+
+    for (const element of candidates) {
+      if (!isVisible(element)) continue;
+
+      const label = (element.getAttribute('aria-label') || element.title || element.textContent || '')
+        .trim()
+        .toLowerCase();
+
+      if (words.some((word) => label.includes(word))) {
+        element.click();
+        return true;
+      }
     }
 
     const key = action === 'next' ? 'MediaTrackNext' : 'MediaTrackPrevious';
@@ -2577,41 +2696,6 @@ const Settings = (() => {
       }));
     } catch {
        
-    }
-
-    const selectors = action === 'next'
-      ? [
-        '.ytp-next-button',
-        '#next-button',
-        '[data-testid="control-button-skip-forward"]',
-        '.playControls__next',
-        'button[aria-label*="next" i]',
-        '[role="button"][aria-label*="next" i]',
-        'button[title*="next" i]',
-        '[data-testid*="next" i]',
-        'button[aria-label*="след" i]',
-        'button[title*="след" i]'
-      ]
-      : [
-        '.ytp-prev-button',
-        '#previous-button',
-        '[data-testid="control-button-skip-back"]',
-        '.playControls__prev',
-        'button[aria-label*="previous" i]',
-        '[role="button"][aria-label*="previous" i]',
-        'button[title*="previous" i]',
-        'button[aria-label*="prev" i]',
-        '[data-testid*="previous" i]',
-        'button[aria-label*="пред" i]',
-        'button[title*="пред" i]'
-      ];
-
-    for (const selector of selectors) {
-      const element = document.querySelector(selector);
-      if (element && typeof element.click === 'function') {
-        element.click();
-        return true;
-      }
     }
 
     return false;
@@ -2639,6 +2723,11 @@ const Settings = (() => {
 
   async function sendControl(action) {
     let handled = false;
+
+    if (action === 'pause' || action === 'play') {
+      requestToken += 1;
+      clearTimeout(hideTimer);
+    }
 
     if (state.mode === 'tab' && state.tabId !== null && scriptingApi) {
       try {
@@ -3038,13 +3127,12 @@ const Settings = (() => {
   const imagePicker = document.getElementById('image-picker');
   const imageInput = document.getElementById('search-image-input');
   const attachment = document.getElementById('search-attachment');
-  const attachmentImg = document.getElementById('search-attachment-img');
+  const attachmentList = document.getElementById('search-attachment-list');
   const attachmentSend = document.getElementById('search-attachment-send');
-  const attachmentRemove = document.getElementById('search-attachment-remove');
   if (!form || !input || !toggle) return;
 
-  let pendingImage = null;
-  let pendingImageUrl = '';
+  const MAX_IMAGES = 10;
+  let pendingImages = [];
 
   const MODE_KEY = 'cosmic.search.mode.v3';
 
@@ -3068,7 +3156,7 @@ const Settings = (() => {
     toggle.setAttribute('aria-pressed', String(aiMode));
     toggle.title = aiMode ? t('search.aiOnTitle') : t('search.aiOffTitle');
     toggle.setAttribute('aria-label', toggle.title);
-    input.placeholder = pendingImage
+    input.placeholder = pendingImages.length
       ? (aiMode ? t('imageSearch.promptPlaceholder') : t('imageSearch.lensReady'))
       : (aiMode
         ? t('search.aiPlaceholder')
@@ -3140,43 +3228,177 @@ const Settings = (() => {
     window.setTimeout(applyMode, 2500);
   }
 
-  function setPendingImage(file) {
-    if (!file || (file.type && !file.type.startsWith('image/'))) return;
+  function renderAttachmentList() {
+    if (!attachmentList) return;
 
-    if (pendingImageUrl) URL.revokeObjectURL(pendingImageUrl);
+    attachmentList.textContent = '';
 
-    pendingImage = file;
-    pendingImageUrl = URL.createObjectURL(file);
+    pendingImages.forEach((item, index) => {
+      const thumb = document.createElement('div');
+      thumb.className = 'search-attachment-thumb';
 
-    if (attachmentImg) attachmentImg.src = pendingImageUrl;
-    if (attachment) attachment.hidden = false;
-    form.classList.add('has-attachment');
+      const img = document.createElement('img');
+      img.className = 'search-attachment-img';
+      img.alt = '';
+      img.src = item.url;
+
+      const remove = document.createElement('button');
+      remove.className = 'search-attachment-remove';
+      remove.type = 'button';
+      remove.textContent = '?';
+      remove.title = t('imageSearch.remove');
+      remove.setAttribute('aria-label', t('imageSearch.remove'));
+
+      remove.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        removePendingImage(index);
+      });
+
+      thumb.append(img, remove);
+      attachmentList.appendChild(thumb);
+    });
+  }
+
+  function removePendingImage(index) {
+    const item = pendingImages[index];
+    if (!item) return;
+
+    URL.revokeObjectURL(item.url);
+    pendingImages.splice(index, 1);
+    renderAttachmentList();
+
+    if (!pendingImages.length) form.classList.remove('has-attachment');
 
     applyMode();
     input.focus();
   }
 
-  function clearPendingImage() {
-    if (pendingImageUrl) {
-      URL.revokeObjectURL(pendingImageUrl);
-      pendingImageUrl = '';
+  function addPendingImages(files) {
+    const list = Array.from(files || []).filter((file) =>
+      file && (!file.type || file.type.startsWith('image/'))
+    );
+
+    if (!list.length) return;
+
+    let skipped = false;
+
+    for (const file of list) {
+      if (pendingImages.length >= MAX_IMAGES) {
+        skipped = true;
+        break;
+      }
+
+      pendingImages.push({
+        file,
+        url: URL.createObjectURL(file)
+      });
     }
 
-    pendingImage = null;
+    if (!pendingImages.length) return;
 
-    if (attachment) attachment.hidden = true;
-    if (attachmentImg) attachmentImg.removeAttribute('src');
+    renderAttachmentList();
+    form.classList.add('has-attachment');
+    applyMode();
+    input.focus();
+
+    if (skipped) {
+      input.placeholder = t('imageSearch.limit');
+      window.setTimeout(applyMode, 2500);
+    }
+  }
+
+  function clearPendingImages() {
+    for (const item of pendingImages) {
+      URL.revokeObjectURL(item.url);
+    }
+
+    pendingImages = [];
+    renderAttachmentList();
     form.classList.remove('has-attachment');
-
     applyMode();
   }
 
-  async function submitImage() {
-    const file = pendingImage;
-    if (!file) return;
+  function loadImageElement(file) {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const img = new Image();
 
+      img.onload = () => {
+        URL.revokeObjectURL(url);
+        resolve(img);
+      };
+
+      img.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error('image-load'));
+      };
+
+      img.src = url;
+    });
+  }
+
+  async function composeImages(files) {
+    if (files.length === 1) return files[0];
+
+    const count = files.length;
+    const columns = Math.ceil(Math.sqrt(count));
+    const rows = Math.ceil(count / columns);
+    const cell = 512;
+    const canvas = document.createElement('canvas');
+
+    canvas.width = columns * cell;
+    canvas.height = rows * cell;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return files[0];
+
+    ctx.fillStyle = '#0a0e18';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    for (let index = 0; index < files.length; index += 1) {
+      try {
+        const image = await loadImageElement(files[index]);
+        const scale = Math.min(cell / image.width, cell / image.height);
+        const width = image.width * scale;
+        const height = image.height * scale;
+        const column = index % columns;
+        const row = Math.floor(index / columns);
+
+        ctx.drawImage(
+          image,
+          column * cell + (cell - width) / 2,
+          row * cell + (cell - height) / 2,
+          width,
+          height
+        );
+      } catch {
+         
+      }
+    }
+
+    const blob = await new Promise((resolve) => {
+      canvas.toBlob(resolve, 'image/png');
+    });
+
+    if (!blob) return files[0];
+
+    return new File([blob], 'cosmotab-images.png', { type: 'image/png' });
+  }
+
+  async function submitImage() {
+    if (!pendingImages.length) return;
+
+    const files = pendingImages.map((item) => item.file);
     const mode = aiMode ? 'ai' : 'lens';
     const query = mode === 'ai' ? input.value.trim() : '';
+    const uploadFile = await composeImages(files);
+
+    if (!uploadFile) {
+      imageError();
+      return;
+    }
+
     await sendImageRequest(mode, query);
 
     const uploadAction = new URL('https://www.google.com/searchbyimage/upload');
@@ -3193,13 +3415,13 @@ const Settings = (() => {
     fileInput.type = 'file';
     fileInput.name = 'encoded_image';
 
-    const uploadFile = file.name
-      ? file
-      : new File([file], 'image.png', { type: file.type || 'image/png' });
+    const normalizedFile = uploadFile.name
+      ? uploadFile
+      : new File([uploadFile], 'image.png', { type: uploadFile.type || 'image/png' });
 
     try {
       const transfer = new DataTransfer();
-      transfer.items.add(uploadFile);
+      transfer.items.add(normalizedFile);
       fileInput.files = transfer.files;
     } catch {
       imageError();
@@ -3216,7 +3438,7 @@ const Settings = (() => {
     uploadForm.submit();
     window.setTimeout(() => uploadForm.remove(), 1000);
 
-    clearPendingImage();
+    clearPendingImages();
     input.value = '';
   }
 
@@ -3224,8 +3446,7 @@ const Settings = (() => {
     imagePicker.addEventListener('click', () => imageInput.click());
 
     imageInput.addEventListener('change', () => {
-      const file = imageInput.files && imageInput.files[0];
-      if (file) setPendingImage(file);
+      addPendingImages(imageInput.files);
       imageInput.value = '';
     });
 
@@ -3233,15 +3454,18 @@ const Settings = (() => {
       const items = event.clipboardData ? event.clipboardData.items : null;
       if (!items) return;
 
+      const files = [];
+
       for (const item of items) {
         if (item.kind === 'file' && item.type.startsWith('image/')) {
           const file = item.getAsFile();
-          if (file) {
-            event.preventDefault();
-            setPendingImage(file);
-          }
-          return;
+          if (file) files.push(file);
         }
+      }
+
+      if (files.length) {
+        event.preventDefault();
+        addPendingImages(files);
       }
     });
 
@@ -3262,12 +3486,12 @@ const Settings = (() => {
     form.addEventListener('drop', (event) => {
       if (!event.dataTransfer) return;
 
-      const file = event.dataTransfer.files && event.dataTransfer.files[0];
-      if (!file) return;
+      const files = event.dataTransfer.files;
+      if (!files || !files.length) return;
 
       event.preventDefault();
       form.classList.remove('is-dragover');
-      if (file.type.startsWith('image/')) setPendingImage(file);
+      addPendingImages(files);
     });
 
     if (attachmentSend) {
@@ -3275,19 +3499,12 @@ const Settings = (() => {
         void submitImage();
       });
     }
-
-    if (attachmentRemove) {
-      attachmentRemove.addEventListener('click', () => {
-        clearPendingImage();
-        input.focus();
-      });
-    }
   }
 
   form.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    if (pendingImage) {
+    if (pendingImages.length) {
       input.focus();
       return;
     }
@@ -4117,8 +4334,6 @@ const Settings = (() => {
   }
 
    
-  const EVENING_DURATION = 1.5;  
-
   const lightingState = {
     sunDirection: new THREE.Vector3(0, 0, 1),
     nightMix: 0,
@@ -4127,13 +4342,13 @@ const Settings = (() => {
     lightsTarget: 0,
     sunrise: 6,
     sunset: 18,
-    state: 'day',
     currentAngle: 0,
     targetAngle: 0,
 
     update(dt = 0) {
       const manualMode = Settings.data.planetMode;
-      let state;
+      let targetAngle = 0;
+      let manualLights = 0;
 
       if (manualMode === 'auto') {
         const now = new Date();
@@ -4143,44 +4358,42 @@ const Settings = (() => {
         this.sunrise = sunrise;
         this.sunset = sunset;
 
+        const dayLength = Math.max(0.5, sunset - sunrise);
+        const nightLength = Math.max(0.5, 24 - dayLength);
+
         if (hours >= sunrise && hours < sunset) {
-          state = 'day';
-        } else if (hours >= sunset && hours < sunset + EVENING_DURATION) {
-          state = 'evening';
+          const progress = (hours - sunrise) / dayLength;
+          targetAngle = (Math.PI / 2) * (1 - Math.sin(Math.PI * progress));
         } else {
-          state = 'night';
+          const nightHours = hours >= sunset ? hours - sunset : hours + 24 - sunset;
+          const progress = Math.min(1, Math.max(0, nightHours / nightLength));
+          targetAngle = Math.PI / 2 + (Math.PI / 2) * Math.sin(Math.PI * progress);
         }
+      } else if (manualMode === 'day') {
+        targetAngle = 0;
+      } else if (manualMode === 'dusk') {
+        targetAngle = Math.PI / 2;
+        manualLights = 1;
       } else {
-        state = manualMode === 'day'
-          ? 'day'
-          : manualMode === 'dusk' ? 'evening' : 'night';
+        targetAngle = Math.PI;
+        manualLights = 1;
       }
 
-      if (state !== this.state) {
-        this.state = state;
+      this.targetAngle = targetAngle;
 
-        if (state === 'day') this.targetAngle = 0;
-        else if (state === 'evening') this.targetAngle = Math.PI / 2;
-        else this.targetAngle = Math.PI;
-      }
-
-       
       const smooth = dt > 0 ? 1 - Math.exp(-3.2 * dt) : 1;
       this.currentAngle += (this.targetAngle - this.currentAngle) * smooth;
 
-      if (Math.abs(this.targetAngle - this.currentAngle) < 0.001) {
+      if (Math.abs(this.targetAngle - this.currentAngle) < 0.0005) {
         this.currentAngle = this.targetAngle;
       }
 
-      this.nightTarget = state === 'night'
-        ? 1
-        : state === 'evening'
-          ? 0.8    
-          : 0;
-      this.lightsTarget = state === 'day' ? 0 : 1;
+      const night = (1 - Math.cos(this.currentAngle)) / 2;
+      this.nightTarget = night;
+      this.lightsTarget = manualMode === 'auto'
+        ? Math.min(1, night * 1.35)
+        : manualLights;
 
-       
-       
       const sunHeight = 0.22 * Math.max(0, Math.cos(this.currentAngle));
 
       this.sunDirection

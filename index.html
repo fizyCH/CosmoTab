@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="color-scheme" content="dark" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
   <title>New Tab</title>
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -155,13 +155,8 @@
   
   <footer class="search-bar">
     <form class="search" id="search-form" action="https://www.google.com/search" method="get" role="search">
-      <div class="search-attachment" id="search-attachment" hidden>
-        <div class="search-attachment-thumb">
-          <img class="search-attachment-img" id="search-attachment-img" alt="" />
-          <button class="search-attachment-remove" id="search-attachment-remove" type="button"
-                  aria-label="Убрать изображение" title="Убрать изображение"
-                  data-i18n-aria="imageSearch.remove" data-i18n-title="imageSearch.remove">×</button>
-        </div>
+      <div class="search-attachment" id="search-attachment">
+        <div class="search-attachment-list" id="search-attachment-list"></div>
       </div>
 
       <div class="search-row">
@@ -342,7 +337,7 @@
   </dialog>
 
   <input type="file" id="bookmark-import" accept="application/json,.json" hidden />
-  <input type="file" id="search-image-input" accept="image/*" hidden />
+  <input type="file" id="search-image-input" accept="image/*" multiple hidden />
 
   <script src="lib/three.min.js"></script>
   <script src="script.js"></script>
