@@ -3845,8 +3845,8 @@ const Settings = (() => {
     moonOrbitX: 3.05,
     moonOrbitY: 1.85,
     moonOrbitYAmp: 1.15,
-    moonOrbitZ: -3.9,
-    moonOrbitZAmp: 1.4,
+    moonOrbitZ: -1.0,
+    moonOrbitZAmp: 3.4,
     maxPixelRatio: 1.75
   };
 
@@ -4423,6 +4423,33 @@ const Settings = (() => {
     };
   }
 
+  function autoNightMix(hours, sunrise, sunset) {
+    const noon = (sunrise + sunset) / 2;
+
+    if (hours >= sunrise && hours < sunset) {
+      if (hours < noon) {
+        const progress = (hours - sunrise) / Math.max(0.25, noon - sunrise);
+        return 0.5 * (1 - progress);
+      }
+
+      const progress = (hours - noon) / Math.max(0.25, sunset - noon);
+      return 0.5 * progress;
+    }
+
+    const nightLength = 24 - (sunset - sunrise);
+    const nightProgress = hours >= sunset ? hours - sunset : hours + 24 - sunset;
+    const midnightPoint = nightLength / 2;
+
+    if (nightProgress < midnightPoint) {
+      const progress = nightProgress / Math.max(0.25, midnightPoint);
+      return 0.5 + 0.5 * progress;
+    }
+
+    const progress =
+      (nightProgress - midnightPoint) / Math.max(0.25, nightLength - midnightPoint);
+    return 1 - 0.5 * progress;
+  }
+
    
   const lightingState = {
     sunDirection: new THREE.Vector3(0, 0, 1),
@@ -4448,17 +4475,8 @@ const Settings = (() => {
         this.sunrise = sunrise;
         this.sunset = sunset;
 
-        const dayLength = Math.max(0.5, sunset - sunrise);
-        const nightLength = Math.max(0.5, 24 - dayLength);
-
-        if (hours >= sunrise && hours < sunset) {
-          const progress = (hours - sunrise) / dayLength;
-          targetAngle = (Math.PI / 2) * (1 - Math.sin(Math.PI * progress));
-        } else {
-          const nightHours = hours >= sunset ? hours - sunset : hours + 24 - sunset;
-          const progress = Math.min(1, Math.max(0, nightHours / nightLength));
-          targetAngle = Math.PI / 2 + (Math.PI / 2) * Math.sin(Math.PI * progress);
-        }
+        const night = Math.min(1, Math.max(0, autoNightMix(hours, sunrise, sunset)));
+        targetAngle = Math.acos(1 - 2 * night);
       } else if (manualMode === 'day') {
         targetAngle = 0;
       } else if (manualMode === 'dusk') {
