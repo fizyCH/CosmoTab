@@ -14,8 +14,8 @@
   --accent-violet: #9b5cff;
   --accent-cyan: #22c7e6;
   --accent-pink: #ec4899;
-  --space-gradient: linear-gradient(135deg, #22d3ee 0%, #5b7cff 34%, #a855f7 66%, #ec4899 100%);
-  --space-glow: rgba(124, 92, 255, 0.5);
+  --space-gradient: linear-gradient(135deg, #5b8cff 0%, #2f5fe0 48%, #102a6b 100%);
+  --space-glow: rgba(40, 90, 220, 0.45);
   --tile-columns: 3;
   --tile-rows: 3;
 }
@@ -209,7 +209,7 @@ body {
   justify-content: center;
   gap: clamp(26px, 4.5vh, 54px);
   width: 100%;
-  max-width: 500px;
+  max-width: 100%;
   height: 100%;
   padding: 0 clamp(16px, 3vw, 36px);
   justify-self: center;
@@ -243,7 +243,7 @@ body {
   grid-template-columns: repeat(var(--tile-columns, 3), minmax(0, 1fr));
   align-content: start;
   gap: clamp(10px, 1.2vw, 15px);
-  width: min(100%, 440px);
+  width: min(100%, calc(var(--tile-columns, 3) * 145px));
 }
 
 .bookmarks-widget {
@@ -1518,7 +1518,7 @@ body.layout-bottom .search {
 
 .search-attachment-send:hover {
   box-shadow:
-    0 10px 24px -10px rgba(100, 120, 255, 1),
+    0 10px 24px -10px rgba(50, 100, 230, 0.8),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
@@ -1707,7 +1707,7 @@ body.layout-bottom .search {
   background:
     linear-gradient(rgba(13, 17, 32, 0.88), rgba(13, 17, 32, 0.88)) padding-box,
     linear-gradient(110deg,
-      #22d3ee, #5b7cff, #a855f7, #ec4899, #22d3ee) border-box;
+      #5b8cff, #2f5fe0, #102a6b, #5b8cff) border-box;
   background-size: 100% 100%, 300% 100%;
   animation: ai-border 7s linear infinite, ai-pulse 3.4s ease-in-out infinite;
 }
@@ -1716,7 +1716,7 @@ body.layout-bottom .search {
   background:
     linear-gradient(rgba(13, 17, 32, 0.94), rgba(13, 17, 32, 0.94)) padding-box,
     linear-gradient(110deg,
-      #22d3ee, #5b7cff, #a855f7, #ec4899, #22d3ee) border-box;
+      #5b8cff, #2f5fe0, #102a6b, #5b8cff) border-box;
   background-size: 100% 100%, 300% 100%;
 }
 
@@ -2051,7 +2051,7 @@ body.layout-bottom .search {
 }
 
 .btn:hover {
-  filter: brightness(1.12);
+  filter: brightness(1.08);
   transform: translateY(-1px);
 }
 
@@ -2441,7 +2441,7 @@ body.layout-bottom .search {
   }
 
   .tiles {
-    width: min(100%, 430px);
+    width: min(100%, calc(var(--tile-columns, 3) * 140px));
   }
 
   

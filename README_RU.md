@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox для Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.13-8A7BFF?style=for-the-badge" alt="Версия 2.6.13">
+  <img src="https://img.shields.io/badge/version-2.6.14-8A7BFF?style=for-the-badge" alt="Версия 2.6.14">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="Лицензия MIT">
 </p>
 
@@ -43,7 +43,7 @@
 - **Сейчас играет.** CosmoTab подхватывает звук из других вкладок и показывает обложку, название, исполнителя, источник и перематываемую шкалу в компактной стеклянной панели.
 - **Поиск на ваш вкус.** Google, Яндекс, Bing или DuckDuckGo, а также ИИ-режим с выбором Google AI, ChatGPT, DeepSeek или Gemini.
 - **Картинки и файлы двумя способами.** Добавьте картинку или другой файл кнопкой «+», вставьте изображение или перетащите его на строку поиска. Картинки уходят в Google AI или Объектив, остальные файлы открываются в новой вкладке.
-- **Сетка вкладок под ваш экран.** Выберите любой размер от 3 × 3 до 5 × 4 визуальным редактором в настройках и переключайте страницы стрелками и точками.
+- **Сетка вкладок под ваш экран.** Выберите любой размер от 3 × 3 до 5 × 4 визуальным редактором в настройках. Сетка расширяется вместе с числом столбцов, а не сжимает плитки; страницы переключаются стрелками и точками.
 - **Перетаскивание для порядка.** Перетащите вкладку к краю другой, чтобы поставить её слева, справа, выше или ниже; отпустите в центре, чтобы создать папку.
 - **Настройки по вкладкам.** Разделы «Общие», «Вкладки», «Планета» и «Погода» держат все параметры под рукой.
 - **Плеер с настоящими кнопками.** Назад, пауза/играть и вперёд в liquid-glass панели. Пауза не скрывает плеер, поэтому воспроизведение можно продолжить с новой вкладки.

@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox for Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.13-8A7BFF?style=for-the-badge" alt="Version 2.6.13">
+  <img src="https://img.shields.io/badge/version-2.6.14-8A7BFF?style=for-the-badge" alt="Version 2.6.14">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="MIT License">
 </p>
 
@@ -43,7 +43,7 @@ Instead of another blank page or a wall of widgets, it gives you a slowly turnin
 - **Now playing, everywhere.** CosmoTab picks up audio from other tabs and shows artwork, title, artist, source and a seekable timeline in a compact glass panel.
 - **Search the way you like.** Google, Yandex, Bing or DuckDuckGo, plus an optional AI mode with Google AI, ChatGPT, DeepSeek or Gemini.
 - **Image and file attachments, two ways.** Add images or other files with the plus button, paste images, or drop them onto the search bar. Images go to Google AI or Lens; other files open in a new tab.
-- **A tab grid that grows with you.** Choose any grid from 3 × 3 to 5 × 4 with the visual editor in Settings, and switch bookmark pages with the arrows and dots.
+- **A tab grid that grows with you.** Choose any grid from 3 × 3 to 5 × 4 with the visual editor in Settings. The grid widens with the column count instead of squeezing the tiles, and pages switch with the arrows and dots.
 - **Drag to arrange.** Drop a tab near the edge of another to move it left, right, above or below; drop it in the centre to create a folder.
 - **Tabbed settings.** General, Tabs, Planet and Weather sections keep every option one click away.
 - **A player with real controls.** Previous, play/pause and next buttons in a liquid-glass panel. Pause keeps the panel visible so you can resume from the new tab.
