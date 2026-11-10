@@ -249,86 +249,138 @@
     <form class="settings-form" id="settings-form" novalidate>
       <h2 data-i18n="settings.title">Настройки</h2>
 
-      <section class="settings-section">
-        <h3 data-i18n="settings.interfaceSection">Интерфейс</h3>
-        <label class="field">
-          <span data-i18n="settings.language">Язык интерфейса</span>
-          <select id="setting-language">
-            <option value="ru">Русский</option>
-            <option value="en">English</option>
-          </select>
-        </label>
-        <label class="field">
-          <span data-i18n="settings.layout">Расположение</span>
-          <select id="setting-layout">
-            <option value="top" data-i18n="settings.layoutTop">Поиск внизу, плеер сверху</option>
-            <option value="bottom" data-i18n="settings.layoutBottom">Поиск вверху, плеер внизу</option>
-          </select>
-        </label>
-      </section>
+      <div class="settings-tabs" role="tablist" data-i18n-aria="settings.tabsLabel" aria-label="Разделы настроек">
+        <button class="settings-tab is-active" type="button" role="tab"
+                id="settings-tab-general" aria-controls="settings-panel-general" aria-selected="true"
+                data-settings-tab="general" data-i18n="settings.tabGeneral">Общие</button>
+        <button class="settings-tab" type="button" role="tab" tabindex="-1"
+                id="settings-tab-tiles" aria-controls="settings-panel-tiles" aria-selected="false"
+                data-settings-tab="tiles" data-i18n="settings.tabTiles">Вкладки</button>
+        <button class="settings-tab" type="button" role="tab" tabindex="-1"
+                id="settings-tab-planet" aria-controls="settings-panel-planet" aria-selected="false"
+                data-settings-tab="planet" data-i18n="settings.tabPlanet">Планета</button>
+        <button class="settings-tab" type="button" role="tab" tabindex="-1"
+                id="settings-tab-weather" aria-controls="settings-panel-weather" aria-selected="false"
+                data-settings-tab="weather" data-i18n="settings.tabWeather">Погода</button>
+      </div>
 
-      <section class="settings-section">
-        <h3 data-i18n="settings.planetSection">Планета</h3>
-        <label class="field">
-          <span data-i18n="settings.planetLighting">Освещение Земли</span>
-          <select id="setting-planet-lighting">
-            <option value="auto" data-i18n="lighting.auto">Авто (по времени)</option>
-            <option value="day" data-i18n="lighting.day">День</option>
-            <option value="dusk" data-i18n="lighting.dusk">50 / 50</option>
-            <option value="night" data-i18n="lighting.night">Ночь</option>
-          </select>
-        </label>
-        <p class="settings-note" data-i18n="settings.planetNote">Авто — по сезонному закату. Ручной режим не зависит от времени.</p>
-      </section>
+      <div class="settings-panels">
+        <section class="settings-panel is-active" id="settings-panel-general" role="tabpanel"
+                 aria-labelledby="settings-tab-general" data-settings-panel="general">
+          <section class="settings-section">
+            <h3 data-i18n="settings.interfaceSection">Интерфейс</h3>
+            <label class="field">
+              <span data-i18n="settings.language">Язык интерфейса</span>
+              <select id="setting-language">
+                <option value="ru">Русский</option>
+                <option value="en">English</option>
+              </select>
+            </label>
+            <label class="field">
+              <span data-i18n="settings.layout">Расположение</span>
+              <select id="setting-layout">
+                <option value="top" data-i18n="settings.layoutTop">Поиск внизу, плеер сверху</option>
+                <option value="bottom" data-i18n="settings.layoutBottom">Поиск вверху, плеер внизу</option>
+              </select>
+            </label>
+          </section>
 
-      <section class="settings-section">
-        <h3 data-i18n="settings.searchSection">Поисковик</h3>
-        <label class="field">
-          <span data-i18n="settings.searchEngine">Поисковая система</span>
-          <select id="setting-search-engine">
-            <option value="google">Google</option>
-            <option value="yandex" data-i18n="searchEngine.yandex">Яндекс</option>
-            <option value="bing">Bing</option>
-            <option value="duckduckgo">DuckDuckGo</option>
-          </select>
-        </label>
-      </section>
+          <section class="settings-section">
+            <h3 data-i18n="settings.searchSection">Поиск</h3>
+            <label class="field">
+              <span data-i18n="settings.searchEngine">Поисковая система</span>
+              <select id="setting-search-engine">
+                <option value="google">Google</option>
+                <option value="yandex" data-i18n="searchEngine.yandex">Яндекс</option>
+                <option value="bing">Bing</option>
+                <option value="duckduckgo">DuckDuckGo</option>
+              </select>
+            </label>
+            <label class="field">
+              <span data-i18n="settings.aiEngine">ИИ для поиска</span>
+              <select id="setting-ai-engine">
+                <option value="google">Google AI</option>
+                <option value="chatgpt">ChatGPT</option>
+                <option value="deepseek">DeepSeek</option>
+                <option value="gemini">Gemini</option>
+              </select>
+            </label>
+            <p class="settings-note" data-i18n="settings.aiNote">Используется при включённом ИИ-поиске. Картинки по-прежнему ищутся через Google Lens или Google AI.</p>
+          </section>
+        </section>
 
-      <section class="settings-section">
-        <div class="settings-heading">
-          <h3 data-i18n="settings.weatherSection">Погода справа от плеера</h3>
-          <label class="switch" title="Показывать виджет погоды" data-i18n-title="settings.weatherToggle">
-            <input id="setting-weather-enabled" type="checkbox" />
-            <span class="switch-track"><span class="switch-thumb"></span></span>
-          </label>
-        </div>
+        <section class="settings-panel" id="settings-panel-tiles" role="tabpanel"
+                 aria-labelledby="settings-tab-tiles" data-settings-panel="tiles">
+          <section class="settings-section">
+            <h3 data-i18n="settings.bookmarksSection">Вкладки</h3>
+            <p class="settings-note" data-i18n="settings.bookmarksNote">Настройте размер сетки и страницы вкладок.</p>
 
-        <label class="field">
-          <span data-i18n="settings.city">Город</span>
-          <select id="setting-weather-city"></select>
-        </label>
+            <div class="grid-editor">
+              <div class="grid-editor-heading">
+                <span data-i18n="settings.gridSize">Размер сетки</span>
+                <strong id="grid-size-value">3 × 3</strong>
+              </div>
+              <div class="grid-editor-board" id="grid-editor-board" role="group"
+                   data-i18n-aria="settings.gridEditor" aria-label="Выбор размера сетки"></div>
+              <p class="settings-note" data-i18n="settings.gridNote">От 3 × 3 до 5 × 4. На одной странице помещается столько вкладок, сколько ячеек в сетке.</p>
+            </div>
+          </section>
 
-        <label class="field">
-          <span data-i18n="settings.units">Единицы температуры</span>
-          <select id="setting-weather-unit">
-            <option value="celsius" data-i18n="units.celsius">Цельсий (°C)</option>
-            <option value="fahrenheit" data-i18n="units.fahrenheit">Фаренгейт (°F)</option>
-          </select>
-        </label>
-      </section>
+          <section class="settings-section">
+            <div class="settings-button-row">
+              <button class="btn btn--ghost" id="settings-export-bookmarks" type="button"
+                      data-i18n="settings.exportBookmarks">Экспорт закладок</button>
+              <button class="btn btn--ghost" id="settings-import-bookmarks" type="button"
+                      data-i18n="settings.importBookmarks">Импорт закладок</button>
+            </div>
+            <button class="btn btn--ghost" id="settings-restore-bookmarks" type="button"
+                    data-i18n="settings.restore">Вернуть стандартные закладки</button>
+          </section>
+        </section>
 
-      <section class="settings-section">
-        <h3 data-i18n="settings.bookmarksSection">Закладки</h3>
-        <p class="settings-note" data-i18n="settings.bookmarksNote">По 9 закладок на странице. Точки под сеткой переключают страницы.</p>
-        <div class="settings-button-row">
-          <button class="btn btn--ghost" id="settings-export-bookmarks" type="button"
-                  data-i18n="settings.exportBookmarks">Экспорт закладок</button>
-          <button class="btn btn--ghost" id="settings-import-bookmarks" type="button"
-                  data-i18n="settings.importBookmarks">Импорт закладок</button>
-        </div>
-        <button class="btn btn--ghost" id="settings-restore-bookmarks" type="button"
-                data-i18n="settings.restore">Вернуть стандартные закладки</button>
-      </section>
+        <section class="settings-panel" id="settings-panel-planet" role="tabpanel"
+                 aria-labelledby="settings-tab-planet" data-settings-panel="planet">
+          <section class="settings-section">
+            <h3 data-i18n="settings.planetSection">Планета</h3>
+            <label class="field">
+              <span data-i18n="settings.planetLighting">Освещение Земли</span>
+              <select id="setting-planet-lighting">
+                <option value="auto" data-i18n="lighting.auto">Авто (по времени)</option>
+                <option value="day" data-i18n="lighting.day">День</option>
+                <option value="dusk" data-i18n="lighting.dusk">50 / 50</option>
+                <option value="night" data-i18n="lighting.night">Ночь</option>
+              </select>
+            </label>
+            <p class="settings-note" data-i18n="settings.planetNote">Авто — по сезонному закату. Ручной режим не зависит от времени.</p>
+          </section>
+        </section>
+
+        <section class="settings-panel" id="settings-panel-weather" role="tabpanel"
+                 aria-labelledby="settings-tab-weather" data-settings-panel="weather">
+          <section class="settings-section">
+            <div class="settings-heading">
+              <h3 data-i18n="settings.weatherSection">Погода справа от плеера</h3>
+              <label class="switch" title="Показывать виджет погоды" data-i18n-title="settings.weatherToggle">
+                <input id="setting-weather-enabled" type="checkbox" />
+                <span class="switch-track"><span class="switch-thumb"></span></span>
+              </label>
+            </div>
+
+            <label class="field">
+              <span data-i18n="settings.city">Город</span>
+              <select id="setting-weather-city"></select>
+            </label>
+
+            <label class="field">
+              <span data-i18n="settings.units">Единицы температуры</span>
+              <select id="setting-weather-unit">
+                <option value="celsius" data-i18n="units.celsius">Цельсий (°C)</option>
+                <option value="fahrenheit" data-i18n="units.fahrenheit">Фаренгейт (°F)</option>
+              </select>
+            </label>
+          </section>
+        </section>
+      </div>
 
       <p class="dialog-status" id="settings-status" role="status"></p>
       <p class="dialog-error" id="settings-error" role="alert"></p>

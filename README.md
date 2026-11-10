@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox for Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.12-8A7BFF?style=for-the-badge" alt="Version 2.6.12">
+  <img src="https://img.shields.io/badge/version-2.6.13-8A7BFF?style=for-the-badge" alt="Version 2.6.13">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="MIT License">
 </p>
 
@@ -41,9 +41,11 @@ Instead of another blank page or a wall of widgets, it gives you a slowly turnin
 - **Seasonal lighting with manual control.** Auto day/night based on the season and local time. From dusk the shadow creeps forward in tiny, imperceptible steps every minute, plus four modes: auto, day, 50/50 and night.
 - **Weather without the noise.** Current conditions and daily range for 30 cities, Celsius or Fahrenheit, powered by `wttr.in` with an Open-Meteo fallback and one-click retry.
 - **Now playing, everywhere.** CosmoTab picks up audio from other tabs and shows artwork, title, artist, source and a seekable timeline in a compact glass panel.
-- **Search the way you like.** Google, Yandex, Bing or DuckDuckGo, plus an optional Google AI Mode toggle.
-- **Image and file attachments, two ways.** Add images or other files with the plus button, paste images, or drop them onto the search bar, then ask Google AI about them or run a visual search in Google Lens.
-- **Bookmarks that stay out of the way.** Nine tiles per page, folders that open as a 3×3 panel, rename support, drag and drop, restore defaults, and JSON export or import.
+- **Search the way you like.** Google, Yandex, Bing or DuckDuckGo, plus an optional AI mode with Google AI, ChatGPT, DeepSeek or Gemini.
+- **Image and file attachments, two ways.** Add images or other files with the plus button, paste images, or drop them onto the search bar. Images go to Google AI or Lens; other files open in a new tab.
+- **A tab grid that grows with you.** Choose any grid from 3 × 3 to 5 × 4 with the visual editor in Settings, and switch bookmark pages with the arrows and dots.
+- **Drag to arrange.** Drop a tab near the edge of another to move it left, right, above or below; drop it in the centre to create a folder.
+- **Tabbed settings.** General, Tabs, Planet and Weather sections keep every option one click away.
 - **A player with real controls.** Previous, play/pause and next buttons in a liquid-glass panel. Pause keeps the panel visible so you can resume from the new tab.
 - **Bilingual and configurable.** English and Russian, two layouts, weather on/off, city and temperature units.
 - **Private by design.** No accounts, no telemetry, no remote code. Your settings and bookmarks stay in local storage.
@@ -67,9 +69,9 @@ On narrow screens the player and weather move below the bookmarks instead of cov
   <img src="assets/attachment.png" width="76%" alt="CosmoTab image attachment preview">
 </p>
 
-Add files with the plus button to the right of the search bar, paste images with `Ctrl+V`, or drop them onto the search bar. Images appear as thumbnails and other files as chips with their extension. Attachments are not sent immediately: the search field expands upward while the input row stays in place. You can type a question about the image in the search bar. Send it with the paper-plane button on the right; pressing Enter does not send an attachment. Up to 10 files can be added; several images are combined into one collage before upload.
+Add files with the plus button to the right of the search bar, paste images with `Ctrl+V`, or drop them onto the search bar. Images appear as thumbnails and other files as chips with their extension. Attachments are not sent immediately: the search field expands upward while the input row stays in place. You can type a question about the image in the search bar. Send it with the paper-plane button on the right; pressing Enter does not send an attachment. Up to 10 files can be added; several images are combined into one collage before upload. If only non-image files are attached, the send button opens them in a new tab. Images are recognized by MIME type and by file extension.
 
-The AI toggle decides the destination: with AI Mode on, the image and your text open in Google AI Mode; with AI Mode off, the image opens in Google Lens. If no question is typed, the image is sent without extra text.
+For text search, the AI selector in Settings sends your query to Google AI, ChatGPT, DeepSeek or Gemini. Images always open through Google AI Mode or Google Lens.
 
 ## Bookmark folders
 
@@ -77,7 +79,7 @@ The AI toggle decides the destination: with AI Mode on, the image and your text 
   <img src="assets/folders.png" width="76%" alt="CosmoTab bookmark folder">
 </p>
 
-Choose **Folder** in the add dialog to create a folder. It opens as a transparent 3×3 panel exactly over the nine bookmark tiles, with its name centered above the folder. Click the name to rename it. Add bookmarks inside, drag bookmarks into folders, or drag a bookmark outside the panel to move it back to the main grid. Dropping one bookmark onto another creates a new folder with both. Click outside the tiles or press `Esc` to close.
+Choose **Folder** in the add dialog to create a folder. It opens as a transparent 3×3 panel over the bookmark grid, with its name centered above the folder. Click the name to rename it. Add bookmarks inside, drag bookmarks into folders, or drag a bookmark outside the panel to move it back to the main grid. Dropping one bookmark onto another creates a new folder with both. Drop it near an edge instead to move it left, right, above or below. Click outside the tiles or press `Esc` to close.
 
 ## Player
 
@@ -96,9 +98,11 @@ The liquid-glass player has previous, play/pause and next controls. Pausing no l
 - **Interface language** — English or Russian. English is used until you change it explicitly.
 - **Layout** — search at the bottom (classic) or search at the top with player and weather at the bottom.
 - **Earth lighting** — auto by season and time, day, 50/50 or night.
-- **Search provider** — Google, Yandex, Bing, DuckDuckGo, with a separate Google AI Mode switch.
+- **Search provider** — Google, Yandex, Bing, DuckDuckGo, plus an AI selector for Google AI, ChatGPT, DeepSeek or Gemini.
 - **Weather** — enable or disable, choose a city, switch between °C and °F.
-- **Bookmarks** — folders, export to JSON, import from JSON, restore the default set.
+- **Tabs** — visual grid editor from 3 × 3 to 5 × 4, folders, export to JSON, import from JSON, restore the default set.
+
+Settings are grouped into **General**, **Tabs**, **Planet** and **Weather** tabs.
 
 ## Install
 

@@ -20,6 +20,25 @@ const SEARCH_ENGINES = {
   }
 };
 
+const AI_SEARCH = {
+  google: {
+    name: 'Google AI',
+    url: 'https://www.google.com/search?udm=50&q={q}'
+  },
+  chatgpt: {
+    name: 'ChatGPT',
+    url: 'https://chatgpt.com/?q={q}'
+  },
+  deepseek: {
+    name: 'DeepSeek',
+    url: 'https://chat.deepseek.com/#cosmotab_q={q}'
+  },
+  gemini: {
+    name: 'Gemini',
+    url: 'https://gemini.google.com/app?cosmotab_q={q}'
+  }
+};
+
 const CITIES = [
   { id: 'moscow', ru: 'Москва', en: 'Moscow', lat: 55.7558, lon: 37.6173 },
   { id: 'spb', ru: 'Санкт-Петербург', en: 'Saint Petersburg', lat: 59.9343, lon: 30.3351 },
@@ -59,8 +78,13 @@ const DEFAULT_SETTINGS = {
   language: 'en',
   languageExplicit: false,
   searchEngine: 'google',
+  aiEngine: 'google',
   planetMode: 'auto',
   layout: 'top',
+  grid: {
+    columns: 3,
+    rows: 3
+  },
   weather: {
     enabled: true,
     cityId: DEFAULT_CITY_ID,
@@ -112,13 +136,20 @@ const I18N = {
     'weather.cond.cloudy': 'Облачно',
     'settings.open': 'Настройки',
     'settings.title': 'Настройки',
+    'settings.tabsLabel': 'Разделы настроек',
+    'settings.tabGeneral': 'Общие',
+    'settings.tabTiles': 'Вкладки',
+    'settings.tabPlanet': 'Планета',
+    'settings.tabWeather': 'Погода',
     'settings.interfaceSection': 'Интерфейс',
     'settings.language': 'Язык интерфейса',
     'settings.layout': 'Расположение',
     'settings.layoutTop': 'Поиск внизу, плеер сверху',
     'settings.layoutBottom': 'Поиск вверху, плеер внизу',
-    'settings.searchSection': 'Поисковик',
+    'settings.searchSection': 'Поиск',
     'settings.searchEngine': 'Поисковая система',
+    'settings.aiEngine': 'ИИ для поиска',
+    'settings.aiNote': 'Используется при включённом ИИ-поиске. Картинки по-прежнему ищутся через Google Lens или Google AI.',
     'settings.weatherSection': 'Погода справа от плеера',
     'settings.weatherToggle': 'Показывать виджет погоды',
     'settings.city': 'Город',
@@ -136,8 +167,11 @@ const I18N = {
     'settings.imported': 'Добавлено закладок: {count}',
     'settings.importNone': 'Новых закладок нет',
     'settings.importError': 'Не удалось прочитать файл закладок',
-    'settings.bookmarksSection': 'Закладки',
-    'settings.bookmarksNote': 'По 9 закладок на странице. Папки открываются сеткой 3×3. Точки под сеткой переключают страницы.',
+    'settings.bookmarksSection': 'Вкладки',
+    'settings.bookmarksNote': 'Настройте размер сетки и страницы вкладок.',
+    'settings.gridSize': 'Размер сетки',
+    'settings.gridNote': 'От 3 × 3 до 5 × 4. На одной странице помещается столько вкладок, сколько ячеек в сетке.',
+    'settings.gridEditor': 'Выбор размера сетки',
     'settings.restore': 'Вернуть стандартные закладки',
     'settings.restoreDone': 'Стандартные закладки возвращены',
     'settings.invalidCity': 'Выберите город из списка.',
@@ -151,19 +185,18 @@ const I18N = {
     'search.history': 'История ИИ-поиска Google',
     'search.aiShort': 'ИИ',
     'search.placeholder': 'Поиск в {engine}',
-    'search.aiPlaceholder': 'Спросить Google ИИ…',
-    'search.aiOffTitle': 'ИИ-поиск Google',
+    'search.aiPlaceholder': 'Спросить {name}…',
+    'search.aiOffTitle': 'ИИ-поиск: {name}',
     'search.aiOnTitle': 'Обычный поиск',
     'imageSearch.lens': 'Искать в Объективе',
     'imageSearch.ai': 'Спросить Google ИИ',
     'imageSearch.error': 'Не удалось подготовить картинку',
     'imageSearch.promptPlaceholder': 'Спросите об изображении…',
     'imageSearch.lensReady': 'Поиск в Объективе',
-    'imageSearch.send': 'Отправить изображение',
+    'imageSearch.send': 'Отправить',
     'imageSearch.remove': 'Убрать вложение',
     'imageSearch.limit': 'Можно добавить до 10 файлов',
     'imageSearch.attach': 'Прикрепить файл',
-    'imageSearch.imageRequired': 'Для поиска нужна картинка',
     'searchEngine.google': 'Google',
     'searchEngine.yandex': 'Яндекс',
     'searchEngine.bing': 'Bing',
@@ -231,13 +264,20 @@ const I18N = {
     'weather.cond.cloudy': 'Cloudy',
     'settings.open': 'Settings',
     'settings.title': 'Settings',
+    'settings.tabsLabel': 'Settings sections',
+    'settings.tabGeneral': 'General',
+    'settings.tabTiles': 'Tabs',
+    'settings.tabPlanet': 'Planet',
+    'settings.tabWeather': 'Weather',
     'settings.interfaceSection': 'Interface',
     'settings.language': 'Interface language',
     'settings.layout': 'Layout',
     'settings.layoutTop': 'Search at bottom, player on top',
     'settings.layoutBottom': 'Search at top, player at bottom',
-    'settings.searchSection': 'Search engine',
+    'settings.searchSection': 'Search',
     'settings.searchEngine': 'Search provider',
+    'settings.aiEngine': 'AI for search',
+    'settings.aiNote': 'Used when AI search is on. Images still go through Google Lens or Google AI.',
     'settings.weatherSection': 'Weather next to the player',
     'settings.weatherToggle': 'Show the weather widget',
     'settings.city': 'City',
@@ -255,8 +295,11 @@ const I18N = {
     'settings.imported': 'Bookmarks added: {count}',
     'settings.importNone': 'No new bookmarks',
     'settings.importError': 'Could not read the bookmarks file',
-    'settings.bookmarksSection': 'Bookmarks',
-    'settings.bookmarksNote': '9 bookmarks per page. Folders open as a 3×3 panel. Use the dots below the grid to switch pages.',
+    'settings.bookmarksSection': 'Tabs',
+    'settings.bookmarksNote': 'Choose the grid size and the number of tab pages.',
+    'settings.gridSize': 'Grid size',
+    'settings.gridNote': 'From 3 × 3 to 5 × 4. Each page holds as many tabs as the grid has cells.',
+    'settings.gridEditor': 'Choose the grid size',
     'settings.restore': 'Restore default bookmarks',
     'settings.restoreDone': 'Default bookmarks restored',
     'settings.invalidCity': 'Choose a city from the list.',
@@ -270,19 +313,18 @@ const I18N = {
     'search.history': 'Google AI search history',
     'search.aiShort': 'AI',
     'search.placeholder': 'Search with {engine}',
-    'search.aiPlaceholder': 'Ask Google AI…',
-    'search.aiOffTitle': 'Google AI search',
+    'search.aiPlaceholder': 'Ask {name}…',
+    'search.aiOffTitle': 'AI search: {name}',
     'search.aiOnTitle': 'Regular search',
     'imageSearch.lens': 'Search with Lens',
     'imageSearch.ai': 'Ask Google AI',
     'imageSearch.error': 'Could not prepare the image',
     'imageSearch.promptPlaceholder': 'Ask about this image…',
     'imageSearch.lensReady': 'Search with Lens',
-    'imageSearch.send': 'Send image',
+    'imageSearch.send': 'Send',
     'imageSearch.remove': 'Remove attachment',
     'imageSearch.limit': 'You can add up to 10 files',
     'imageSearch.attach': 'Attach file',
-    'imageSearch.imageRequired': 'Add an image to search',
     'searchEngine.google': 'Google',
     'searchEngine.yandex': 'Yandex',
     'searchEngine.bing': 'Bing',
@@ -376,10 +418,25 @@ const Settings = (() => {
     const engine = Object.prototype.hasOwnProperty.call(SEARCH_ENGINES, source.searchEngine)
       ? source.searchEngine
       : DEFAULT_SETTINGS.searchEngine;
+    const aiEngine = Object.prototype.hasOwnProperty.call(AI_SEARCH, source.aiEngine)
+      ? source.aiEngine
+      : DEFAULT_SETTINGS.aiEngine;
 
     const weather = source.weather && typeof source.weather === 'object'
       ? source.weather
       : {};
+
+    const gridSource = source.grid && typeof source.grid === 'object'
+      ? source.grid
+      : {};
+    const columnsValue = Number(gridSource.columns);
+    const rowsValue = Number(gridSource.rows);
+    const columns = Number.isFinite(columnsValue)
+      ? Math.min(5, Math.max(3, Math.round(columnsValue)))
+      : DEFAULT_SETTINGS.grid.columns;
+    const rows = Number.isFinite(rowsValue)
+      ? Math.min(4, Math.max(3, Math.round(rowsValue)))
+      : DEFAULT_SETTINGS.grid.rows;
 
     const cityId = CITIES.some((city) => city.id === weather.cityId)
       ? weather.cityId
@@ -394,10 +451,15 @@ const Settings = (() => {
       language,
       languageExplicit,
       searchEngine: engine,
+      aiEngine,
       planetMode: ['auto', 'day', 'dusk', 'night'].includes(source.planetMode)
         ? source.planetMode
         : 'auto',
       layout: source.layout === 'bottom' ? 'bottom' : 'top',
+      grid: {
+        columns,
+        rows
+      },
       weather: {
         enabled: weather.enabled === undefined
           ? DEFAULT_SETTINGS.weather.enabled
@@ -672,9 +734,11 @@ const Settings = (() => {
 
   const STORAGE_KEY = 'cosmic.bookmarks.v2';
   const LEGACY_KEY = 'cosmic.bookmarks.v1';
-  const PER_PAGE = 9;
   const MAX_BOOKMARKS = 36;
   const MAX_FOLDER_ITEMS = 9;
+  let gridColumns = Settings.data.grid.columns;
+  let gridRows = Settings.data.grid.rows;
+  let perPage = gridColumns * gridRows;
 
   const DEFAULT_BOOKMARKS = [
     { id: 'default-google', type: 'bookmark', title: 'Google', url: 'https://www.google.com/', icon: 'icons/google.png' },
@@ -868,7 +932,7 @@ const Settings = (() => {
   }
 
   function pageCount() {
-    return Math.max(1, Math.ceil(totalItems() / PER_PAGE));
+    return Math.max(1, Math.ceil(totalItems() / perPage));
   }
 
   function clampPage() {
@@ -1028,6 +1092,66 @@ const Settings = (() => {
     });
   }
 
+  const DROP_CENTER_MIN = 0.28;
+  const DROP_CENTER_MAX = 0.72;
+
+  function dropZone(event, element) {
+    const rect = element.getBoundingClientRect();
+
+    if (!rect.width || !rect.height) return 'center';
+
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+
+    if (x > DROP_CENTER_MIN && x < DROP_CENTER_MAX &&
+        y > DROP_CENTER_MIN && y < DROP_CENTER_MAX) {
+      return 'center';
+    }
+
+    const dx = x - 0.5;
+    const dy = y - 0.5;
+
+    if (Math.abs(dx) > Math.abs(dy)) return dx < 0 ? 'left' : 'right';
+    return dy < 0 ? 'top' : 'bottom';
+  }
+
+  function clearDropState(element) {
+    element.classList.remove(
+      'is-drop-target',
+      'is-folder-drop',
+      'is-drop-left',
+      'is-drop-right',
+      'is-drop-top',
+      'is-drop-bottom'
+    );
+  }
+
+  function clearDropStates() {
+    for (const element of document.querySelectorAll('.tile-wrap')) {
+      clearDropState(element);
+    }
+
+    if (folderBackdrop) folderBackdrop.classList.remove('is-drop-target');
+  }
+
+  function reorderItem(itemId, parentId, targetId, after) {
+    const list = listFor(parentId);
+    const from = list.findIndex((item) => item.id === itemId);
+    const target = list.findIndex((item) => item.id === targetId);
+
+    if (from === -1 || target === -1 || from === target) return;
+
+    const [item] = list.splice(from, 1);
+    const nextTarget = list.findIndex((entry) => entry.id === targetId);
+    const insertAt = nextTarget === -1 ? list.length : nextTarget + (after ? 1 : 0);
+
+    list.splice(insertAt, 0, item);
+
+    saveBookmarks();
+    render();
+    if (folderStack.length) renderFolder();
+  }
+
   function createBookmarkTile(bookmark, parentId) {
     const wrap = document.createElement('div');
     wrap.className = 'tile-wrap';
@@ -1079,38 +1203,57 @@ const Settings = (() => {
     wrap.addEventListener('dragend', () => {
       wrap.classList.remove('is-dragging');
       draggedItem = null;
+      clearDropStates();
     });
 
+    function canDropHere() {
+      return Boolean(draggedItem) &&
+        draggedItem.id !== bookmark.id &&
+        draggedItem.parentId === parentId;
+    }
+
     wrap.addEventListener('dragover', (event) => {
-      if (!draggedItem ||
-          draggedItem.id === bookmark.id ||
-          draggedItem.parentId !== parentId) {
-        return;
-      }
+      if (!canDropHere()) return;
 
       event.preventDefault();
       if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
-      wrap.classList.add('is-folder-drop');
+
+      const zone = dropZone(event, wrap);
+      clearDropState(wrap);
+
+      if (zone === 'center') wrap.classList.add('is-folder-drop');
+      else wrap.classList.add(`is-drop-${zone}`);
     });
 
-    wrap.addEventListener('dragleave', () => {
-      wrap.classList.remove('is-folder-drop');
+    wrap.addEventListener('dragleave', (event) => {
+      if (event.relatedTarget && wrap.contains(event.relatedTarget)) return;
+      clearDropState(wrap);
     });
 
     wrap.addEventListener('drop', (event) => {
-      if (!draggedItem ||
-          draggedItem.id === bookmark.id ||
-          draggedItem.parentId !== parentId) {
-        return;
-      }
+      if (!canDropHere()) return;
 
       event.preventDefault();
       event.stopPropagation();
-      wrap.classList.remove('is-folder-drop');
+
+      const zone = dropZone(event, wrap);
+      clearDropState(wrap);
 
       const dragged = draggedItem;
       draggedItem = null;
-      createFolderFromDrop(bookmark, parentId, dragged.id);
+
+      if (zone === 'center') {
+        createFolderFromDrop(bookmark, parentId, dragged.id);
+      } else {
+        reorderItem(
+          dragged.id,
+          dragged.parentId,
+          bookmark.id,
+          zone === 'right' || zone === 'bottom'
+        );
+      }
+
+      clearDropStates();
     });
 
     return wrap;
@@ -1177,8 +1320,54 @@ const Settings = (() => {
 
     button.addEventListener('click', () => openFolder(folder.id));
 
-    makeDropTarget(wrap, (dragged) => {
-      moveItemToFolder(dragged.id, dragged.parentId, folder.id);
+    function canDropHere() {
+      return Boolean(draggedItem) &&
+        draggedItem.id !== folder.id &&
+        draggedItem.parentId === parentId;
+    }
+
+    wrap.addEventListener('dragover', (event) => {
+      if (!canDropHere()) return;
+
+      event.preventDefault();
+      if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+
+      const zone = dropZone(event, wrap);
+      clearDropState(wrap);
+
+      if (zone === 'center') wrap.classList.add('is-folder-drop');
+      else wrap.classList.add(`is-drop-${zone}`);
+    });
+
+    wrap.addEventListener('dragleave', (event) => {
+      if (event.relatedTarget && wrap.contains(event.relatedTarget)) return;
+      clearDropState(wrap);
+    });
+
+    wrap.addEventListener('drop', (event) => {
+      if (!canDropHere()) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+
+      const zone = dropZone(event, wrap);
+      clearDropState(wrap);
+
+      const dragged = draggedItem;
+      draggedItem = null;
+
+      if (zone === 'center') {
+        moveItemToFolder(dragged.id, dragged.parentId, folder.id);
+      } else {
+        reorderItem(
+          dragged.id,
+          dragged.parentId,
+          folder.id,
+          zone === 'right' || zone === 'bottom'
+        );
+      }
+
+      clearDropStates();
     });
 
     return wrap;
@@ -1234,7 +1423,8 @@ const Settings = (() => {
 
       if (tileHeight > 0 && bookmarksWidget) {
         bookmarksWidget.style.minHeight = `${Math.round(
-          tileHeight * 3 + rowGap * 2 + (navHeight ? widgetGap + navHeight : 0)
+          tileHeight * gridRows + rowGap * Math.max(0, gridRows - 1) +
+          (navHeight ? widgetGap + navHeight : 0)
         )}px`;
       }
     });
@@ -1269,8 +1459,8 @@ const Settings = (() => {
     const items = bookmarks.map((item) => ({ kind: item.type === 'folder' ? 'folder' : 'bookmark', item }));
     if (canAddTo(null)) items.push({ kind: 'add' });
 
-    const start = currentPage * PER_PAGE;
-    const pageItems = items.slice(start, start + PER_PAGE);
+    const start = currentPage * perPage;
+    const pageItems = items.slice(start, start + perPage);
 
     grid.textContent = '';
     const fragment = document.createDocumentFragment();
@@ -1609,7 +1799,7 @@ const Settings = (() => {
     saveBookmarks();
 
     if (!dialogParentId) {
-      currentPage = Math.floor((bookmarks.length - 1) / PER_PAGE);
+      currentPage = Math.floor((bookmarks.length - 1) / perPage);
       render();
     } else {
       render();
@@ -1724,7 +1914,7 @@ const Settings = (() => {
 
     if (added > 0) {
       saveBookmarks();
-      currentPage = Math.floor((bookmarks.length - 1) / PER_PAGE);
+      currentPage = Math.floor((bookmarks.length - 1) / perPage);
       render();
     }
 
@@ -1754,6 +1944,19 @@ const Settings = (() => {
   window.addEventListener('cosmic:locale', () => {
     render();
     if (folderStack.length) renderFolder();
+  });
+
+  Settings.subscribe((settings) => {
+    document.documentElement.style.setProperty('--tile-columns', String(settings.grid.columns));
+    document.documentElement.style.setProperty('--tile-rows', String(settings.grid.rows));
+
+    if (settings.grid.columns === gridColumns && settings.grid.rows === gridRows) return;
+
+    gridColumns = settings.grid.columns;
+    gridRows = settings.grid.rows;
+    perPage = gridColumns * gridRows;
+    clampPage();
+    render();
   });
 
   render();
@@ -3207,10 +3410,13 @@ const Settings = (() => {
   }
 
   let engine = SEARCH_ENGINES[Settings.data.searchEngine] || SEARCH_ENGINES.google;
+  let aiSelection = AI_SEARCH[Settings.data.aiEngine] || AI_SEARCH.google;
 
   function applyEngine() {
     engine = SEARCH_ENGINES[Settings.data.searchEngine] || SEARCH_ENGINES.google;
+    aiSelection = AI_SEARCH[Settings.data.aiEngine] || AI_SEARCH.google;
     form.action = engine.url.replace('{q}', '');
+    if (historyButton) historyButton.hidden = Settings.data.aiEngine !== 'google';
     applyMode();
   }
 
@@ -3218,12 +3424,14 @@ const Settings = (() => {
     form.classList.toggle('is-ai', aiMode);
     if (compose) compose.classList.toggle('is-ai', aiMode);
     toggle.setAttribute('aria-pressed', String(aiMode));
-    toggle.title = aiMode ? t('search.aiOnTitle') : t('search.aiOffTitle');
+    toggle.title = aiMode
+      ? t('search.aiOnTitle')
+      : t('search.aiOffTitle', { name: aiSelection.name });
     toggle.setAttribute('aria-label', toggle.title);
     input.placeholder = pendingAttachments.length
       ? (aiMode ? t('imageSearch.promptPlaceholder') : t('imageSearch.lensReady'))
       : (aiMode
-        ? t('search.aiPlaceholder')
+        ? t('search.aiPlaceholder', { name: aiSelection.name })
         : t('search.placeholder', { engine: t(`searchEngine.${Settings.data.searchEngine}`) }));
 
     if (attachButton) {
@@ -3354,6 +3562,14 @@ const Settings = (() => {
     input.focus();
   }
 
+  const IMAGE_EXTENSION = /\.(avif|bmp|gif|heic|heif|jpe?g|png|svg|webp)$/i;
+
+  function isImageFile(file) {
+    if (!file) return false;
+    if (file.type && file.type.startsWith('image/')) return true;
+    return IMAGE_EXTENSION.test(file.name || '');
+  }
+
   function addPendingFiles(files) {
     const list = Array.from(files || []).filter((file) => file);
 
@@ -3367,11 +3583,12 @@ const Settings = (() => {
         break;
       }
 
-      const isImage = Boolean(file.type && file.type.startsWith("image/"));
+      const image = isImageFile(file);
 
       pendingAttachments.push({
         file,
-        url: isImage ? URL.createObjectURL(file) : ""
+        isImage: image,
+        url: image ? URL.createObjectURL(file) : ""
       });
     }
 
@@ -3466,17 +3683,34 @@ const Settings = (() => {
     return new File([blob], 'cosmotab-images.png', { type: 'image/png' });
   }
 
+  function openPendingFiles() {
+    if (!pendingAttachments.length) return;
+
+    for (const item of pendingAttachments) {
+      const url = URL.createObjectURL(item.file);
+      const link = document.createElement('a');
+
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener';
+      link.click();
+
+      window.setTimeout(() => URL.revokeObjectURL(url), 60000);
+    }
+
+    clearPendingAttachments();
+    input.value = '';
+  }
+
   async function submitImage() {
     if (!pendingAttachments.length) return;
 
     const files = pendingAttachments
-      .filter((item) => item.file.type && item.file.type.startsWith('image/'))
+      .filter((item) => isImageFile(item.file))
       .map((item) => item.file);
 
     if (!files.length) {
-      input.placeholder = t('imageSearch.imageRequired');
-      window.setTimeout(applyMode, 2500);
-      input.focus();
+      openPendingFiles();
       return;
     }
 
@@ -3606,9 +3840,7 @@ const Settings = (() => {
     }
 
     if (aiMode) {
-       
-      window.location.href =
-        `https://www.google.com/search?q=${encodeURIComponent(query)}&udm=50`;
+      window.location.href = aiSelection.url.replace('{q}', encodeURIComponent(query));
       return;
     }
 
@@ -3636,10 +3868,13 @@ const Settings = (() => {
   const languageSelect = document.getElementById('setting-language');
   const layoutSelect = document.getElementById('setting-layout');
   const engineSelect = document.getElementById('setting-search-engine');
+  const aiEngineSelect = document.getElementById('setting-ai-engine');
   const lightingSelect = document.getElementById('setting-planet-lighting');
   const weatherEnabled = document.getElementById('setting-weather-enabled');
   const citySelect = document.getElementById('setting-weather-city');
   const weatherUnit = document.getElementById('setting-weather-unit');
+  const gridBoard = document.getElementById('grid-editor-board');
+  const gridValue = document.getElementById('grid-size-value');
   const restoreButton = document.getElementById('settings-restore-bookmarks');
   const exportButton = document.getElementById('settings-export-bookmarks');
   const importButton = document.getElementById('settings-import-bookmarks');
@@ -3679,6 +3914,111 @@ const Settings = (() => {
     statusTimer = window.setTimeout(clearStatus, 4000);
   }
 
+  const settingsTabs = Array.from(dialog.querySelectorAll('[data-settings-tab]'));
+  const settingsPanels = Array.from(dialog.querySelectorAll('[data-settings-panel]'));
+  const MIN_GRID_COLUMNS = 3;
+  const MAX_GRID_COLUMNS = 5;
+  const MIN_GRID_ROWS = 3;
+  const MAX_GRID_ROWS = 4;
+  let activeSettingsTab = 'general';
+  let selectedGrid = {
+    columns: MIN_GRID_COLUMNS,
+    rows: MIN_GRID_ROWS
+  };
+
+  function setSettingsTab(name) {
+    if (!settingsTabs.some((tab) => tab.dataset.settingsTab === name)) return;
+    activeSettingsTab = name;
+
+    for (const tab of settingsTabs) {
+      const active = tab.dataset.settingsTab === name;
+      tab.classList.toggle('is-active', active);
+      tab.setAttribute('aria-selected', String(active));
+      tab.tabIndex = active ? 0 : -1;
+    }
+
+    for (const panel of settingsPanels) {
+      panel.classList.toggle('is-active', panel.dataset.settingsPanel === name);
+    }
+  }
+
+  for (const tab of settingsTabs) {
+    tab.addEventListener('click', () => setSettingsTab(tab.dataset.settingsTab));
+
+    tab.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+
+      const index = settingsTabs.indexOf(tab);
+      const direction = event.key === 'ArrowRight' ? 1 : -1;
+      const next = settingsTabs[(index + direction + settingsTabs.length) % settingsTabs.length];
+      setSettingsTab(next.dataset.settingsTab);
+      next.focus();
+    });
+  }
+
+  function clampGrid(columns, rows) {
+    return {
+      columns: Math.min(MAX_GRID_COLUMNS, Math.max(MIN_GRID_COLUMNS, Math.round(columns))),
+      rows: Math.min(MAX_GRID_ROWS, Math.max(MIN_GRID_ROWS, Math.round(rows)))
+    };
+  }
+
+  function paintGridEditor(preview) {
+    if (!gridBoard) return;
+
+    const dimensions = preview || selectedGrid;
+
+    for (const cell of gridBoard.children) {
+      const column = Number(cell.dataset.col);
+      const row = Number(cell.dataset.row);
+      const inside = column <= dimensions.columns && row <= dimensions.rows;
+      cell.classList.toggle('is-preview', inside && Boolean(preview));
+      cell.classList.toggle('is-selected', inside && !preview);
+    }
+
+    if (gridValue) {
+      gridValue.textContent = `${dimensions.columns} × ${dimensions.rows}`;
+    }
+  }
+
+  function buildGridEditor() {
+    if (!gridBoard) return;
+
+    gridBoard.textContent = '';
+
+    for (let row = 1; row <= MAX_GRID_ROWS; row += 1) {
+      for (let column = 1; column <= MAX_GRID_COLUMNS; column += 1) {
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'grid-editor-cell';
+        cell.dataset.col = String(column);
+        cell.dataset.row = String(row);
+        cell.setAttribute('aria-label', `${column} × ${row}`);
+
+        cell.addEventListener('click', () => {
+          selectedGrid = clampGrid(column, row);
+          paintGridEditor();
+        });
+
+        cell.addEventListener('mouseenter', () => {
+          paintGridEditor(clampGrid(column, row));
+        });
+
+        cell.addEventListener('focus', () => {
+          paintGridEditor(clampGrid(column, row));
+        });
+
+        cell.addEventListener('blur', () => paintGridEditor());
+        gridBoard.appendChild(cell);
+      }
+    }
+
+    gridBoard.addEventListener('mouseleave', () => paintGridEditor());
+  }
+
+  buildGridEditor();
+
   function populateCities(selectedId) {
     if (!citySelect) return;
 
@@ -3701,9 +4041,14 @@ const Settings = (() => {
     if (languageSelect) languageSelect.value = settings.language;
     if (layoutSelect) layoutSelect.value = settings.layout;
     if (engineSelect) engineSelect.value = settings.searchEngine;
+    if (aiEngineSelect) aiEngineSelect.value = settings.aiEngine;
     if (lightingSelect) lightingSelect.value = settings.planetMode;
     if (weatherEnabled) weatherEnabled.checked = settings.weather.enabled;
     if (weatherUnit) weatherUnit.value = settings.weather.unit;
+
+    selectedGrid = clampGrid(settings.grid.columns, settings.grid.rows);
+    paintGridEditor();
+    setSettingsTab(activeSettingsTab);
 
     populateCities(settings.weather.cityId);
     clearError();
@@ -3798,7 +4143,12 @@ const Settings = (() => {
       languageExplicit,
       layout: layoutSelect ? layoutSelect.value : 'top',
       searchEngine: engineSelect ? engineSelect.value : 'google',
+      aiEngine: aiEngineSelect ? aiEngineSelect.value : 'google',
       planetMode: lightingSelect ? lightingSelect.value : 'auto',
+      grid: {
+        columns: selectedGrid.columns,
+        rows: selectedGrid.rows
+      },
       weather: {
         enabled,
         cityId: cityById(cityId) ? cityId : DEFAULT_CITY_ID,

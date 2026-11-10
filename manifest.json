@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Cosmic New Tab",
-  "version": "2.6.12",
+  "version": "2.6.13",
   "description": "Космическая стартовая страница и новая вкладка: реалистичная 3D-Земля и Луна, Солнечная система, часы, быстрые ссылки и поиск.",
   "icons": {
     "48": "icons/icon-48.png",
@@ -22,6 +22,19 @@
       "background.js"
     ]
   },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.deepseek.com/*",
+        "https://gemini.google.com/*"
+      ],
+      "js": [
+        "ai-prefill.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
