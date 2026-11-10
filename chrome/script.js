@@ -158,7 +158,7 @@ const I18N = {
     'imageSearch.ai': 'Спросить Google ИИ',
     'imageSearch.error': 'Не удалось подготовить картинку',
     'imageSearch.promptPlaceholder': 'Спросите об изображении…',
-    'imageSearch.lensReady': 'Enter — поиск в Объективе',
+    'imageSearch.lensReady': 'Поиск в Объективе',
     'imageSearch.send': 'Отправить изображение',
     'imageSearch.remove': 'Убрать изображение',
     'searchEngine.google': 'Google',
@@ -274,7 +274,7 @@ const I18N = {
     'imageSearch.ai': 'Ask Google AI',
     'imageSearch.error': 'Could not prepare the image',
     'imageSearch.promptPlaceholder': 'Ask about this image…',
-    'imageSearch.lensReady': 'Enter — search with Lens',
+    'imageSearch.lensReady': 'Search with Lens',
     'imageSearch.send': 'Send image',
     'imageSearch.remove': 'Remove image',
     'searchEngine.google': 'Google',
@@ -3288,7 +3288,7 @@ const Settings = (() => {
     event.preventDefault();
 
     if (pendingImage) {
-      void submitImage();
+      input.focus();
       return;
     }
 
