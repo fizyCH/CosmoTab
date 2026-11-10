@@ -160,8 +160,10 @@ const I18N = {
     'imageSearch.promptPlaceholder': 'Спросите об изображении…',
     'imageSearch.lensReady': 'Поиск в Объективе',
     'imageSearch.send': 'Отправить изображение',
-    'imageSearch.remove': 'Убрать изображение',
-    'imageSearch.limit': 'Можно добавить до 10 изображений',
+    'imageSearch.remove': 'Убрать вложение',
+    'imageSearch.limit': 'Можно добавить до 10 файлов',
+    'imageSearch.attach': 'Прикрепить файл',
+    'imageSearch.imageRequired': 'Для поиска нужна картинка',
     'searchEngine.google': 'Google',
     'searchEngine.yandex': 'Яндекс',
     'searchEngine.bing': 'Bing',
@@ -277,8 +279,10 @@ const I18N = {
     'imageSearch.promptPlaceholder': 'Ask about this image…',
     'imageSearch.lensReady': 'Search with Lens',
     'imageSearch.send': 'Send image',
-    'imageSearch.remove': 'Remove image',
-    'imageSearch.limit': 'You can add up to 10 images',
+    'imageSearch.remove': 'Remove attachment',
+    'imageSearch.limit': 'You can add up to 10 files',
+    'imageSearch.attach': 'Attach file',
+    'imageSearch.imageRequired': 'Add an image to search',
     'searchEngine.google': 'Google',
     'searchEngine.yandex': 'Yandex',
     'searchEngine.bing': 'Bing',
@@ -3124,15 +3128,16 @@ const Settings = (() => {
   const input = document.getElementById('search-input');
   const toggle = document.getElementById('ai-toggle');
   const historyButton = document.getElementById('ai-history');
-  const imagePicker = document.getElementById('image-picker');
-  const imageInput = document.getElementById('search-image-input');
+  const attachButton = document.getElementById('attach-button');
+  const fileInput = document.getElementById('search-file-input');
   const attachment = document.getElementById('search-attachment');
   const attachmentList = document.getElementById('search-attachment-list');
   const attachmentSend = document.getElementById('search-attachment-send');
+  const compose = form ? form.closest('.search-compose') : null;
   if (!form || !input || !toggle) return;
 
-  const MAX_IMAGES = 10;
-  let pendingImages = [];
+  const MAX_ATTACHMENTS = 10;
+  let pendingAttachments = [];
 
   const MODE_KEY = 'cosmic.search.mode.v3';
 
@@ -3153,19 +3158,20 @@ const Settings = (() => {
 
   function applyMode() {
     form.classList.toggle('is-ai', aiMode);
+    if (compose) compose.classList.toggle('is-ai', aiMode);
     toggle.setAttribute('aria-pressed', String(aiMode));
     toggle.title = aiMode ? t('search.aiOnTitle') : t('search.aiOffTitle');
     toggle.setAttribute('aria-label', toggle.title);
-    input.placeholder = pendingImages.length
+    input.placeholder = pendingAttachments.length
       ? (aiMode ? t('imageSearch.promptPlaceholder') : t('imageSearch.lensReady'))
       : (aiMode
         ? t('search.aiPlaceholder')
         : t('search.placeholder', { engine: t(`searchEngine.${Settings.data.searchEngine}`) }));
 
-    if (imagePicker) {
-      const imageTitle = aiMode ? t('imageSearch.ai') : t('imageSearch.lens');
-      imagePicker.title = imageTitle;
-      imagePicker.setAttribute('aria-label', imageTitle);
+    if (attachButton) {
+      const attachTitle = t('imageSearch.attach');
+      attachButton.title = attachTitle;
+      attachButton.setAttribute('aria-label', attachTitle);
     }
   }
 
@@ -3228,94 +3234,110 @@ const Settings = (() => {
     window.setTimeout(applyMode, 2500);
   }
 
+  function fileLabel(file) {
+    const name = (file && file.name) || "";
+    const dot = name.lastIndexOf(".");
+    const extension = dot > -1 ? name.slice(dot + 1) : "";
+    return (extension || "file").slice(0, 5);
+  }
+
   function renderAttachmentList() {
     if (!attachmentList) return;
 
-    attachmentList.textContent = '';
+    attachmentList.textContent = "";
 
-    pendingImages.forEach((item, index) => {
-      const thumb = document.createElement('div');
-      thumb.className = 'search-attachment-thumb';
+    pendingAttachments.forEach((item, index) => {
+      const thumb = document.createElement("div");
+      thumb.className = "search-attachment-thumb";
 
-      const img = document.createElement('img');
-      img.className = 'search-attachment-img';
-      img.alt = '';
-      img.src = item.url;
+      if (item.url) {
+        const img = document.createElement("img");
+        img.className = "search-attachment-img";
+        img.alt = "";
+        img.src = item.url;
+        thumb.appendChild(img);
+      } else {
+        const chip = document.createElement("span");
+        chip.className = "search-attachment-file";
+        chip.textContent = fileLabel(item.file);
+        thumb.title = item.file.name || "";
+        thumb.appendChild(chip);
+      }
 
-      const remove = document.createElement('button');
-      remove.className = 'search-attachment-remove';
-      remove.type = 'button';
-      remove.textContent = '?';
-      remove.title = t('imageSearch.remove');
-      remove.setAttribute('aria-label', t('imageSearch.remove'));
+      const remove = document.createElement("button");
+      remove.className = "search-attachment-remove";
+      remove.type = "button";
+      remove.textContent = "\u00d7";
+      remove.title = t("imageSearch.remove");
+      remove.setAttribute("aria-label", t("imageSearch.remove"));
 
-      remove.addEventListener('click', (event) => {
+      remove.addEventListener("click", (event) => {
         event.preventDefault();
         event.stopPropagation();
-        removePendingImage(index);
+        removePendingAttachment(index);
       });
 
-      thumb.append(img, remove);
+      thumb.appendChild(remove);
       attachmentList.appendChild(thumb);
     });
   }
 
-  function removePendingImage(index) {
-    const item = pendingImages[index];
+  function removePendingAttachment(index) {
+    const item = pendingAttachments[index];
     if (!item) return;
 
-    URL.revokeObjectURL(item.url);
-    pendingImages.splice(index, 1);
+    if (item.url) URL.revokeObjectURL(item.url);
+    pendingAttachments.splice(index, 1);
     renderAttachmentList();
 
-    if (!pendingImages.length) form.classList.remove('has-attachment');
+    if (!pendingAttachments.length) form.classList.remove("has-attachment");
 
     applyMode();
     input.focus();
   }
 
-  function addPendingImages(files) {
-    const list = Array.from(files || []).filter((file) =>
-      file && (!file.type || file.type.startsWith('image/'))
-    );
+  function addPendingFiles(files) {
+    const list = Array.from(files || []).filter((file) => file);
 
     if (!list.length) return;
 
     let skipped = false;
 
     for (const file of list) {
-      if (pendingImages.length >= MAX_IMAGES) {
+      if (pendingAttachments.length >= MAX_ATTACHMENTS) {
         skipped = true;
         break;
       }
 
-      pendingImages.push({
+      const isImage = Boolean(file.type && file.type.startsWith("image/"));
+
+      pendingAttachments.push({
         file,
-        url: URL.createObjectURL(file)
+        url: isImage ? URL.createObjectURL(file) : ""
       });
     }
 
-    if (!pendingImages.length) return;
+    if (!pendingAttachments.length) return;
 
     renderAttachmentList();
-    form.classList.add('has-attachment');
+    form.classList.add("has-attachment");
     applyMode();
     input.focus();
 
     if (skipped) {
-      input.placeholder = t('imageSearch.limit');
+      input.placeholder = t("imageSearch.limit");
       window.setTimeout(applyMode, 2500);
     }
   }
 
-  function clearPendingImages() {
-    for (const item of pendingImages) {
-      URL.revokeObjectURL(item.url);
+  function clearPendingAttachments() {
+    for (const item of pendingAttachments) {
+      if (item.url) URL.revokeObjectURL(item.url);
     }
 
-    pendingImages = [];
+    pendingAttachments = [];
     renderAttachmentList();
-    form.classList.remove('has-attachment');
+    form.classList.remove("has-attachment");
     applyMode();
   }
 
@@ -3387,9 +3409,19 @@ const Settings = (() => {
   }
 
   async function submitImage() {
-    if (!pendingImages.length) return;
+    if (!pendingAttachments.length) return;
 
-    const files = pendingImages.map((item) => item.file);
+    const files = pendingAttachments
+      .filter((item) => item.file.type && item.file.type.startsWith('image/'))
+      .map((item) => item.file);
+
+    if (!files.length) {
+      input.placeholder = t('imageSearch.imageRequired');
+      window.setTimeout(applyMode, 2500);
+      input.focus();
+      return;
+    }
+
     const mode = aiMode ? 'ai' : 'lens';
     const query = mode === 'ai' ? input.value.trim() : '';
     const uploadFile = await composeImages(files);
@@ -3411,9 +3443,9 @@ const Settings = (() => {
     uploadForm.target = '_blank';
     uploadForm.style.display = 'none';
 
-    const fileInput = document.createElement('input');
-    fileInput.type = 'file';
-    fileInput.name = 'encoded_image';
+    const uploadInput = document.createElement('input');
+    uploadInput.type = 'file';
+    uploadInput.name = 'encoded_image';
 
     const normalizedFile = uploadFile.name
       ? uploadFile
@@ -3422,7 +3454,7 @@ const Settings = (() => {
     try {
       const transfer = new DataTransfer();
       transfer.items.add(normalizedFile);
-      fileInput.files = transfer.files;
+      uploadInput.files = transfer.files;
     } catch {
       imageError();
       return;
@@ -3433,21 +3465,21 @@ const Settings = (() => {
     imageContent.name = 'image_content';
     imageContent.value = '';
 
-    uploadForm.append(fileInput, imageContent);
+    uploadForm.append(uploadInput, imageContent);
     document.body.appendChild(uploadForm);
     uploadForm.submit();
     window.setTimeout(() => uploadForm.remove(), 1000);
 
-    clearPendingImages();
+    clearPendingAttachments();
     input.value = '';
   }
 
-  if (imagePicker && imageInput) {
-    imagePicker.addEventListener('click', () => imageInput.click());
+  if (attachButton && fileInput) {
+    attachButton.addEventListener('click', () => fileInput.click());
 
-    imageInput.addEventListener('change', () => {
-      addPendingImages(imageInput.files);
-      imageInput.value = '';
+    fileInput.addEventListener('change', () => {
+      addPendingFiles(fileInput.files);
+      fileInput.value = '';
     });
 
     form.addEventListener('paste', (event) => {
@@ -3465,7 +3497,7 @@ const Settings = (() => {
 
       if (files.length) {
         event.preventDefault();
-        addPendingImages(files);
+        addPendingFiles(files);
       }
     });
 
@@ -3491,7 +3523,7 @@ const Settings = (() => {
 
       event.preventDefault();
       form.classList.remove('is-dragover');
-      addPendingImages(files);
+      addPendingFiles(files);
     });
 
     if (attachmentSend) {
@@ -3504,7 +3536,7 @@ const Settings = (() => {
   form.addEventListener('submit', (event) => {
     event.preventDefault();
 
-    if (pendingImages.length) {
+    if (pendingAttachments.length) {
       input.focus();
       return;
     }

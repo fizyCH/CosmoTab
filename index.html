@@ -154,58 +154,61 @@
 
   
   <footer class="search-bar">
-    <form class="search" id="search-form" action="https://www.google.com/search" method="get" role="search">
-      <div class="search-attachment" id="search-attachment">
-        <div class="search-attachment-list" id="search-attachment-list"></div>
+    <div class="search-compose">
+      <div class="search-slot">
+        <form class="search" id="search-form" action="https://www.google.com/search" method="get" role="search">
+          <div class="search-attachment" id="search-attachment">
+            <div class="search-attachment-list" id="search-attachment-list"></div>
+          </div>
+
+          <div class="search-row">
+            <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="6.5" />
+              <path d="M20.2 20.2 15.9 15.9" />
+            </svg>
+
+            <input id="search-input" name="q" type="text" placeholder="Search with Google"
+                   autocomplete="off" spellcheck="false" autofocus />
+
+            <button class="ai-history" id="ai-history" type="button"
+                    aria-label="Открыть историю ИИ-поиска Google" title="История ИИ-поиска Google"
+                    data-i18n-aria="search.history" data-i18n-title="search.history">
+              <img src="textures/history.png" alt="" aria-hidden="true" />
+            </button>
+
+            <button class="ai-toggle" id="ai-toggle" type="button" aria-pressed="false"
+                    aria-label="Переключить ИИ-поиск Google" title="ИИ-поиск Google">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M12 3.2 13.6 7.6 18 9.2 13.6 10.8 12 15.2 10.4 10.8 6 9.2 10.4 7.6 12 3.2Z" />
+                <path d="m18.4 14.6.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z" />
+              </svg>
+              <span class="ai-toggle-text" data-i18n="search.aiShort">AI</span>
+            </button>
+
+            <button class="search-attachment-send" id="search-attachment-send" type="button"
+                    aria-label="Отправить изображение" title="Отправить изображение"
+                    data-i18n-aria="imageSearch.send" data-i18n-title="imageSearch.send">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
+                   stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 3 3 10.5l7 2.5 2.5 7L21 3Z" />
+                <path d="m10 13 5-5" />
+              </svg>
+            </button>
+          </div>
+        </form>
       </div>
 
-      <div class="search-row">
-        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+      <button class="attach-button" id="attach-button" type="button"
+              aria-label="Прикрепить файл" title="Прикрепить файл"
+              data-i18n-aria="imageSearch.attach" data-i18n-title="imageSearch.attach">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
              stroke-linecap="round" aria-hidden="true">
-          <circle cx="11" cy="11" r="6.5" />
-          <path d="M20.2 20.2 15.9 15.9" />
+          <path d="M12 5v14M5 12h14" />
         </svg>
-
-        <input id="search-input" name="q" type="text" placeholder="Search with Google"
-               autocomplete="off" spellcheck="false" autofocus />
-
-        <button class="image-picker" id="image-picker" type="button"
-                aria-label="Поиск по картинке" title="Поиск по картинке">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <rect x="3" y="4.5" width="18" height="15" rx="3" />
-            <circle cx="8.6" cy="9.4" r="1.5" />
-            <path d="m5.5 17 5.1-5.1 3.8 3.8 2.1-2.1 2 2" />
-          </svg>
-        </button>
-
-        <button class="ai-history" id="ai-history" type="button"
-                aria-label="Открыть историю ИИ-поиска Google" title="История ИИ-поиска Google"
-                data-i18n-aria="search.history" data-i18n-title="search.history">
-          <img src="textures/history.png" alt="" aria-hidden="true" />
-        </button>
-
-        <button class="ai-toggle" id="ai-toggle" type="button" aria-pressed="false"
-                aria-label="Переключить ИИ-поиск Google" title="ИИ-поиск Google">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 3.2 13.6 7.6 18 9.2 13.6 10.8 12 15.2 10.4 10.8 6 9.2 10.4 7.6 12 3.2Z" />
-            <path d="m18.4 14.6.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2Z" />
-          </svg>
-          <span class="ai-toggle-text" data-i18n="search.aiShort">AI</span>
-        </button>
-
-        <button class="search-attachment-send" id="search-attachment-send" type="button"
-                aria-label="Отправить изображение" title="Отправить изображение"
-                data-i18n-aria="imageSearch.send" data-i18n-title="imageSearch.send">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"
-               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M21 3 3 10.5l7 2.5 2.5 7L21 3Z" />
-            <path d="m10 13 5-5" />
-          </svg>
-        </button>
-      </div>
-    </form>
+      </button>
+    </div>
   </footer>
 
   
@@ -337,7 +340,7 @@
   </dialog>
 
   <input type="file" id="bookmark-import" accept="application/json,.json" hidden />
-  <input type="file" id="search-image-input" accept="image/*" multiple hidden />
+  <input type="file" id="search-file-input" multiple hidden />
 
   <script src="lib/three.min.js"></script>
   <script src="script.js"></script>
