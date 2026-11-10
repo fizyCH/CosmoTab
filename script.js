@@ -552,6 +552,64 @@ const Settings = (() => {
   });
 })();
 
+(function initComets() {
+  const sky = document.getElementById('comet-sky');
+  if (!sky) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const active = new Set();
+  let timer = 0;
+
+  function schedule(delay) {
+    clearTimeout(timer);
+    timer = window.setTimeout(spawn, delay);
+  }
+
+  function spawn() {
+    for (const comet of active) {
+      if (!comet.isConnected) active.delete(comet);
+    }
+
+    if (!document.hidden && active.size < 2) {
+      const comet = document.createElement('span');
+      const leftward = Math.random() < 0.25;
+      const angle = leftward
+        ? 135 + Math.random() * 30
+        : 15 + Math.random() * 30;
+      const radians = angle * Math.PI / 180;
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const length = 90 + Math.random() * 90;
+      const travel = Math.min(width * 0.65, 320 + Math.random() * 620);
+      const startX = leftward
+        ? width * (0.45 + Math.random() * 0.62)
+        : width * (-0.1 + Math.random() * 0.62);
+      const startY = height * (0.02 + Math.random() * 0.4);
+
+      comet.className = 'comet';
+      comet.style.left = `${startX.toFixed(1)}px`;
+      comet.style.top = `${startY.toFixed(1)}px`;
+      comet.style.setProperty('--len', `${length.toFixed(1)}px`);
+      comet.style.setProperty('--angle', `${angle.toFixed(1)}deg`);
+      comet.style.setProperty('--dx', `${(Math.cos(radians) * travel).toFixed(1)}px`);
+      comet.style.setProperty('--dy', `${(Math.sin(radians) * travel).toFixed(1)}px`);
+      comet.style.setProperty('--flight', `${(0.9 + Math.random() * 0.9).toFixed(2)}s`);
+
+      comet.addEventListener('animationend', () => {
+        active.delete(comet);
+        comet.remove();
+      });
+
+      active.add(comet);
+      sky.appendChild(comet);
+    }
+
+    schedule(7000 + Math.random() * 11000);
+  }
+
+  schedule(3500 + Math.random() * 4000);
+})();
+
  
 (function initClock() {
   const hoursEl = document.getElementById('clock-hours');
