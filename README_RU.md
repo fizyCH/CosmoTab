@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox для Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.14-8A7BFF?style=for-the-badge" alt="Версия 2.6.14">
+  <img src="https://img.shields.io/badge/version-2.6.15-8A7BFF?style=for-the-badge" alt="Версия 2.6.15">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="Лицензия MIT">
 </p>
 

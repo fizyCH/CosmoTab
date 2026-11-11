@@ -14,8 +14,8 @@
   --accent-violet: #9b5cff;
   --accent-cyan: #22c7e6;
   --accent-pink: #ec4899;
-  --space-gradient: linear-gradient(135deg, #5b8cff 0%, #2f5fe0 48%, #102a6b 100%);
-  --space-glow: rgba(40, 90, 220, 0.45);
+  --space-gradient: linear-gradient(180deg, #3b5f86 0%, #294a6b 52%, #1a2f47 100%);
+  --space-glow: rgba(30, 60, 95, 0.3);
   --tile-columns: 3;
   --tile-rows: 3;
 }
@@ -1518,7 +1518,7 @@ body.layout-bottom .search {
 
 .search-attachment-send:hover {
   box-shadow:
-    0 10px 24px -10px rgba(50, 100, 230, 0.8),
+    0 10px 24px -10px rgba(45, 80, 130, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
@@ -1707,7 +1707,7 @@ body.layout-bottom .search {
   background:
     linear-gradient(rgba(13, 17, 32, 0.88), rgba(13, 17, 32, 0.88)) padding-box,
     linear-gradient(110deg,
-      #5b8cff, #2f5fe0, #102a6b, #5b8cff) border-box;
+      #3b5f86, #294a6b, #1a2f47, #3b5f86) border-box;
   background-size: 100% 100%, 300% 100%;
   animation: ai-border 7s linear infinite, ai-pulse 3.4s ease-in-out infinite;
 }
@@ -1716,7 +1716,7 @@ body.layout-bottom .search {
   background:
     linear-gradient(rgba(13, 17, 32, 0.94), rgba(13, 17, 32, 0.94)) padding-box,
     linear-gradient(110deg,
-      #5b8cff, #2f5fe0, #102a6b, #5b8cff) border-box;
+      #3b5f86, #294a6b, #1a2f47, #3b5f86) border-box;
   background-size: 100% 100%, 300% 100%;
 }
 
@@ -2051,7 +2051,7 @@ body.layout-bottom .search {
 }
 
 .btn:hover {
-  filter: brightness(1.08);
+  filter: brightness(1.05);
   transform: translateY(-1px);
 }
 
