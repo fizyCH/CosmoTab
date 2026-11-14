@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox for Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.16-8A7BFF?style=for-the-badge" alt="Version 2.6.16">
+  <img src="https://img.shields.io/badge/version-2.6.17-8A7BFF?style=for-the-badge" alt="Version 2.6.17">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="MIT License">
 </p>
 
@@ -38,7 +38,6 @@ Instead of another blank page or a wall of widgets, it gives you a slowly turnin
 ## Features
 
 - **A living 3D solar system.** Earth with an independent cloud layer, the Moon, a ringed planet and distant worlds. Drag to rotate with inertia, then let go — Earth and the Moon glide back to their orbit, while a comet occasionally crosses the sky. The Moon now passes both behind and in front of Earth.
-- **An occasional black hole.** A black hole with a glowing accretion disk and photon ring fades into the background when you open a tab or at random, then quietly disappears.
 - **Seasonal lighting with manual control.** Auto day/night based on the season and local time. From dusk the shadow creeps forward in tiny, imperceptible steps every minute, plus four modes: auto, day, 50/50 and night.
 - **Weather without the noise.** Current conditions and daily range for 30 cities, Celsius or Fahrenheit, powered by `wttr.in` with an Open-Meteo fallback and one-click retry.
 - **Now playing, everywhere.** CosmoTab picks up audio from other tabs and shows artwork, title, artist, source and a seekable timeline in a compact glass panel.
