@@ -19,7 +19,7 @@
   <img src="https://img.shields.io/badge/Firefox-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox">
   <img src="https://img.shields.io/badge/Firefox%20Android-supported-FF7139?style=for-the-badge&logo=firefoxbrowser&logoColor=white" alt="Firefox для Android">
   <img src="https://img.shields.io/badge/Chrome-supported-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Chrome">
-  <img src="https://img.shields.io/badge/version-2.6.15-8A7BFF?style=for-the-badge" alt="Версия 2.6.15">
+  <img src="https://img.shields.io/badge/version-2.6.16-8A7BFF?style=for-the-badge" alt="Версия 2.6.16">
   <img src="https://img.shields.io/badge/license-MIT-3FB950?style=for-the-badge" alt="Лицензия MIT">
 </p>
 
@@ -38,6 +38,7 @@
 ## Возможности
 
 - **Живая 3D-Солнечная система.** Земля с независимым слоем облаков, Луна, планета с кольцами и далёкие миры. Сцену можно вращать мышью с инерцией, а после отпускания Земля и Луна плавно возвращаются на свою орбиту. Иногда по небу проносится комета, а Луна проходит и за Землёй, и перед ней.
+- **Иногда появляется чёрная дыра.** Чёрная дыра с аккреционным диском и световым кольцом плавно проявляется на фоне при открытии вкладки или случайно, а затем так же тихо исчезает.
 - **Сезонное освещение и ручные режимы.** Авто-режим учитывает сезон и местное время. С наступлением темноты тень двигается крошечными незаметными шагами каждую минуту. Плюс четыре варианта: авто, день, 50/50 и ночь.
 - **Погода без лишнего шума.** Текущие условия и дневной диапазон для 30 городов, °C или °F. Основной источник — `wttr.in`, резервный — Open-Meteo, повтор запроса по клику.
 - **Сейчас играет.** CosmoTab подхватывает звук из других вкладок и показывает обложку, название, исполнителя, источник и перематываемую шкалу в компактной стеклянной панели.
